@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<title>WSU TALink</title> 
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" type="image/png" href="images/favicon.png">
+	<link rel="stylesheet" type="text/css" href="styles/main.css">
+
+	<script src="scripts/jquery.min.js"></script>
+	<script type="text/javascript" src="scripts/talink.js"></script>
+	
+	<!-- Not working - "TALink is undefined" ?? 
+		Replaced this with $(document).ready() in the JS file. -->
+	<!-- 	<script type="text/javascript">
+		$(function() {
+			TALink.start();
+		});
+	</script> -->
+</head>
+<body>
+	<section class="mainbody">
+		<div class="form-section">
+			<header>
+				<h1>WSU TALink</h1>
+				<h2>New Account</h2>
+			</header>
+			
+			<form class="account-creation-form" method="post" action="index.html">
+				<div class="input-block form-both">
+					<input type="radio" name="account-type" id="account-type-student" value="student" checked>
+					<label>Student</label>
+					<input type="radio" name="account-type" id="account-type-instructor" value="instructor">
+					<label>Instructor</label>
+				</div>
+				
+				<div class="input-block form-both">
+					<label class="input-block">Name</label>
+					<input type="text" name="first-name" id="first-name" placeholder="First" 
+						title="Please enter your first name" required>
+					<input type="text" name="last-name" id="last-name" placeholder="Last" 
+						title="Please enter your last name" required>
+				</div>
+				
+				<div class="input-block form-both">
+					<label class="input-block">WSU Email</label>
+					<label class="input-block input-description">This will be your username.</label>
+					<input type="email" name="wsu-email" id="wsu-email" 
+						title="Please enter your WSU email" required>
+				</div>
+				
+				<div class="input-block form-both">
+					<label class="input-block">Password</label>
+					<input type="password" name="password" id="password" 
+						title="Please enter a password" required>
+				</div>
+				
+				<div class="input-block form-both">
+					<label class="input-block">Confirm Password</label>
+					<input type="password" name="confirm-password" id="confirm-password" 
+						title="Please confirm your password" required>
+				</div>
+
+				<div class="input-block form-both">
+					<label class="input-block">WSU ID</label>
+					<input type="text" name="wsu-id" id="wsu-id" 
+						title="Please enter your WSU ID" pattern="[0-9]+" required>
+				</div>	
+
+				<div class="input-block form-both">
+					<label class="input-block">Phone</label>
+					<label class="input-block input-description">(xxx-xxx-xxxx)</label>
+					<input type="text" name="phone" id="phone" 
+						title="Please enter your phone number" pattern="[0-9]{3}[ |-][0-9]{3}[ |-][0-9]{4}" required>
+				</div>	
+				
+				<div class="input-block form-both">
+					<label class="input-block">Personal Email (Optional)</label>
+					<input type="email" name="personal-email" id="personal-email" 
+						title="Personal email is optional">
+				</div>	
+
+				<!-- ------------------------------------------- -->
+				
+				<div class="input-block form-student divider">
+				</div>
+				
+				<div class="input-block form-student">
+					<label class="input-block">Major</label>
+					<input type="text" name="major" id="major" 
+						title="Please enter a major. (Undecided is valid!)" required>				
+				</div>
+				
+				<div class="input-block form-student">
+					<label class="input-block">Cumulative GPA</label>
+					<input type="text" name="gpa" id="gpa" 
+						title="Please enter your GPA, in number format" pattern="[0-4][.][0-9]" required>					
+				</div>
+				
+				<div class="input-block form-student">
+					<label class="input-block">Expected Graduation Date</label>
+					<input type="radio" name="graduation-semester" id="graduation-semester-fall" 
+						value="fall" checked>
+					<label>Fall</label>
+					<input type="radio" name="graduation-semester" id="graduation-semester-spring" 
+						value="spring">
+					<label>Spring</label>
+					<input type="text" name="graduation-year" id="graduation-year" placeholder="Year" 
+						title="Please enter your expected graduation year" pattern="[0-9]+" required>
+				</div>
+				
+				<div class="input-block form-student">
+					<label>Have you served as a TA before?</label>
+					<input type="radio" name="ta-prior" id="ta-prior-yes" value="yes">
+					<label>Yes</label>
+					<input type="radio" name="ta-prior" id="ta-prior-no" value="no" checked>
+					<label>No</label>
+				</div>				
+				
+				
+				<input type="submit" value="Continue" class="signup-button input-block"/>				
+			</form>
+		</div>
+		
+	</section>
+
+</body>
+</html>

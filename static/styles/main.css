@@ -1,0 +1,34 @@
+.mainbody{
+	text-align:center;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+.form-section{
+	margin-left:auto;
+	margin-right:auto;
+	width: 25%;
+	text-align: left;
+}
+
+.input-block{
+	display: block;
+}
+
+.login-button .signup-button{
+	margin-top: 6px;
+}
+
+.input-description{
+	font-size: 75%;
+}
+
+.divider{
+	margin-top:8px;
+	margin-bottom: 4px;
+	border-top: 1px solid black;
+}
+
+.form-student{
+	
+}
