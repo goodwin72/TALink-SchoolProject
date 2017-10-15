@@ -1,0 +1,23 @@
+List of JavaScript functions still needed:
+----------------------------
+
+makeGetRequest
+makePostRequest
+
+determineAccountTypeToCreate:	
+	if (accountType == 'student')
+		createStudentAccount()
+		
+	elif (accountType == 'instructor)
+		createInstructorAccount()
+	
+
+createInstructorAccount (calls makePostRequest)
+createStudentAccount (calls makePostRequest)
+
+confirmLogin (calls makeGetRequest)
+
+-----------------------------
+Later:
+displayData (what to do about pages needing different information?)
+
