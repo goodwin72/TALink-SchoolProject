@@ -28,7 +28,7 @@ class Student(db.Model):
 	phone_number = db.Column(db.String(16), default="N/A")
 	#-----student-unique information-----
 	major = db.Column(db.String(32))	#	*******need to add functionality to support multiple majors*******
-	gpa = db.Column(db.Float)			#their cumulative gpa
+	gpa = db.Column(db.String(4))			#their cumulative gpa
 	expected_grad = db.Column(db.String(16))	#will be Fall XXXX or Spring XXXX, the X's being a year
 	ta_before = db.Column(db.Boolean, default=False)	#if the student has been a TA before, Yes/No
 	
@@ -127,9 +127,11 @@ def index():
 def create_student():
 	account = Student(**request.json)
 	if exists(account.wsu_email):
-		return "An account with that username/email already exists", 500
+		return "An account with that username/email already exists", 501
 	db.session.add(account)
 	db.session.commit()
+	
+	db.session.refresh(account)
 
 	return jsonify({"status": 1, "user": account_to_obj_student(account)}), 200
 	
@@ -144,6 +146,8 @@ def create_instructor():
 	db.session.add(account)
 	db.session.commit()
 	
+	db.session.refresh(account)
+	
 	return jsonify({"status": 1, "user": account_to_obj_instructor(account)}), 200
 	
 
@@ -156,6 +160,8 @@ def create_admin():
 		return "An account with that username/email already exists", 500
 	db.session.add(account)
 	db.session.commit()
+	
+	db.session.refresh(account)
 	
 	return jsonify({"status": 1, "user": account_to_obj_admin(account)}), 200
 
