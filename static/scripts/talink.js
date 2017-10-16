@@ -191,6 +191,26 @@ var TALink = (function(){
 	
 	};
 	
+	var attachLoginHandler = function(e){
+		
+		$(".login-form").on('click', ".login-button", function(e) {
+			e.preventDefault ();	// Tell the browser to skip its default click action
+		
+			var lUsername = $(".login-form").find('.username-input').val();
+			var lPassword = $(".login-form").find('.password-input').val();
+		
+			var onSuccess = function(data) {
+				window.location.href = "my-account.html";	//if we successfully logged into an account, go to the account page
+			};
+			var onFailure = function() { 
+				console.error('create account failed'); 
+			};
+		
+			//make a get request, supplying the login info
+			makeGetRequest('/api/account?space=' + accountSpace + '&username='+ lUsername + '&password=' + lPassword, onSuccess, onFailure);
+		})
+	};
+	
 	
 	var attachCreateAccountHandler = function(e){
 		
@@ -214,6 +234,7 @@ var TALink = (function(){
 		attachStudentFieldDisplayListener();
 		attachConfirmPasswordListener();
 		attachCreateAccountHandler();
+		attachLoginHandler();
 	
 	});
 	

@@ -75,16 +75,16 @@ base_url = '/api/'
 def index():
 	spaceName = request.args.get('space', None) 
 	if spaceName is None:
-		return "Must provide space", 500
+		return "Must provide space", 501
 
 	username = request.args.get('username', None)
 	password = request.args.get('password', None)
 	
 	if username is None:
-		return "Must provide username", 500
+		return "Must provide username", 502
 		
 	if password is None:
-		return "Must provide password", 500
+		return "Must provide password", 503
 	
 	#Look for an existing account with the given username; starting with students
 	query = Student.query.filter_by(space=spaceName).filter_by(wsu_email=username).first()
@@ -94,7 +94,7 @@ def index():
 	if query is None:
 		query = Admin.query.filter_by(space=spaceName).filter_by(wsu_email=username).first()
 	if query is None:
-		return "No account exists with the given username", 500
+		return "No account exists with the given username", 504
 	
 	
 	#NOTE!!!! After password encryption is set up, decrypt 'password' immediately below this comment before comparing it to query.password
@@ -103,7 +103,7 @@ def index():
 	
 	#check if the supplied password and the account's password match
 	if (query.password != password):
-		return "Password does not match", 500
+		return "Password does not match", 505
 		
 		
 	#prepare the information as a json file to be sent back to the requester
