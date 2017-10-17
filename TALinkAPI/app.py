@@ -25,7 +25,7 @@ class Student(db.Model):
 	first_name = db.Column(db.String(64))
 	last_name = db.Column(db.String(64))
 	wsu_email = db.Column(db.String(128))		#this doubles as a user's username
-	password = db.Column(db.String(5000))
+	password = db.Column(db.String(128))
 	secondary_email = db.Column(db.String(128), default="N/A")		#the UI prototype allowed for an alternate email; optional?
 	phone_number = db.Column(db.String(16), default="N/A")
 	#-----student-unique information-----
