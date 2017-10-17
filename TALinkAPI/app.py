@@ -81,8 +81,6 @@ def index():
 
 	username = request.args.get('username', None)
 	password = request.args.get('password', None)
-	#pw_hash = bcrypt.generate_password_hash(password).decode('utf-8')
-
 	
 	if username is None:
 		return "Must provide username", 500
@@ -104,13 +102,9 @@ def index():
 	#NOTE!!!! After password encryption is set up, decrypt 'password' immediately below this comment before comparing it to query.password
 	#^^^ This is only if we decide to do encryption in the .js file instead of here.
 	
-	
 	#check if the supplied password and the account's password match
-	#if (query.password != password):
-	#	return "Password does not match", 500
 
 	if bcrypt.check_password_hash(query.password, password) == False:
-		print(pw_hash, query.password)
 		return "Password does not match", 500
 		
 		
