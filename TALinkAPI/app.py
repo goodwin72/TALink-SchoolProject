@@ -1,10 +1,12 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import flask_sqlalchemy as sqlalchemy
+from flask_bcrypt import Bcrypt
 
 import datetime
 
 app = Flask(__name__)
+bcrypt = Bcrypt(app)
 CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sqlalchemy-demo.db'
 
@@ -23,12 +25,12 @@ class Student(db.Model):
 	first_name = db.Column(db.String(64))
 	last_name = db.Column(db.String(64))
 	wsu_email = db.Column(db.String(128))		#this doubles as a user's username
-	password = db.Column(db.String(128))
+	password = db.Column(db.String(5000))
 	secondary_email = db.Column(db.String(128), default="N/A")		#the UI prototype allowed for an alternate email; optional?
 	phone_number = db.Column(db.String(16), default="N/A")
 	#-----student-unique information-----
 	major = db.Column(db.String(32))	#	*******need to add functionality to support multiple majors*******
-	gpa = db.Column(db.String(4))			#their cumulative gpa
+	gpa = db.Column(db.Float)			#their cumulative gpa
 	expected_grad = db.Column(db.String(16))	#will be Fall XXXX or Spring XXXX, the X's being a year
 	ta_before = db.Column(db.Boolean, default=False)	#if the student has been a TA before, Yes/No
 	
@@ -75,16 +77,18 @@ base_url = '/api/'
 def index():
 	spaceName = request.args.get('space', None) 
 	if spaceName is None:
-		return "Must provide space", 501
+		return "Must provide space", 500
 
 	username = request.args.get('username', None)
 	password = request.args.get('password', None)
+	#pw_hash = bcrypt.generate_password_hash(password).decode('utf-8')
+
 	
 	if username is None:
-		return "Must provide username", 502
+		return "Must provide username", 500
 		
 	if password is None:
-		return "Must provide password", 503
+		return "Must provide password", 500
 	
 	#Look for an existing account with the given username; starting with students
 	query = Student.query.filter_by(space=spaceName).filter_by(wsu_email=username).first()
@@ -94,7 +98,7 @@ def index():
 	if query is None:
 		query = Admin.query.filter_by(space=spaceName).filter_by(wsu_email=username).first()
 	if query is None:
-		return "No account exists with the given username", 504
+		return "No account exists with the given username", 500
 	
 	
 	#NOTE!!!! After password encryption is set up, decrypt 'password' immediately below this comment before comparing it to query.password
@@ -102,8 +106,12 @@ def index():
 	
 	
 	#check if the supplied password and the account's password match
-	if (query.password != password):
-		return "Password does not match", 505
+	#if (query.password != password):
+	#	return "Password does not match", 500
+
+	if bcrypt.check_password_hash(query.password, password) == False:
+		print(pw_hash, query.password)
+		return "Password does not match", 500
 		
 		
 	#prepare the information as a json file to be sent back to the requester
@@ -127,11 +135,11 @@ def index():
 def create_student():
 	account = Student(**request.json)
 	if exists(account.wsu_email):
-		return "An account with that username/email already exists", 501
+		return "An account with that username/email already exists", 500
+	account.password = bcrypt.generate_password_hash(account.password).decode('utf-8')
+	print(account.password)
 	db.session.add(account)
 	db.session.commit()
-	
-	db.session.refresh(account)
 
 	return jsonify({"status": 1, "user": account_to_obj_student(account)}), 200
 	
@@ -143,10 +151,9 @@ def create_instructor():
 	account = Instructor(**request.json)
 	if exists(account.wsu_email):
 		return "An account with that username/email already exists", 500
+	account.password = bcrypt.generate_password_hash(account.password).decode('utf-8')
 	db.session.add(account)
 	db.session.commit()
-	
-	db.session.refresh(account)
 	
 	return jsonify({"status": 1, "user": account_to_obj_instructor(account)}), 200
 	
@@ -158,10 +165,9 @@ def create_admin():
 	account = Admin(**request.json)
 	if exists(account.wsu_email):
 		return "An account with that username/email already exists", 500
+	account.password = bcrypt.generate_password_hash(account.password).decode('utf-8')
 	db.session.add(account)
 	db.session.commit()
-	
-	db.session.refresh(account)
 	
 	return jsonify({"status": 1, "user": account_to_obj_admin(account)}), 200
 
@@ -244,7 +250,8 @@ def account_to_obj_admin(user):
   
 def main():
     db.create_all() # creates the tables you've provided
-    app.run()       # runs the Flask application  
+    app.run()       # runs the Flask application
+
 
 if __name__ == '__main__':
     main()
