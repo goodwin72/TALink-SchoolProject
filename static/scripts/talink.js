@@ -8,7 +8,7 @@ var TALink = (function(){
 	
 	var accountSpace = 'testingSpace';	//	this is the space in which the accounts we create live; 
 										//	a tag to separate them from other sets of accounts.
-	
+	var userData;
 	
 	
 	//-------------------------------------------------------------------------
@@ -136,6 +136,7 @@ var TALink = (function(){
 		accountInfo.secondary_email = $('#personal-email').val();
 		accountInfo.major = $('#major').val();
 		accountInfo.gpa = $('#gpa').val();
+		accountInfo.course_preferences = [];
 		
 		if ($("input[name=ta-prior]:checked").val() == "yes"){
 			accountInfo.ta_before = true;
@@ -177,6 +178,7 @@ var TALink = (function(){
 		accountInfo.password = $('#password').val();
 		accountInfo.phone_number = $('#phone').val();
 		accountInfo.secondary_email = $('#personal-email').val();
+		accountInfo.courses_taught = [];
 	
 	
 	    var onSuccess = function(data) {
@@ -200,6 +202,7 @@ var TALink = (function(){
 			var lPassword = $(".login-form").find('.password-input').val();
 		
 			var onSuccess = function(data) {
+				userData = data;
 				window.location.href = "my-account.html";	//if we successfully logged into an account, go to the account page
 			};
 			var onFailure = function() { 
