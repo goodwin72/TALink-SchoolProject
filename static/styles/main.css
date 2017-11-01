@@ -1,4 +1,16 @@
-.mainbody{
+.login-form, .account-creation-form{
+	max-width: 550px;
+	margin-left: auto;
+	margin-right: auto;
+}
+.control-label{
+	text-align: left;
+}
+
+.main-content{
+	max-width: 90%;
+}
+/*.mainbody{
 	text-align:center;
 	margin-left:auto;
 	margin-right:auto;
@@ -18,17 +30,27 @@
 .login-button .signup-button{
 	margin-top: 6px;
 }
+*/
 
 .input-description{
-	font-size: 75%;
+	display: block;
+	font-size: 80%;
+}
+
+.radio-label{
+	display: block;
 }
 
 .divider{
 	margin-top:8px;
-	margin-bottom: 4px;
+	margin-bottom: 8px;
 	border-top: 1px solid black;
 }
 
-.form-student{
-	
+.signup-button{
+	margin-bottom: 28px;
+}
+
+h2{
+	font-size: 18px;
 }
