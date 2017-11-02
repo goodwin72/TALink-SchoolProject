@@ -195,7 +195,7 @@ var TALink = (function(){
 	
 	var attachLoginHandler = function(e){
 		
-		$(".login-form").on('click', ".login-button btn", function(e) {
+		$(".login-form").on('click', ".login-button", function(e) {
 			e.preventDefault ();	// Tell the browser to skip its default click action
 		
 			var lUsername = $(".login-form").find('.username-input').val();
