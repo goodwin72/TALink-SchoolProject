@@ -206,7 +206,7 @@ var TALink = (function(){
 				window.location.href = "my-account.html";	//if we successfully logged into an account, go to the account page
 			};
 			var onFailure = function() { 
-				console.error('create account failed'); 
+				console.error('login failed'); 
 			};
 			//make a get request, supplying the login info
 			makeGetRequest('/api/account?space=' + accountSpace + '&username='+ lUsername + '&password=' + lPassword, onSuccess, onFailure);
