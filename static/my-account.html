@@ -17,5 +17,141 @@
 
 </head>
 <body>
-	<p>You are viewing the account page. There's nothing here yet, but if you made it here from the login screen, you've successfully logged in.</p>
+	<!-- Make a Bootstrap alert for successful login -->
+	<nav class="navbar navbar-default navbar-static-top">
+		<div class="container">
+			<div class="navbar-header">
+				<div class="navbar-left">	
+					<a class="navbar-brand" href="#">WSU TALink</a>
+					<div id="nav-search" class="input-group">
+						<input type="text" class="form-control" placeholder="Search for...">
+						<span class="input-group-btn">
+							<button class="btn btn-default" type="button">Go!</button>
+						</span>
+					</div>
+				</div>
+				
+				<!-- BUG: Why does this take a whole line in mobile-sized views? -->
+				<button type="button" class="navbar-toggle collapsed navbar-right" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+
+			</div>
+			
+			<div id="navbar" class="navbar-collapse collapse navbar-right">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="#">Home</a></li>
+					<li><a href="#">Account</a></li>
+					<li><a href="#">Log Out</a></li>
+				</ul>
+			</div><!--/.nav-collapse -->
+		</div><!--/.container -->
+	</nav>
+
+    <div class="container">
+    <!-- Main component for a primary marketing message or call to action -->
+		<div class="jumbotron">
+			<h1>Jane Doe</h1>
+			<!-- <p>Major: <span id="studentMajor" class="small">Computer Science</span></p>
+			<p>Expected Graduation Date: <span id="studentExpectedGraduationDate" class="small">Default</span></p>
+			<p>Previously Been a TA: <span id="previouslyBeenATA" class="small">Default</span></p>--><!-- Should we have this auto-update? -->
+			<dl class="dl-horizontal">
+				<dt>Major</dt>
+				<dd>Computer Science</dd>
+				
+				<dt>Graduation Date</dt>
+				<dd>Fall 2018</dd>
+				
+				<dt>Previously Been a TA</dt>
+				<dd>No</dd>
+			</dl>
+			
+			<div class="class-list-empty">
+				<h2>Welcome!</h2>
+				<p>You have not applied to TA any courses.</p>
+				<p><a class="btn btn-lg btn-primary" href="" role="button">Add Course &raquo;</a></p>
+			</div>
+			
+			<div class="container class-list">
+				<h2>Applied For:</h2>
+				<div class="border-bottom"></div>
+				<div class="row">
+					<div class="col-xs-10">
+						<dl class="dl-horizontal">
+							<dt class="h3">Cpts 223</dt>
+							<dd></dd>
+							
+							<dt>Taken</dt>
+							<dd>2017</dd>
+							
+							<dt>Grade</dt>
+							<dd>A-</dd>
+							
+							<dt>Previously Been a TA</dt>
+							<dd>No</dd>
+						</dl>
+					</div>
+					
+					<div class="col-xs-2 text-right">
+						<p class="h3">x</p>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-xs-10">
+						<dl class="dl-horizontal">
+							<dt class="h3">Cpts 223</dt>
+							<dd></dd>
+							
+							<dt>Taken</dt>
+							<dd>2017</dd>
+							
+							<dt>Grade</dt>
+							<dd>A-</dd>
+							
+							<dt>Previously Been a TA</dt>
+							<dd>No</dd>
+						</dl>
+					</div>
+					
+					<div class="col-xs-2 text-right">
+						<p class="h3">x</p>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-xs-10">
+						<dl class="dl-horizontal">
+							<dt class="h3">Cpts 223</dt>
+							<dd></dd>
+							
+							<dt>Taken</dt>
+							<dd>2017</dd>
+							
+							<dt>Grade</dt>
+							<dd>A-</dd>
+							
+							<dt>Previously Been a TA</dt>
+							<dd>No</dd>
+						</dl>
+					</div>
+					
+					<div class="col-xs-2 text-right">
+						<p class="h3">x</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- [Bootstrap] Bootstrap core JavaScript
+	================================================== -->
+	<!-- [Bootstrap] Placed at the end of the document so the pages load faster -->
+	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
+	<script src="scripts/jquery.min.js"></script>
+	<script src="scripts/bootstrap.min.js"></script>
+	<script type="text/javascript" src="scripts/talink.js"></script>
 </body>

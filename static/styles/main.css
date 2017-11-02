@@ -51,6 +51,24 @@
 	margin-bottom: 28px;
 }
 
-h2{
+.account-creation-form h2{
 	font-size: 18px;
+}
+
+.container dt{
+  width:auto;
+  margin-left:auto;
+  display:inline-block;
+}
+
+.class-list-empty{
+	display: none;
+}
+
+.border-bottom{
+	border-bottom: 1px solid #505050;
+}
+
+#nav-search{
+	padding-top: 7px;
 }
