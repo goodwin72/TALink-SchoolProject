@@ -195,7 +195,7 @@ var TALink = (function(){
 	
 	var attachLoginHandler = function(e){
 		
-		$(".login-form").on('click', ".login-button", function(e) {
+		$(".login-form").on('click', ".login-button btn", function(e) {
 			e.preventDefault ();	// Tell the browser to skip its default click action
 		
 			var lUsername = $(".login-form").find('.username-input').val();
@@ -208,10 +208,9 @@ var TALink = (function(){
 			var onFailure = function() { 
 				console.error('create account failed'); 
 			};
-		
 			//make a get request, supplying the login info
 			makeGetRequest('/api/account?space=' + accountSpace + '&username='+ lUsername + '&password=' + lPassword, onSuccess, onFailure);
-		})
+		});
 	};
 	
 	
@@ -227,7 +226,7 @@ var TALink = (function(){
 			else if ($("input[name=account-type]:checked").val() == "instructor"){ //if the radio button's value is 'instructor', create an instructor account
 				createInstructorAccount();
 			}
-		})
+		});
 	};
 	
 	
