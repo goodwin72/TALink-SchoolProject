@@ -430,6 +430,7 @@ def updateStudentInfo():
 		return "The username or password is incorrect", 500
 	
 	#---------- begin updating info ------------
+	query.wsu_email = info["wsu_email"]
 	query.wsu_id = info["wsu_id"]
 	query.first_name = info["first_name"]
 	query.last_name = info["last_name"]
@@ -471,6 +472,7 @@ def updateInstructorInfo():
 		return "The username or password is incorrect", 500
 	
 	#---------- begin updating info ------------
+	query.wsu_email = info["wsu_email"]
 	query.wsu_id = info["wsu_id"]
 	query.first_name = info["first_name"]
 	query.last_name = info["last_name"]
@@ -575,10 +577,10 @@ def validatePassword(username, password):
 	if query is None:
 		return False	# account does not exist
 		
-#	if query.password != password:
-#		return False	# passwords do not match	
-	if bcrypt.check_password_hash(query.password, password) == False:
-		return False
+	if query.password != password:
+		return False	# passwords do not match	
+#	if bcrypt.check_password_hash(query.password, password) == False:
+#		return False
 
 	return True
 	
@@ -618,6 +620,10 @@ def updateStudentInfoValidation(data):
 # for right now, it only makes sure each field has a value.
 def updateInfoValidation(data, userType):
 	
+	if exists(data["wsu_email"]) is True:	#checking if the new username already exists
+		return False
+	if data["wsu_email"] is None or data["wsu_email"] == "":
+		return False
 	if data["wsu_id"] is None or data["wsu_id"] == "":
 		return False
 	if data["first_name"] is None or data["first_name"] == "":
