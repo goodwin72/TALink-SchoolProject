@@ -203,7 +203,7 @@ var TALink = (function(){
 		
 			var onSuccess = function(data) {
 				userData = data;
-				window.location.href = "my-account.html";	//if we successfully logged into an account, go to the account page
+				window.location.href = "home.html";	//if we successfully logged into an account, go to the account page
 			};
 			var onFailure = function() { 
 				console.error('login failed'); 
