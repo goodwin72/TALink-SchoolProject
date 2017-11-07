@@ -8,3 +8,5 @@ OR
 
 python -m unittest  -v
 Passing the -v option to your test script will instruct unittest.main() to enable a higher level of verbosity.
+
+Make sure the server is running (python app.py).
