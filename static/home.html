@@ -16,6 +16,7 @@
 	<link rel="stylesheet" type="text/css" href="styles/main.css">
 
 </head>
+
 <body>
 	<!-- TODO: Make a Bootstrap alert for successful login -->
 	
@@ -72,6 +73,70 @@
 		</div>
 	</nav>
 
+	<!-- Bootstrap models are popup-like prompts that dim the screen behind them. -->
+	<!-- Code largely an edited version of sample code from the Bootstrap documentation: 
+		https://bootstrapdocs.com/v3.3.6/docs/javascript/ -->
+	<div class="modal fade" id="modal-add-class" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel">Add Course</h4>
+				</div>
+				
+				<div class="modal-body">
+					<div class="form-group">
+						<div class="form-inline">
+							<div class="row">
+								<div class="col-sm-4">
+									<label class="control-label">Prefix</label>
+								</div>
+								
+								<div class="col-sm-4">
+									<label class="control-label">Course Number</label>
+								</div>
+								
+								<div class="col-sm-4">
+									<label class="control-label">Section/Lab Number</label>
+								</div>
+							</div>
+							
+							<div class="row">
+								<div class="col-sm-4">
+									<input type="text" name="course-prefix" id="course-prefix" class="form-control"
+										title="Enter the course prefix" required/>								
+								</div>
+								
+								<div class="col-sm-4">
+									<input type="text" name="course-number" id="course-number" class="form-control"
+										title="Enter the course number" required/>								
+								</div>
+								
+								<div class="col-sm-4">
+									<input type="text" name="section-or-lab-number" id="section-or-lab-number" class="form-control"
+										title="Enter the section or lab number" required/>								
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="form-group form-student">
+						<label class="control-label radio-label">Is this course a lab?</label>
+						<input type="radio" name="ta-prior" id="course-is-lab-yes" value="yes">
+						<label>Yes</label>
+						<input type="radio" name="ta-prior" id="course-is-lab-no" value="no" checked>
+						<label>No</label>
+					</div>						
+				</div>
+				
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary">Add course</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
     <div class="container">
     <!-- The Jumbotron is one of several base styling classes in Bootstrap. As a template I referenced 
 		said, it's the "main component for a primary marketing message or call to action". -->
@@ -96,7 +161,7 @@
 			<div class="class-list-empty">
 				<h2>Welcome!</h2>
 				<p>You have not applied to TA any courses.</p>
-				<p><a class="btn btn-lg btn-primary" href="" role="button">Add Course &raquo;</a></p>
+				<p><button type="button" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#modal-add-class">Add Course &raquo;</button></p>
 			</div>
 			
 			<!-- Shows the list of classes. Displayed if even one class is returned via the GET request. -->
@@ -107,7 +172,7 @@
 					</div>
 					
 					<div class="col-sm-6 text-right">
-						<p><a class="btn btn-lg btn-primary" href="" role="button">Add Course &raquo;</a></p>
+						<p><button type="button" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#modal-add-class">Add Course &raquo;</button></p>
 					</div>
 				</div>
 				

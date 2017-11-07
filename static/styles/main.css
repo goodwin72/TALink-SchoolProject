@@ -56,9 +56,9 @@
 }
 
 .container dt{
-  width:auto;
-  margin-left:auto;
-  display:inline-block;
+	width:auto;
+	margin-left:auto;
+	display:inline-block;
 }
 
 .class-list-empty{
