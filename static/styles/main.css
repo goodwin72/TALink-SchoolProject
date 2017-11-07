@@ -72,3 +72,11 @@
 #nav-search{
 	padding-top: 7px;
 }
+
+#account-info h1{
+	font-size: 28px;
+}
+
+#account-info dd{
+	margin-bottom: 8px;
+}

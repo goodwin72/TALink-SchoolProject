@@ -8,7 +8,7 @@
 	<!-- [Bootstrap] The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 	<link rel="icon" href="images/favicon.ico">
 
-	<title>WSUTALink | My Account</title>
+	<title>WSUTALink | Home</title>
 
 	<!-- [Bootstrap] Bootstrap core CSS -->
 	<link href="styles/bootstrap.min.css" rel="stylesheet">
@@ -17,21 +17,42 @@
 
 </head>
 <body>
-	<!-- Make a Bootstrap alert for successful login -->
+	<!-- TODO: Make a Bootstrap alert for successful login -->
+	
+	<!-- Navbar is the Bootstrap class for creating a navbar section. Navbar-default
+		gives it its basic styling. Navbar-static-top is used for a navbar that covers
+		the whole screen, but isn't fixed to the top. (See this link for a good comparison
+		of the different classes for this: https://getbootstrap.com/docs/3.3/examples/navbar/)-->
 	<nav class="navbar navbar-default navbar-static-top">
+		<!-- Container classes are a key component of Bootstrap - its grid system relies on them.
+			That said, containers have padding, so elements that should appear in a line on the page 
+			shouldn't use nested containers. 
+			In this project, I put the basic info in a container, and the class list as a container 
+			in that container - the extra padding works perfectly here. -->
 		<div class="container">
+			<!-- ...I don't fully understand a few of these navbar classes myself - a lot of this was
+				trial-and-error. -->
 			<div class="navbar-header">
 				<div class="navbar-left">	
 					<a class="navbar-brand" href="#">WSU TALink</a>
+					<!-- "input-group" groups elements related to a single input element together.
+						It seems pretty similar to the "input-block" class that I wrote earlier on. -->
 					<div id="nav-search" class="input-group">
+						<!-- "form-control" gives forms Bootstrap styling -->
 						<input type="text" class="form-control" placeholder="Search for...">
+						<!-- The button appears on its own line if it isn't wrapped in an
+							"input-group-btn" element -->
 						<span class="input-group-btn">
+							<!-- "btn" gives the standard Bootstrap button styling.
+								"btn-default" makes the button white instaed of gray, and gives 
+								it a subtle border. -->
 							<button class="btn btn-default" type="button">Go!</button>
 						</span>
 					</div>
 				</div>
 				
-				<!-- BUG: Why does this take a whole line in mobile-sized views? -->
+				<!-- Dropdown button - should only be visible at mobile sizes. -->
+				<!-- BUG: Why does this take a whole line in mobile-resolution views? -->
 				<button type="button" class="navbar-toggle collapsed navbar-right" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
 					<span class="sr-only">Toggle navigation</span>
 					<span class="icon-bar"></span>
@@ -43,41 +64,66 @@
 			
 			<div id="navbar" class="navbar-collapse collapse navbar-right">
 				<ul class="nav navbar-nav">
-					<li class="active"><a href="#">Home</a></li>
-					<li><a href="#">Account</a></li>
+					<li class="active"><a href="home.html">Home</a></li>
+					<li><a href="account.html">Account</a></li>
 					<li><a href="#">Log Out</a></li>
 				</ul>
-			</div><!--/.nav-collapse -->
-		</div><!--/.container -->
+			</div>
+		</div>
 	</nav>
 
     <div class="container">
-    <!-- Main component for a primary marketing message or call to action -->
+    <!-- The Jumbotron is one of several base styling classes in Bootstrap. As a template I referenced 
+		said, it's the "main component for a primary marketing message or call to action". -->
 		<div class="jumbotron">
-			<h1>Jane Doe</h1>
-			<!-- <p>Major: <span id="studentMajor" class="small">Computer Science</span></p>
-			<p>Expected Graduation Date: <span id="studentExpectedGraduationDate" class="small">Default</span></p>
-			<p>Previously Been a TA: <span id="previouslyBeenATA" class="small">Default</span></p>--><!-- Should we have this auto-update? -->
+			<h1 id="user-name">Jane Doe</h1>
+			<!-- This is a Bootstrap description list (dl). "dl-horizontal" makes the title 
+				and description appear side-by-side. <dt> is the description title; 
+				<dd> is the description... description? -->
 			<dl class="dl-horizontal">
 				<dt>Major</dt>
-				<dd>Computer Science</dd>
+				<dd id="student-major">Computer Science</dd>
 				
 				<dt>Graduation Date</dt>
-				<dd>Fall 2018</dd>
+				<dd id="student-graduation-date">Fall 2018</dd>
 				
 				<dt>Previously Been a TA</dt>
-				<dd>No</dd>
+				<dd id="student-TA-history">No</dd>
 			</dl>
 			
+			<!-- This class appears by default. If the GET request returns at leat one class, this is
+				hidden via jQuery, and "class-list" is shown instead. -->
 			<div class="class-list-empty">
 				<h2>Welcome!</h2>
 				<p>You have not applied to TA any courses.</p>
 				<p><a class="btn btn-lg btn-primary" href="" role="button">Add Course &raquo;</a></p>
 			</div>
 			
+			<!-- Shows the list of classes. Displayed if even one class is returned via the GET request. -->
 			<div class="container class-list">
-				<h2>Applied For:</h2>
+				<div class="row">
+					<div class="col-sm-6">
+						<h2>Applied For:</h2>
+					</div>
+					
+					<div class="col-sm-6 text-right">
+						<p><a class="btn btn-lg btn-primary" href="" role="button">Add Course &raquo;</a></p>
+					</div>
+				</div>
+				
 				<div class="border-bottom"></div>
+				
+				<!-- Bootstrap's grid system uses rows and columns. Columns are nested in rows,
+					and each row is always split into 12 columns.
+					
+					Columns can span across multiple column "slots", however - when coding a Bootstrap 
+					grid, you choose the class that specifies how wide you want the column to be, 
+					relative to 12 being 100%.
+					
+					So: if you want a three-column grid, you can use "col-xs-4" for each column.
+					The "xs" specifies that the columns exist even in the smallest mobile views.
+					If you want the columns to collapse into 1 column on mobile, you can use
+					"col-sm-4". -->
 				<div class="row">
 					<div class="col-xs-10">
 						<dl class="dl-horizontal">
