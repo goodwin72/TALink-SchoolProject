@@ -151,21 +151,21 @@ def index():
 		
 		
 	#prepare the information as a json file to be sent back to the requester
-	result = []
+	#result = []
 	if query.user_type == "Student":
-		result.append(account_to_obj_student(query))
+		result = account_to_obj_student(query)
 		###for c in query.course_preferences:
 		###	  result.append(preference_to_obj(c))
 	
 	if query.user_type == "Instructor":
-		result.append(account_to_obj_instructor(query))
+		result = account_to_obj_instructor(query)
 		###for c in query.courses_taught:
 		###	  result.append(instructorCourse_to_obj(c))
 		###	  for d in c.course_sections:
 		###		  result.append(courseSection_to_obj(d))
 
 	if query.user_type == "Admin":
-		result.append(account_to_obj_admin(query))
+		result = account_to_obj_admin(query)
 		
 
 	return jsonify({"status": 1, "person": result})
@@ -345,20 +345,20 @@ def removeInstructorCourse():
 def addCourseSection():
 	section = CourseSection(**request.json)
 	if courseSectionValidation(section) is False:
-		return "One or more of the required fields were invalid", 500
+		return "One or more of the required fields were invalid", 507
 	username = request.args.get('username', None)
 	password = request.args.get('password', None)
 	courseName = request.args.get('course', None)
 	# all of this 'is None' checking stuff could probably be grouped into another function
 	if username is None:
-		return "Must provide username", 500
+		return "Must provide username", 506
 	if password is None:
-		return "Must provide password", 500
+		return "Must provide password", 505
 	if courseName is None:
-		return "Must provide a course name (ie. Cpt_S 121)", 500
+		return "Must provide a course name (ie. Cpt_S 121)", 504
 	query = Instructor.query.filter_by(wsu_email=username).first()
 	if query is None:
-		return "No account exists with the given username", 500
+		return "No account exists with the given username", 503
 	
 	metaCourse = None
 	for c in query.courses_taught:		# this will give us the InstructorCourse that this course section will join to
@@ -366,10 +366,10 @@ def addCourseSection():
 			metaCourse = c
 			break
 	if metaCourse is None:
-		return "No course exists with that course name", 500
+		return "No course exists with that course name", 502
 	
 	if (validatePassword(username, password)) is False:
-		return "The username or password is incorrect", 500
+		return "The username or password is incorrect", 501
 	
 	section.course_id = metaCourse.course_id
 	metaCourse.course_sections.append(section)
@@ -524,13 +524,32 @@ def getCoursesTaught():
 		
 	return jsonify({"status": 1, "instructor": result})
 	
+
 	
+		
+	
+#---------- lower priority -----------------	
+
+def applyForTA():	# function for adding a TAApplication to a course section
+	pass
+	
+	
+	
+#--------------------------------------------- Testing Functions ----------------------------------------------
+#	These are functions that are used for the automated testing; they can be used if needed, but were created for
+#	the intent of testing. 
+#-----------------------------------------------------------------------------------------------------------------
+	
+
 # This is a function created for testing purposes, used to see what accounts currently exist in the database.
 @app.route(base_url + 'account/getAll', methods=['GET'])
 def getAllAccounts():
-	students = Student.query.all()
-	instructors = Instructor.query.all()
-	admins = Admin.query.all()
+	space = request.args.get('space', None)
+	if space is None:
+		return "Must provide space", 500
+	students = Student.query.filter_by(space=space).all()
+	instructors = Instructor.query.filter_by(space=space).all()
+	admins = Admin.query.filter_by(space=space).all()
 	
 	result = []
 	for s in students:
@@ -543,14 +562,56 @@ def getAllAccounts():
 	return jsonify({"status": 1, "all accounts": result})
 	
 	
-	
-#---------- lower priority -----------------	
+#Purely for use in testing. REMEMBER to comment it out when released. Deletes all accounts in a given space.
+@app.route(base_url + 'account', methods=['DELETE'])
+def deleteAllAccounts():
+	space = request.args.get('space', None) 
+	if space is None:
+		return "Must provide space", 500
 
-def applyForTA():	# function for adding a TAApplication to a course section
-	pass
+	Student.query.filter_by(space=space).delete()
+	Instructor.query.filter_by(space=space).delete()
+	Admin.query.filter_by(space=space).delete()
+	InstructorCourse.query.delete()
+	CoursePreference.query.delete()
+	CourseSection.query.delete()
+	
+	db.session.commit()
+	
+	return jsonify({"status": 1}), 200
 	
 	
+@app.route(base_url + 'account/getAllCoursePref', methods=['GET'])
+def getAllCoursePref():
+	preferences = CoursePreference.query.all()
 	
+	result = []
+	for c in preferences:
+		result.append(preference_to_obj(c))
+	
+	return jsonify({"status": 1, "all_CoursePref": result})
+	
+	
+@app.route(base_url + 'account/getAllInstructorCourses', methods=['GET'])
+def getAllInstructorCourses():
+	courses = InstructorCourse.query.all()
+	
+	result = []
+	for c in courses:
+		result.append(instructorCourse_to_obj(c))
+	
+	return jsonify({"status": 1, "all_InstructorCourses": result})
+	
+	
+@app.route(base_url + 'account/getAllCourseSections', methods=['GET'])
+def getAllCourseSections():
+	sections = CourseSection.query.all()
+	
+	result = []
+	for c in sections:
+		result.append(courseSection_to_obj(c))
+	
+	return jsonify({"status": 1, "all_CourseSections": result})
 	
 #--------------------------------------------- Validation Functions ----------------------------------------------
 #	These are functions that are used for validating information; checking if something exists, is null, 
@@ -620,8 +681,8 @@ def updateStudentInfoValidation(data):
 # for right now, it only makes sure each field has a value.
 def updateInfoValidation(data, userType):
 	
-	if exists(data["wsu_email"]) is True:	#checking if the new username already exists
-		return False
+	#if exists(data["wsu_email"]) is True:	#checking if the new username already exists
+	#	return False
 	if data["wsu_email"] is None or data["wsu_email"] == "":
 		return False
 	if data["wsu_id"] is None or data["wsu_id"] == "":
