@@ -80,3 +80,11 @@
 #account-info dd{
 	margin-bottom: 8px;
 }
+
+.instructor{
+	display: none !important;
+}
+
+.student{
+	
+}

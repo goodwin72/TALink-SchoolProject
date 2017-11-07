@@ -76,7 +76,7 @@
 	<!-- Bootstrap modals are popup-like prompts that dim the screen behind them. -->
 	<!-- Code largely an edited version of sample code from the Bootstrap documentation: 
 		https://bootstrapdocs.com/v3.3.6/docs/javascript/ -->
-	<div class="modal fade" id="modal-add-class" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal fade" id="modal-instructor-add-class" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -120,7 +120,7 @@
 						</div>
 					</div>
 					
-					<div class="form-group form-student">
+					<div class="form-group">
 						<label class="control-label radio-label">Is this course a lab?</label>
 						<input type="radio" name="ta-prior" id="course-is-lab-yes" value="yes">
 						<label>Yes</label>
@@ -146,33 +146,37 @@
 				and description appear side-by-side. <dt> is the description title; 
 				<dd> is the description... description? -->
 			<dl class="dl-horizontal">
-				<dt>Major</dt>
-				<dd id="student-major">Computer Science</dd>
+				<dt class="instructor">Professor</dt>
+				<dd></dd>
 				
-				<dt>Graduation Date</dt>
-				<dd id="student-graduation-date">Fall 2018</dd>
+				<dt class="student">Major</dt>
+				<dd class="student" id="student-major">Computer Science</dd>
 				
-				<dt>Previously Been a TA</dt>
-				<dd id="student-TA-history">No</dd>
+				<dt class="student">Graduation Date</dt>
+				<dd class="student" id="student-graduation-date">Fall 2018</dd>
+				
+				<dt class="student">Previously Been a TA</dt>
+				<dd class="student" id="student-TA-history">No</dd>
 			</dl>
 			
 			<!-- This class appears by default. If the GET request returns at leat one class, this is
 				hidden via jQuery, and "class-list" is shown instead. -->
-			<div class="class-list-empty">
+			<div class="student class-list-empty">
 				<h2>Welcome!</h2>
 				<p>You have not applied to TA any courses.</p>
-				<p><button type="button" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#modal-add-class">Add Course &raquo;</button></p>
+			</div>
+			
+			<div class="instructor class-list-empty">
+				<h2>Welcome!</h2>
+				<p>You have not added any courses with an open TA position.</p>
+				<p><button type="button" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#modal-instructor-add-class">Add Course &raquo;</button></p>
 			</div>
 			
 			<!-- Shows the list of classes. Displayed if even one class is returned via the GET request. -->
-			<div class="container class-list">
+			<div class="container student class-list">
 				<div class="row">
 					<div class="col-sm-6">
 						<h2>Applied For:</h2>
-					</div>
-					
-					<div class="col-sm-6 text-right">
-						<p><button type="button" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#modal-add-class">Add Course &raquo;</button></p>
 					</div>
 				</div>
 				
@@ -250,6 +254,86 @@
 							
 							<!--<dt>Sections</dt>
 							<dd>01, 02, 03, 01-L, 02-L, 03-L</dd>-->
+						</dl>
+					</div>
+					
+					<div class="col-xs-2 text-right">
+						<p class="h3">x</p>
+					</div>
+				</div>
+			</div>
+			
+			<div class="container instructor class-list">
+				<div class="row">
+					<div class="col-sm-6">
+						<h2>Applied For:</h2>
+					</div>
+					
+					<div class="col-sm-6 text-right">
+						<p><button type="button" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#modal-instructor-add-class">Add Course &raquo;</button></p>
+					</div>
+				</div>
+				
+				<div class="border-bottom"></div>
+				
+				<div class="row">
+					<div class="col-xs-10">
+						<dl class="dl-horizontal">
+							<dt class="h3">Cpts 223</dt>
+							<dd></dd>
+							
+							<dt>Section number:</dt>
+							<dd>01</dd>
+							
+							<dt>Assigned to:</dt>
+							<dd>Tyler Walker</dd>
+							
+							<dt>Number of applicants:</dt>
+							<dd>4</dd>
+						</dl>
+					</div>
+					
+					<div class="col-xs-2 text-right">
+						<p class="h3">x</p>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-xs-10">
+						<dl class="dl-horizontal">
+							<dt class="h3">Cpts 223</dt>
+							<dd></dd>
+							
+							<dt>Section number:</dt>
+							<dd>01</dd>
+							
+							<dt>Assigned to:</dt>
+							<dd>Tyler Walker</dd>
+							
+							<dt>Number of applicants:</dt>
+							<dd>4</dd>
+						</dl>
+					</div>
+					
+					<div class="col-xs-2 text-right">
+						<p class="h3">x</p>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-xs-10">
+						<dl class="dl-horizontal">
+							<dt class="h3">Cpts 223</dt>
+							<dd></dd>
+							
+							<dt>Section number:</dt>
+							<dd>01</dd>
+							
+							<dt>Assigned to:</dt>
+							<dd>Tyler Walker</dd>
+							
+							<dt>Number of applicants:</dt>
+							<dd>4</dd>
 						</dl>
 					</div>
 					
