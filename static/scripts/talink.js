@@ -276,6 +276,12 @@ var TALink = (function(){
 		});
 	};
 	
+	var attachPrefixDropdownTextHandler = function(){
+		$("#course-prefix-dropdown").on('click', 'li a', function(){
+			$("#selected-prefix:first-child").text($(this).text());
+			$("#selected-prefix:first-child").val($(this).text());
+		});
+	};
 	
 	//	Waits until the page is loaded before running these functions.
 	$(document).ready(function(){
@@ -284,16 +290,12 @@ var TALink = (function(){
 		attachConfirmPasswordListener();
 		attachCreateAccountHandler();
 		attachLoginHandler();
+		attachPrefixDropdownTextHandler();
 		
 		homeLoadUserData();
 		accountLoadUserData();
 		
-		$(function(){
-			$("#course-prefix-dropdown").on('click', 'li a', function(){
-				$("#selected-prefix:first-child").text($(this).text());
-				$("#selected-prefix:first-child").val($(this).text());
-			});
-		});
+		
 	});
 	
 })();
