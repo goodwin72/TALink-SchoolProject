@@ -241,6 +241,7 @@ var TALink = (function(){
 		
 			var onSuccess = function(data) {
 				window.location.href = "home.html";	//if we successfully logged into an account, go to the account page
+
 				window.sessionStorage.setItem("username", data["person"]["wsu_email"]);
 				window.sessionStorage.setItem("major", data["person"]["major"]);
 				window.sessionStorage.setItem("expected_grad", data["person"]["expected_grad"]);
