@@ -221,7 +221,7 @@ var TALink = (function(){
 			var onSuccess = function(data) {
 				userData = data;
 				window.location.href = "home.html";	//if we successfully logged into an account, go to the account page
-				document.cookie = lUsername;
+				document.cookie = username=lUsername;
 			};
 			var onFailure = function() { 
 				console.error('login failed'); 
