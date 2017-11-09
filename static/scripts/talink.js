@@ -8,7 +8,6 @@ var TALink = (function(){
 	
 	var accountSpace = 'testingSpace';	//	this is the space in which the accounts we create live; 
 										//	a tag to separate them from other sets of accounts.
-	var userData;
 	
 	
 	//-------------------------------------------------------------------------
@@ -54,7 +53,7 @@ var TALink = (function(){
     };
 	
 	
-	var homeLoadUserData = function(userData){
+	var homeLoadUserData = function(){
 		console.log(window.location.pathname);
 		
 		var pathnameSplit = window.location.pathname.split("/");
@@ -64,8 +63,30 @@ var TALink = (function(){
 		
 		if (pathname == "home.html"){
 			console.log("HELLO!");
-			//console.log($("#user-name").text());
-			$("#user-name").text(document.cookie);
+			$("#user-name").text(sessionStorage.getItem("first_name") + ' ' + sessionStorage.getItem("last_name"));
+			$("#student-major").text(sessionStorage.getItem("major"));
+			$("#student-graduation-date").text(sessionStorage.getItem("expected_grad"));
+			$("#student-TA-history").text(sessionStorage.getItem("ta_before"));
+		}
+	};
+	
+	var accountLoadUserData = function(){
+		console.log(window.location.pathname);
+		
+		var pathnameSplit = window.location.pathname.split("/");
+		var pathname = pathnameSplit[pathnameSplit.length - 1];
+		
+		console.log(pathname);
+		
+		if (pathname == "account.html"){
+			$("#first-name").val(sessionStorage.getItem("first_name"));
+			$("#last-name").val(sessionStorage.getItem("last_name"));
+			$("#wsu-email").val(sessionStorage.getItem("username"));
+			$("#wsu-id").val(sessionStorage.getItem("wsu_id"));
+			$("#phone").val(sessionStorage.getItem("phone_number"));
+			$("#personal-email").val(sessionStorage.getItem("secondary_email"));
+			$("#major").val(sessionStorage.getItem("major"));
+			$("#gpa").val(sessionStorage.getItem("gpa"));
 		}
 		
 		//$("user-name").text = userdata.first_name + ' ' + userdata.last_name;
@@ -163,10 +184,10 @@ var TALink = (function(){
 		}
 		
 		if ($("input[name=ta-prior]:checked").val() == "spring"){
-			accountInfo.expected_grad = "Spring" + $('#graduation-year').val();
+			accountInfo.expected_grad = "Spring " + $('#graduation-year').val();
 		}
 		else{
-			accountInfo.expected_grad = "Fall" + $('#graduation-year').val();
+			accountInfo.expected_grad = "Fall " + $('#graduation-year').val();
 		}
 		
         var onSuccess = function(data) {  
@@ -219,9 +240,17 @@ var TALink = (function(){
 			var lPassword = $(".login-form").find('.password-input').val();
 		
 			var onSuccess = function(data) {
-				userData = data;
 				window.location.href = "home.html";	//if we successfully logged into an account, go to the account page
-				document.cookie = username=lUsername;
+				window.sessionStorage.setItem("username", data["person"]["wsu_email"]);
+				window.sessionStorage.setItem("major", data["person"]["major"]);
+				window.sessionStorage.setItem("expected_grad", data["person"]["expected_grad"]);
+				window.sessionStorage.setItem("ta_before", data["person"]["ta_before"]);
+				window.sessionStorage.setItem("first_name", data["person"]["first_name"]);
+				window.sessionStorage.setItem("last_name", data["person"]["last_name"]);
+				window.sessionStorage.setItem("wsu_id", data["person"]["wsu_id"]);
+				window.sessionStorage.setItem("phone_number", data["person"]["phone_number"]);
+				window.sessionStorage.setItem("secondary_email", data["person"]["secondary_email"]);
+				window.sessionStorage.setItem("gpa", data["person"]["gpa"]);
 			};
 			var onFailure = function() { 
 				console.error('login failed'); 
@@ -256,7 +285,8 @@ var TALink = (function(){
 		attachCreateAccountHandler();
 		attachLoginHandler();
 		
-		homeLoadUserData(userData);
+		homeLoadUserData();
+		accountLoadUserData();
 	});
 	
 })();

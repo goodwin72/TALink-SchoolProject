@@ -37,6 +37,7 @@ class Student(db.Model):
 	expected_grad = db.Column(db.String(16))	#will be Fall XXXX or Spring XXXX, the X's being a year
 	ta_before = db.Column(db.Boolean, default=False)	#if the student has been a TA before, Yes/No
 	course_preferences = db.relationship('CoursePreference', backref='student') # should be a list of CoursePreferences
+	#assigned_ta = db.Column(db.Boolean, default=False) #whether or not the student is already a TA
 	
 class CoursePreference(db.Model):
 	pref_id = db.Column(db.Integer, primary_key=True)
@@ -78,6 +79,8 @@ class CourseSection(db.Model):
 	time_lecture = db.Column(db.String(32)) #this is the time the course occurs at; ie. 8:00 - 14:00; we'll try to maintain class-signup format
 	ta_chosen = db.Column(db.Boolean, default=False) # whether or not a TA has been chosen for this course section
 	#ta_apps = db.relationship('TAApplications', backref='section')
+	#ta_username =
+	#ta_name = 
 	
 	#note, to get the course's instructor, you should be able to use [CourseSectionObject].course.instructor.first_name, etc.
 	# as such, I don't see the need for a specific "instructor name" field. Though, you can add one if the above doesn't work.
