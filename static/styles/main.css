@@ -88,3 +88,7 @@
 .student{
 	
 }
+
+#selected-prefix{
+	display: inline;
+}

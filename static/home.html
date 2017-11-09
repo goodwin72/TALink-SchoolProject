@@ -134,56 +134,59 @@
 				<div class="modal-body">
 					<div class="form-group">
 						<div class="form-inline">
-
-						
 							<div class="row">
-								<div class="col-sm-4">
+								<div class="col-sm-3">
 									<label class="control-label">Prefix</label>
 								</div>
 								
-								<div class="col-sm-4">
-
+								<div class="col-sm-6">
+									<label class="control-label">Course Number</label>
 								</div>
 							</div>
 							
 							<div class="row">
-								<div class="col-sm-4">
-									<input type="text" name="course-prefix" id="course-prefix" class="form-control"
-										title="Enter the course prefix" required/>								
+								<div class="col-sm-3">
+									<div id="course-prefix-dropdown" class="dropdown">
+										<button class="btn btn-default dropdown-toggle" id="course-prefix-dropdown-btn" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+											<div id="selected-prefix">ACCTG</div>
+											<span class="caret"></span>
+										</button>
+										
+										<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+											<li><a class="dropdown-item" href="#">ACCTG</a></li>
+											<li><a class="dropdown-item" href="#">Cpt_S</a></li>
+											<li><a class="dropdown-item" href="#">DTC</a></li>
+											<li><a class="dropdown-item" href="#">TEST</a></li>
+										</div>
+									</div>							
 								</div>
 								
-								<div class="col-sm-4">		
-									<!-- "input-group" groups elements related to a single input element together.
-										It seems pretty similar to the "input-block" class that I wrote earlier on. -->
-									<div id="nav-search" class="input-group">
+								<div class="col-sm-6">		
+									<div class="form-group">
 										<!-- "form-control" gives forms Bootstrap styling -->
-										<input type="text" class="form-control" placeholder="Search for...">
-										<!-- The button appears on its own line if it isn't wrapped in an
-											"input-group-btn" element -->
-										<span class="input-group-btn">
-											<!-- "btn" gives the standard Bootstrap button styling.
-												"btn-default" makes the button white instaed of gray, and gives 
-												it a subtle border. -->
-											<button class="btn btn-default" type="button">Go!</button>
-										</span>
+										<input type="text" class="form-control" placeholder="ex: 101"/>
 									</div>
 								</div>
-								
-								<div class="col-sm-4">
-									<input type="text" name="section-or-lab-number" id="section-or-lab-number" class="form-control"
-										title="Enter the section or lab number" required/>								
+							</div>
+							
+							<div class="row">
+								<div class="col-sm-12">
+									<!-- "btn" gives the standard Bootstrap button styling.
+										"btn-default" makes the button white instaed of gray, and gives 
+										it a subtle border. -->
+									<button type="button" class="btn btn-default">Search</button>
 								</div>
 							</div>
 						</div>
 					</div>
 					
-					<div class="form-group">
+					<!--<div class="form-group">
 						<label class="control-label radio-label">temp?</label>
 						<input type="radio" name="ta-prior" id="course-is-lab-yes" value="yes">
 						<label>Yes</label>
 						<input type="radio" name="ta-prior" id="course-is-lab-no" value="no" checked>
 						<label>No</label>
-					</div>						
+					</div>-->					
 				</div>
 				
 				<div class="modal-footer">

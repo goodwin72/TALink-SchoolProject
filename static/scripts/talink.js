@@ -52,7 +52,6 @@ var TALink = (function(){
         });
     };
 	
-	
 	var homeLoadUserData = function(){
 		console.log(window.location.pathname);
 		
@@ -288,6 +287,13 @@ var TALink = (function(){
 		
 		homeLoadUserData();
 		accountLoadUserData();
+		
+		$(function(){
+			$("#course-prefix-dropdown").on('click', 'li a', function(){
+				$("#selected-prefix:first-child").text($(this).text());
+				$("#selected-prefix:first-child").val($(this).text());
+			});
+		});
 	});
 	
 })();
