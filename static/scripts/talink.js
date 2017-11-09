@@ -54,6 +54,23 @@ var TALink = (function(){
     };
 	
 	
+	var homeLoadUserData = function(userData){
+		console.log(window.location.pathname);
+		
+		var pathnameSplit = window.location.pathname.split("/");
+		var pathname = pathnameSplit[pathnameSplit.length - 1];
+		
+		console.log(pathname);
+		
+		if (pathname == "home.html"){
+			console.log("HELLO!");
+			//console.log($("#user-name").text());
+			$("#user-name").text(document.cookie);
+		}
+		
+		//$("user-name").text = userdata.first_name + ' ' + userdata.last_name;
+	};
+	
 	
 	//	Attach an event listener to the account type radio that handles making
 	//	student-specific attributes visible or not.
@@ -204,6 +221,7 @@ var TALink = (function(){
 			var onSuccess = function(data) {
 				userData = data;
 				window.location.href = "home.html";	//if we successfully logged into an account, go to the account page
+				document.cookie = lUsername;
 			};
 			var onFailure = function() { 
 				console.error('login failed'); 
@@ -237,7 +255,8 @@ var TALink = (function(){
 		attachConfirmPasswordListener();
 		attachCreateAccountHandler();
 		attachLoginHandler();
-	
+		
+		homeLoadUserData(userData);
 	});
 	
 })();

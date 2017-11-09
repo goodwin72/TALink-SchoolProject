@@ -38,18 +38,6 @@
 					<a class="navbar-brand" href="home.html">WSU TALink</a>
 					<!-- "input-group" groups elements related to a single input element together.
 						It seems pretty similar to the "input-block" class that I wrote earlier on. -->
-					<div id="nav-search" class="input-group">
-						<!-- "form-control" gives forms Bootstrap styling -->
-						<input type="text" class="form-control" placeholder="Search for...">
-						<!-- The button appears on its own line if it isn't wrapped in an
-							"input-group-btn" element -->
-						<span class="input-group-btn">
-							<!-- "btn" gives the standard Bootstrap button styling.
-								"btn-default" makes the button white instaed of gray, and gives 
-								it a subtle border. -->
-							<button class="btn btn-default" type="button">Go!</button>
-						</span>
-					</div>
 				</div>
 				
 				<!-- Dropdown button - should only be visible at mobile sizes. -->
@@ -137,11 +125,80 @@
 		</div>
 	</div>
 	
+	<div class="modal fade" id="modal-student-add-class" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel">Apply for TA</h4>
+				</div>
+				
+				<div class="modal-body">
+					<div class="form-group">
+						<div class="form-inline">
+
+						
+							<div class="row">
+								<div class="col-sm-4">
+									<label class="control-label">Prefix</label>
+								</div>
+								
+								<div class="col-sm-4">
+
+								</div>
+							</div>
+							
+							<div class="row">
+								<div class="col-sm-4">
+									<input type="text" name="course-prefix" id="course-prefix" class="form-control"
+										title="Enter the course prefix" required/>								
+								</div>
+								
+								<div class="col-sm-4">		
+										<div id="nav-search" class="input-group">
+										<!-- "form-control" gives forms Bootstrap styling -->
+										<input type="text" class="form-control" placeholder="Search for...">
+										<!-- The button appears on its own line if it isn't wrapped in an
+											"input-group-btn" element -->
+										<span class="input-group-btn">
+											<!-- "btn" gives the standard Bootstrap button styling.
+												"btn-default" makes the button white instaed of gray, and gives 
+												it a subtle border. -->
+											<button class="btn btn-default" type="button">Go!</button>
+										</span>
+									</div>
+								</div>
+								
+								<div class="col-sm-4">
+									<input type="text" name="section-or-lab-number" id="section-or-lab-number" class="form-control"
+										title="Enter the section or lab number" required/>								
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="control-label radio-label">temp?</label>
+						<input type="radio" name="ta-prior" id="course-is-lab-yes" value="yes">
+						<label>Yes</label>
+						<input type="radio" name="ta-prior" id="course-is-lab-no" value="no" checked>
+						<label>No</label>
+					</div>						
+				</div>
+				
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary">Add course</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
     <div class="container">
     <!-- The Jumbotron is one of several base styling classes in Bootstrap. As a template I referenced 
 		said, it's the "main component for a primary marketing message or call to action". -->
 		<div class="jumbotron">
-			<h1 id="user-name">Jane Doe</h1>
+			<h1 id="user-name"></h1>
 			<!-- This is a Bootstrap description list (dl). "dl-horizontal" makes the title 
 				and description appear side-by-side. <dt> is the description title; 
 				<dd> is the description... description? -->
@@ -164,6 +221,7 @@
 			<div class="student class-list-empty">
 				<h2>Welcome!</h2>
 				<p>You have not applied to TA any courses.</p>
+				<p><button type="button" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#modal-student-add-class">Add Course &raquo;</button></p>
 			</div>
 			
 			<div class="instructor class-list-empty">
@@ -177,6 +235,10 @@
 				<div class="row">
 					<div class="col-sm-6">
 						<h2>Applied For:</h2>
+					</div>
+					
+					<div class="col-sm-6 text-right">
+						<p><button type="button" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#modal-student-add-class">Apply for TA &raquo;</button></p>
 					</div>
 				</div>
 				
