@@ -1,0 +1,10 @@
+List of JavaScript functions still needed:
+----------------------------
+
+
+confirmLogin (calls makeGetRequest)
+
+-----------------------------
+Later:
+displayData (what to do about pages needing different information?)
+validateEmail (confirms that the entered username-email is a valid wsu email)
