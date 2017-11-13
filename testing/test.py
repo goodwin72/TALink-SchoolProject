@@ -207,51 +207,6 @@ class TestTALink(testLib.AccountTestCase):
 		respGet = self.makeRequest(tUrl, method="GET")
 		self.assertEqual('CptS_322', respGet['instructor'][0]['course_name'])
 		self.assertEqual('Fall', respGet['instructor'][0]['semester'])
-		
-	def testAddCourseSection(self):
-		"""
-		Test adding a CourseSection to an InstructorCourse
-		"""
-		respCreate = self.makeRequest("/api/account/instructor", method="POST",
-                                    data = { 'user_type' : 'Instructor',
-											 'wsu_id' : '1234567890',
-                                             'space' : self.accountSpace,
-                                             'first_name' : 'Johnny',
-											 'last_name' : 'Doey',
-											 'wsu_email' : 'johnny.doey@wsu.edu',
-											 'password' : 'test2',
-											 'secondary_email' : "",
-											 'phone_number' : '112-223-3334'
-                                             })
-											 
-		self.assertSuccessResponse(respCreate)
-		self.assertEqual('112-223-3334', respCreate['user']['phone_number'])	#confirming the returned result contained correct data
-		self.assertEqual('Johnny', respCreate['user']['first_name'])
-		
-		#Now we will test adding an instructor course
-		tUrl = "/api/account/instructor/addCourse?username="+respCreate['user']['wsu_email']+"&password="+respCreate['user']['password']
-		respPref = self.makeRequest(tUrl, method="POST",
-									data = { 'course_name' : 'CptS_322',
-											 'semester' : 'Fall'
-											})
-		self.assertEqual('CptS_322', respPref['course']['course_name'])
-		self.assertEqual('Fall', respPref['course']['semester'])
-		
-		#Now we make sure the instructor course was added to the instructors's account
-		tUrl = "api/account/instructor/courses?username="+respCreate['user']['wsu_email']
-		respGet = self.makeRequest(tUrl, method="GET")
-		self.assertEqual('CptS_322', respGet['instructor'][0]['course_name'])
-		self.assertEqual('Fall', respGet['instructor'][0]['semester'])	
-		
-		#Now we add a course section to the instructor course
-		tUrl = "/api/account/instructor/addCourse/addSection?username="+respCreate['user']['wsu_email']+"&password="+respCreate['user']['password']+"&course=CptS_322"
-		respSect = self.makeRequest(tUrl, method="POST",
-									data = { 'section_name' : '01',
-											 'days_lecture' : 'MWF',
-											 'time_lecture' : '8:10-9:00'
-											})
-		self.assertEqual('01', respSect['course']['section_name'])
-		self.assertEqual(False, respSect['course']['ta_chosen'])
 
 		
 	def testUpdateInfoInstructor(self):
@@ -346,21 +301,7 @@ class TestTALink(testLib.AccountTestCase):
 		self.assertSuccessResponse(respGet)
 		self.assertEqual(3.4, respGet['person']['gpa'])	#confirming the returned result contained correct data
 		self.assertEqual(True, respGet['person']['ta_before'])
-		
-		
-	"""
-	_________________________________________________________________________
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	"""
+
 	
 	def testRemoveCoursePreference(self):
 		"""
@@ -460,59 +401,6 @@ class TestTALink(testLib.AccountTestCase):
 		self.assertEqual([], respGet['all_InstructorCourses'])
 		
 		
-	def testRemoveCourseSection(self):
-		"""
-		#Test removing a CourseSection to an InstructorCourse
-		"""
-		respCreate = self.makeRequest("/api/account/instructor", method="POST",
-                                    data = { 'user_type' : 'Instructor',
-											 'wsu_id' : '1234567890',
-                                             'space' : self.accountSpace,
-                                             'first_name' : 'Johnny',
-											 'last_name' : 'Doey',
-											 'wsu_email' : 'johnny.doey@wsu.edu',
-											 'password' : 'test2',
-											 'secondary_email' : "",
-											 'phone_number' : '112-223-3334'
-                                             })
-											 
-		self.assertSuccessResponse(respCreate)
-		self.assertEqual('112-223-3334', respCreate['user']['phone_number'])	#confirming the returned result contained correct data
-		self.assertEqual('Johnny', respCreate['user']['first_name'])
-		
-		#Now we will test adding an instructor course
-		tUrl = "/api/account/instructor/addCourse?username="+respCreate['user']['wsu_email']+"&password="+respCreate['user']['password']
-		respPref = self.makeRequest(tUrl, method="POST",
-									data = { 'course_name' : 'CptS_322',
-											 'semester' : 'Fall'
-											})
-		self.assertEqual('CptS_322', respPref['course']['course_name'])
-		self.assertEqual('Fall', respPref['course']['semester'])
-		
-		#Now we add a course section to the instructor course
-		tUrl = "/api/account/instructor/addCourse/addSection?username="+respCreate['user']['wsu_email']+"&password="+respCreate['user']['password']+"&course=CptS_322"
-		respSect = self.makeRequest(tUrl, method="POST",
-									data = { 'section_name' : '01',
-											 'days_lecture' : 'MWF',
-											 'time_lecture' : '8:10-9:00'
-											})
-		self.assertEqual('01', respSect['course']['section_name'])
-		self.assertEqual(False, respSect['course']['ta_chosen'])
-		
-		#Now we test removing the course section from instructor course
-		tUrl = "/api/account/instructor/removeCourse/removeSection?username="+respCreate['user']['wsu_email']+"&password="+respCreate['user']['password']+"&section_id="+str(respSect['course']['section_id'])
-		respRemove = self.makeRequest(tUrl, method="DELETE")
-		self.assertSuccessResponse(respRemove)
-		#Now make sure the course section isn't in the instructorCourse
-		tUrl = "/api/account/instructor/courses?username="+respCreate['user']['wsu_email']
-		respGet = self.makeRequest(tUrl, method="GET")
-		self.assertSuccessResponse(respGet)
-		self.assertEqual([], respGet['instructor'][0]['course_sections'])
-		#make sure the courseSection isn't in the database still
-		tUrl = "/api/account/getAllCourseSections"
-		respGet = self.makeRequest(tUrl, method="GET")
-		self.assertSuccessResponse(respGet)
-		self.assertEqual([], respGet['all_CourseSections'])
 		
 
 if __name__ == '__main__':
