@@ -169,9 +169,9 @@ def index():
 def create_student():
 	account = Student(**request.json)
 	if validateNewAccount(account) is False:
-		return "One or more required fields contained invalid values", 500
+		return "One or more required fields contained invalid values", 501
 	if exists(account.wsu_email):
-		return "An account with that username/email already exists", 500
+		return "An account with that username/email already exists", 502
 	account.password = bcrypt.generate_password_hash(account.password).decode('utf-8')
 	#print(account.password)
 	db.session.add(account)
@@ -276,22 +276,22 @@ def removeCoursePreference():
 def addInstructorCourse():
 	course = InstructorCourse(**request.json)
 	if courseValidation(course) is False:
-		return "One or more of the required fields were invalid", 500
+		return "One or more of the required fields were invalid", 501
 	username = request.args.get('username', None)
 	password = request.args.get('password', None)
 	if username is None:
-		return "Must provide username", 500
+		return "Must provide username", 502
 	if password is None:
-		return "Must provide password", 500
+		return "Must provide password", 503
 		
 	query = Instructor.query.filter_by(wsu_email=username).first()
 	if query is None:
-		return "No account exists with the given username", 500
+		return "No account exists with the given username", 504
 	courseQuery = InstructorCourse.query.filter_by(course_id=query.account_id).filter_by(course_name=course.course_name).first()
 	if courseQuery is not None:
-		return "An InstructorCourse for that course already exists", 500
+		return "An InstructorCourse for that course already exists", 505
 	if (validatePassword(username, password)) is False:
-		return "The username or password is incorrect", 500
+		return "The username or password is incorrect", 506
 	
 	course.person_id = query.account_id
 	query.courses_taught.append(course)
@@ -307,14 +307,19 @@ def addInstructorCourse():
 def removeInstructorCourse():
 	cid = request.args.get('course_id', None)
 	if cid is None:
-		return "Must provide course_id", 500
+		return "Must provide course_id", 501
 	username = request.args.get('username', None)
 	password = request.args.get('password', None)
 
 	if (validatePassword(username, password)) is False:
-		return "The username or password is incorrect", 500
+		return "The username or password is incorrect", 502
 	
 	course = InstructorCourse.query.filter_by(course_id=cid).first() #obtain the InstructorCourse we want to delete
+
+	#If the course had a TA, make sure that student loses TA status
+	if course.ta_chosen is True:
+		query = Student.query.filter_by(wsu_email=course.ta_username)
+		query.assigned_ta = False
 	
 	# making sure this InstructorCourse will be removed from the Instructor's list
 	for c in course.instructor.courses_taught:
@@ -428,7 +433,7 @@ def getCoursePreferences():
 	return jsonify({"status": 1, "student": result})
 		
 		
-# returns all of a given instructor's course preferences
+# returns all of a given instructor's Instructor Courses
 @app.route(base_url + 'account/instructor/courses', methods=['GET'])
 def getCoursesTaught():
 	username = request.args.get('username', None)
@@ -448,42 +453,186 @@ def getCoursesTaught():
 # returns all applications for a given InstructorCourse
 @app.route(base_url + 'account/instructor/courses/applications', methods=['GET'])
 def getCourseApplications():
-	pass
+	cid = request.args.get('course_id', None)
+	if cid is None:
+		return "Must provide course id", 500
+	query = InstructorCourse.query.filter_by(course_id=cid).first()
+	if query is None:
+		return "No course exists with the given course id", 500
+
+	result = []
+	for c in query.applications:
+		result.append(taApplication_to_obj(c))
+
+	return jsonify({"status": 1, "applications": result})
+
 
 # returns all applications for a given Student
 @app.route(base_url + 'account/student/applications', methods=['GET'])
 def getStudentApplications():
-	pass
+	username = request.args.get('username', None)
+	if username is None:
+		return "Must provide student username", 500
+	query = Student.query.filter_by(wsu_email=username).first()
+	if query is None:
+		return "No student exists with the given username", 500
+
+	result = []
+	for c in query.course_applications:
+		result.append(taApplication_to_obj(c))
+
+	return jsonify({"status": 1, "applications": result})
 
 
-#Adds a TAApplication to a Student and a InstructorCourse
+
+
+
+
+# Adds a TAApplication to a Student and a InstructorCourse
+# The passed-in username and password are the login info for the student who is posting the application
+# may need to update to allow for multiple applications to be passed in at once
 @app.route(base_url + 'account/student/addApp', methods=['POST'])
 def addApplication():
-	pass
+	# ----- Get Info and make sure it's valid -----
+	application = TAApplication(**request.json)		#Note: This a Course Preference stuff mixed with student info
+	course_ids = request.args.get('course_ids', None)
+	#if applicationValidation(application) is False:
+	#	return "One or more of the required fields were invalid", 500
+	if course_ids is None:
+		return "No courses were selected to apply to", 501
+	cids = course_ids.split(',', -1)	# Splits the string of ids into a list of ids
+	username = request.args.get('username', None)
+	password = request.args.get('password', None)
+	# ----- ----- ----- ----- ----- ----- ----- -----
+
+
+
+	query = Student.query.filter_by(wsu_email=username).first()
+	if query is None:
+		return "No student exists with the given username", 502
+	if (validatePassword(username, password)) is False:
+		return "The username or password is incorrect", 503
+
+
+	for i in cids:
+		courseQuery = InstructorCourse.query.filter_by(course_id=i).first()
+		if courseQuery is None:
+			return "No course with that id exists", 504
+		query.course_applications.append(application)	#add application to student's applications
+		courseQuery.applications.append(application)	# add application to the InstructorCourse's applications
+		db.session.add(application)		# add application to the TAApplication database
+		db.session.commit()
+		db.session.refresh(application)
+
+	return jsonify({"status": 1, "application": taApplication_to_obj(application)}), 200
 
 
 # Removes a TAApplication from a Student and a InstructorCourse.
 ## if the InstructorCourse has a TA chosen and that TA is the student who is deleting their application,
 ## remove the TA information from the course and set ta_chosen to false
-## also set the student's chosen_ta to false
+## also set the student's assigned_ta to false
 @app.route(base_url + 'account/student/removeApp', methods=['DELETE'])
 def removeApplication():
-	pass
+	app_id = request.args.get('app_id', None)
+	if app_id is None:
+		return "Must provide app_id", 500
+	username = request.args.get('username', None)
+	password = request.args.get('password', None)
+
+	if (validatePassword(username, password)) is False:
+		return "The username or password is incorrect", 500
+
+	application = TAApplication.query.filter_by(app_id=app_id).first()  # obtain the TAApplication we want to delete
+	if application is None:
+		return "No application with that id exists", 500
+
+	# making sure ta_chosen stuff if correct
+	if application.course.ta_username == application.student.wsu_email:	#if the student was chosen as ta for that course
+		application.course.ta_username = "No TA Chosen."
+		application.course.ta_name = "No TA Chosen."
+		application.course.ta_chosen = False
+		application.student.assigned_ta = False
+
+	# making sure this InstructorCourse will be removed from the Student's list
+	for c in application.student.course_applications:
+		if c.app_id == app_id:
+			application.student.course_applications.remove(c)
+			break
+
+	# next we need to remove the taApp from the course it belongs to
+	for d in application.course.applications:
+		application.course.applications.remove(d)
+
+
+	db.session.delete(application)  # remove the TAApplication from the database
+	db.session.commit()
+
+	return jsonify({"status": 1}), 200
 
 
 # function for setting a student as TA for a course/lab section
+# will be called by instructors, not students
+@app.route(base_url + 'account/instructor/course/chooseTA', methods=['POST'])
 def setTA():
-	pass
-# sets the section’s ta_chosen to true, store name and username of selected student;
-# selected student needs their ‘assigned_ta’ updated
+	app_id = request.args.get('app_id', None)
+	if app_id is None:
+		return "Must provide app_id", 500
+	username = request.args.get('username', None)
+	password = request.args.get('password', None)
+
+	if (validatePassword(username, password)) is False:
+		return "The username or password is incorrect", 500
+
+	application = TAApplication.query.filter_by(app_id=app_id).first()
+	if application is None:
+		return "No application with that id exists", 500
+
+	application.course.ta_username = application.student.wsu_email
+	application.course.ta_name = application.student.first_name + " " + application.student.last_name
+	application.course.ta_chosen = True
+	application.student.assigned_ta = True
+
+	db.session.add(application.student)
+	db.session.add(application.course)
+	db.session.commit()
+	db.session.refresh(application.student)
+	db.session.refresh(application.course)
+
+	return jsonify({"status": 1}), 200
 
 
 # function for removing a student from TAship for a course/lab section
+# will be called by instructors, not students
+@app.route(base_url + 'account/instructor/course/removeTA', methods=['POST'])
 def removeTA():
-	pass
-# sets respective courseSection’s ta_chosen to false, clears student’s name and username that was stored;
-# the student who was previously TA needs their ‘assigned_ta’ value set to False.
-	
+	course_id = request.args.get('course_id', None)
+	if course_id is None:
+		return "Must provide course_id", 500
+	username = request.args.get('username', None)
+	password = request.args.get('password', None)
+
+	if (validatePassword(username, password)) is False:
+		return "The username or password is incorrect", 500
+
+	course = InstructorCourse.query.filter_by(course_id=course_id).first()
+	if course is None:
+		return "No course with that id exists", 500
+	student = Student.query.filter_by(wsu_email=course.ta_username).first()
+
+	# making sure ta_chosen stuff if correct
+	course.ta_username = "No TA Chosen."
+	course.ta_name = "No TA Chosen."
+	course.ta_chosen = False
+	student.assigned_ta = False
+
+	db.session.add(student)
+	db.session.add(course)
+	db.session.commit()
+	db.session.refresh(student)
+	db.session.refresh(course)
+
+	return jsonify({"status": 1}), 200
+
 	
 #--------------------------------------------- Testing Functions ----------------------------------------------
 #	These are functions that are used for the automated testing; they can be used if needed, but were created for
@@ -509,7 +658,7 @@ def getAllAccounts():
 	for a in admins:
 		result.append(account_to_obj_admin(a))
 	
-	return jsonify({"status": 1, "all accounts": result})
+	return jsonify({"status": 1, "all_accounts": result})
 	
 	
 #Purely for use in testing. REMEMBER to comment it out when released. Deletes all accounts in a given space.
@@ -555,7 +704,7 @@ def getAllInstructorCourses():
 	
 @app.route(base_url + 'account/getAllTAApplications', methods=['GET'])
 def getAllTAApplications():
-	taApps = TAApplications.query.all()
+	taApps = TAApplication.query.all()
 	
 	result = []
 	for application in taApps:
@@ -658,7 +807,18 @@ def courseValidation(data):
 		return False
 	if data.semester is None or data.semester == "":
 		return False
+	if data.days_lecture is None or data.days_lecture == "":
+		return False
+	if data.time_lecture is None or data.time_lecture == "":
+		return False
+	#if ((data.ta_chosen is not True) and (data.ta_chosen is not False)):
+	#	return False
+	#if data.ta_username is None or data.ta_username == "":
+	#	return False
+	#if data.ta_name is None or data.ta_name == "":
+	#	return False
 	return True
+
 	
 # validates a given CoursePreference to ensure each required field has a valid value.	
 def coursePreferenceValidation(data):
@@ -727,7 +887,8 @@ def account_to_obj_student(user):
 			"major": user.major,
 			"gpa": user.gpa,
 			"expected_grad": user.expected_grad,
-			"ta_before": user.ta_before
+			"ta_before": user.ta_before,
+			"assigned_ta": user.assigned_ta
 		}
 	return user
 	
