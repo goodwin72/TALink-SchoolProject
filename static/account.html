@@ -53,7 +53,7 @@
 				<ul class="nav navbar-nav">
 					<li><a href="home.html">Home</a></li>
 					<li class="active"><a href="account.html">Account</a></li>
-					<li><a href="#">Log Out</a></li>
+					<li><a id="logout-button" href="#">Log Out</a></li>
 				</ul>
 			</div>
 		</div>
@@ -83,18 +83,6 @@
 							<input type="email" name="wsu-email" id="wsu-email" class="form-control"
 								title="Please enter your WSU email" required>
 						</div>
-						
-						<div class="form-group">
-							<label class="control-label">Password</label>
-							<input type="password" name="password" id="password" class="form-control"
-								title="Please enter a password" required>
-						</div>
-						
-						<div class="form-group">
-							<label class="control-label">Confirm Password</label>
-							<input type="password" name="confirm-password" id="confirm-password" class="form-control"
-								title="Please confirm your password" required>
-						</div>
 
 						<div class="form-group">
 							<label class="control-label">WSU ID</label>
@@ -113,11 +101,12 @@
 							<label class="control-label">Personal Email (Optional)</label>
 							<input type="email" name="personal-email" id="personal-email" class="form-control"
 								title="Personal email is optional">
-						</div>	
-					</div>
-					
-					<div class="col-sm-6">
-					<!-- "form-student" fields should be hidden by default, and shown only if the user is a student. -->
+						</div>
+						
+						<div class="divider form-student">
+						</div>
+						
+						<!-- "form-student" fields should be hidden by default, and shown only if the user is a student. -->
 						<div class="form-group form-student">
 							<label class="control-label">Major</label>
 							<input type="text" name="major" id="major" class="form-control"
@@ -151,7 +140,23 @@
 							<label>Yes</label>
 							<input type="radio" name="ta-prior" id="ta-prior-no" value="no" checked>
 							<label>No</label>
-						</div>				
+						</div>
+					</div>
+					
+					<div class="col-sm-6">			
+						<h2>Change Password</h2>
+						<div class="form-group">
+							<label class="control-label">New Password</label>
+							<input type="password" name="password" id="password" class="form-control"
+								title="Please enter a password" required>
+						</div>
+						
+						<div class="form-group">
+							<label class="control-label">Current Password</label>
+							<label class="control-label input-description">(Confirm)</label>
+							<input type="password" name="confirm-password" id="confirm-password" class="form-control"
+								title="Please confirm your password" required>
+						</div>
 					</div>
 				</div>	
 				

@@ -62,10 +62,10 @@ var TALink = (function(){
 		
 		if (pathname == "home.html"){
 			console.log("HELLO!");
-			$("#user-name").text(sessionStorage.getItem("first_name") + ' ' + sessionStorage.getItem("last_name"));
-			$("#student-major").text(sessionStorage.getItem("major"));
-			$("#student-graduation-date").text(sessionStorage.getItem("expected_grad"));
-			$("#student-TA-history").text(sessionStorage.getItem("ta_before"));
+			$("#user-name").text(localStorage.getItem("first_name") + ' ' + localStorage.getItem("last_name"));
+			$("#student-major").text(localStorage.getItem("major"));
+			$("#student-graduation-date").text(localStorage.getItem("expected_grad"));
+			$("#student-TA-history").text(localStorage.getItem("ta_before"));
 		}
 	};
 	
@@ -78,14 +78,14 @@ var TALink = (function(){
 		console.log(pathname);
 		
 		if (pathname == "account.html"){
-			$("#first-name").val(sessionStorage.getItem("first_name"));
-			$("#last-name").val(sessionStorage.getItem("last_name"));
-			$("#wsu-email").val(sessionStorage.getItem("username"));
-			$("#wsu-id").val(sessionStorage.getItem("wsu_id"));
-			$("#phone").val(sessionStorage.getItem("phone_number"));
-			$("#personal-email").val(sessionStorage.getItem("secondary_email"));
-			$("#major").val(sessionStorage.getItem("major"));
-			$("#gpa").val(sessionStorage.getItem("gpa"));
+			$("#first-name").val(localStorage.getItem("first_name"));
+			$("#last-name").val(localStorage.getItem("last_name"));
+			$("#wsu-email").val(localStorage.getItem("username"));
+			$("#wsu-id").val(localStorage.getItem("wsu_id"));
+			$("#phone").val(localStorage.getItem("phone_number"));
+			$("#personal-email").val(localStorage.getItem("secondary_email"));
+			$("#major").val(localStorage.getItem("major"));
+			$("#gpa").val(localStorage.getItem("gpa"));
 		}
 		
 		//$("user-name").text = userdata.first_name + ' ' + userdata.last_name;
@@ -241,16 +241,16 @@ var TALink = (function(){
 			var onSuccess = function(data) {
 				window.location.href = "home.html";	//if we successfully logged into an account, go to the account page
 
-				window.sessionStorage.setItem("username", data["person"]["wsu_email"]);
-				window.sessionStorage.setItem("major", data["person"]["major"]);
-				window.sessionStorage.setItem("expected_grad", data["person"]["expected_grad"]);
-				window.sessionStorage.setItem("ta_before", data["person"]["ta_before"]);
-				window.sessionStorage.setItem("first_name", data["person"]["first_name"]);
-				window.sessionStorage.setItem("last_name", data["person"]["last_name"]);
-				window.sessionStorage.setItem("wsu_id", data["person"]["wsu_id"]);
-				window.sessionStorage.setItem("phone_number", data["person"]["phone_number"]);
-				window.sessionStorage.setItem("secondary_email", data["person"]["secondary_email"]);
-				window.sessionStorage.setItem("gpa", data["person"]["gpa"]);
+				window.localStorage.setItem("username", data["person"]["wsu_email"]);
+				window.localStorage.setItem("major", data["person"]["major"]);
+				window.localStorage.setItem("expected_grad", data["person"]["expected_grad"]);
+				window.localStorage.setItem("ta_before", data["person"]["ta_before"]);
+				window.localStorage.setItem("first_name", data["person"]["first_name"]);
+				window.localStorage.setItem("last_name", data["person"]["last_name"]);
+				window.localStorage.setItem("wsu_id", data["person"]["wsu_id"]);
+				window.localStorage.setItem("phone_number", data["person"]["phone_number"]);
+				window.localStorage.setItem("secondary_email", data["person"]["secondary_email"]);
+				window.localStorage.setItem("gpa", data["person"]["gpa"]);
 			};
 			var onFailure = function() { 
 				console.error('login failed'); 
@@ -283,6 +283,13 @@ var TALink = (function(){
 		});
 	};
 	
+	var attachLogoutListener = function(){
+		$("#logout-button").click(function(){
+			window.localStorage.clear();
+			window.location.href = "index.html";	//if we successfully created an account, go back to the login page
+		});
+	};
+	
 	//	Waits until the page is loaded before running these functions.
 	$(document).ready(function(){
 		resetRadios();
@@ -291,6 +298,7 @@ var TALink = (function(){
 		attachCreateAccountHandler();
 		attachLoginHandler();
 		attachPrefixDropdownTextHandler();
+		attachLogoutListener();
 		
 		homeLoadUserData();
 		accountLoadUserData();

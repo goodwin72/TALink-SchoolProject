@@ -77,6 +77,10 @@
 	font-size: 28px;
 }
 
+#account-info h2{
+	font-size: 20px;
+}
+
 #account-info dd{
 	margin-bottom: 8px;
 }
