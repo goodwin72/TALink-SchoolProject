@@ -86,9 +86,38 @@ var TALink = (function(){
 			$("#personal-email").val(localStorage.getItem("secondary_email"));
 			$("#major").val(localStorage.getItem("major"));
 			$("#gpa").val(localStorage.getItem("gpa"));
+			
+			//Split the "expected_grad" string (example of returned string: "Fall 2017")
+			var expectedGradSplitList = localStorage.getItem("expected_grad").split(" ");
+			var expectedGradSemester = expectedGradSplitList[0];
+			var expectedGradYear = expectedGradSplitList[1];
+			
+			console.log(expectedGradSemester);
+			console.log(expectedGradYear);
+			console.log(localStorage.getItem("ta_before"));
+			
+			//Check the correct radio button for expected grad semester
+			if (expectedGradSemester == "Fall"){
+				$("input:radio[name=graduation-semester]").filter('[value=Fall]').prop('checked', true);
+			}
+			
+			else if (expectedGradSemester == "Spring"){
+				$("input:radio[name=graduation-semester]").filter('[value=Spring]').prop('checked', true);
+			}
+			
+			//Fill in the expected graduation year field
+			$("#graduation-year").val(expectedGradYear);
+			
+			//Check the correct radio button for TA history
+			if (localStorage.getItem("ta_before") == "true"){
+				$("input:radio[name=ta-prior]").filter('[value=yes]').prop('checked', true);
+			}
+			
+			else{
+				$("input:radio[name=ta-prior]").filter('[value=no]').prop('checked', true);
+			}
 		}
 		
-		//$("user-name").text = userdata.first_name + ' ' + userdata.last_name;
 	};
 	
 	var displayUserTypeClasses = function(){
