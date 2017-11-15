@@ -53,15 +53,17 @@ var TALink = (function(){
     };
 	
 	var homeLoadUserData = function(){
-		console.log(window.location.pathname);
-		
 		var pathnameSplit = window.location.pathname.split("/");
 		var pathname = pathnameSplit[pathnameSplit.length - 1];
 		
-		console.log(pathname);
-		
 		if (pathname == "home.html"){
-			console.log("HELLO!");
+			console.log("confirmed on home.html!");
+			
+			console.log(localStorage.getItem("user_type"));
+			console.log(localStorage.getItem("user_type") == "Instructor");
+			
+			displayUserTypeClasses();
+			
 			$("#user-name").text(localStorage.getItem("first_name") + ' ' + localStorage.getItem("last_name"));
 			$("#student-major").text(localStorage.getItem("major"));
 			$("#student-graduation-date").text(localStorage.getItem("expected_grad"));
@@ -70,14 +72,12 @@ var TALink = (function(){
 	};
 	
 	var accountLoadUserData = function(){
-		console.log(window.location.pathname);
-		
 		var pathnameSplit = window.location.pathname.split("/");
 		var pathname = pathnameSplit[pathnameSplit.length - 1];
 		
-		console.log(pathname);
-		
 		if (pathname == "account.html"){
+			displayUserTypeClasses();
+			
 			$("#first-name").val(localStorage.getItem("first_name"));
 			$("#last-name").val(localStorage.getItem("last_name"));
 			$("#wsu-email").val(localStorage.getItem("username"));
@@ -91,6 +91,22 @@ var TALink = (function(){
 		//$("user-name").text = userdata.first_name + ' ' + userdata.last_name;
 	};
 	
+	var displayUserTypeClasses = function(){
+		if(localStorage.getItem("user_type") == "Instructor"){
+			$('.instructor').each(function () {
+				this.style.setProperty('display', 'initial', '');
+			});
+			
+			$('.student').each(function () {
+				this.style.setProperty('display', 'none', '');
+			});
+			
+			//This doesn't apply to home.html, but we'll just cover everything here.
+			$('.form-student').each(function () {
+				this.style.setProperty('display', 'none', '');
+			});
+		}
+	};
 	
 	//	Attach an event listener to the account type radio that handles making
 	//	student-specific attributes visible or not.
@@ -241,6 +257,8 @@ var TALink = (function(){
 			var onSuccess = function(data) {
 				window.location.href = "home.html";	//if we successfully logged into an account, go to the account page
 
+				window.localStorage.setItem("user_type", data["person"]["user_type"]);
+				
 				window.localStorage.setItem("username", data["person"]["wsu_email"]);
 				window.localStorage.setItem("major", data["person"]["major"]);
 				window.localStorage.setItem("expected_grad", data["person"]["expected_grad"]);

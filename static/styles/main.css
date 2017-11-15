@@ -85,11 +85,14 @@
 	margin-bottom: 8px;
 }
 
-.instructor{
-	display: none !important;
+/* 'body' listed here because without it, this rule would lose in CSS specificity to '.container dt'
+	when it needs to override it. !important is problematic to deal with, so this is a better
+	solution */
+body .instructor{
+	display: none;
 }
 
-.student{
+body .student{
 	
 }
 
