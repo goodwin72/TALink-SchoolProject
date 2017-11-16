@@ -337,6 +337,64 @@ var TALink = (function(){
 		});
 	};
 	
+	var attachEditAccountListener = function(e){		
+		$(".account-edit-button").click(function(e){
+			e.preventDefault ();	// Tell the browser to skip its default click action
+			
+			if(localStorage.getItem("user_type") == "Student"){
+				var accountInfo = {};	//prepare the account object to send to the server
+				//And now we fill the object with information from the forms
+				accountInfo.user_type = "Student";
+				accountInfo.space = accountSpace;
+				accountInfo.first_name = $('#first-name').val();
+				accountInfo.last_name = $('#last-name').val();
+				accountInfo.wsu_id = $('#wsu-id').val();
+				accountInfo.wsu_email = $('#wsu-email').val();
+				accountInfo.password = $('#confirm-password').val(); /*change?*/
+				accountInfo.phone_number = $('#phone').val();
+				accountInfo.secondary_email = $('#personal-email').val();
+				accountInfo.major = $('#major').val();
+				accountInfo.gpa = $('#gpa').val();
+				accountInfo.course_preferences = [];
+				
+				if ($("input[name=ta-prior]:checked").val() == "yes"){
+					accountInfo.ta_before = true;
+				}
+				else{
+					accountInfo.ta_before = false;
+				}
+				
+				if ($("input[name=ta-prior]:checked").val() == "spring"){
+					accountInfo.expected_grad = "Spring " + $('#graduation-year').val();
+				}
+				else{
+					accountInfo.expected_grad = "Fall " + $('#graduation-year').val();
+				}
+				
+				var onSuccess = function(data) {  
+					alert("Account edit successful!");
+					//window.location.href = "index.html";	//if we successfully created an account, go back to the login page
+				};
+				var onFailure = function() { 
+					alert("Account edit failed.");
+					console.error('Edit account failed'); 
+				};
+		
+				//make a post request, supplying the accountInfo object we just filled out
+				makePostRequest('/api/account/student/editProfile?space=' + accountSpace + '&username='+ localStorage.getItem("username") + '&password=' + localStorage.getItem("password"), accountInfo, onSuccess, onFailure);
+			}
+			
+			else if (localStorage.getItem("user_type") == "Instructor"){
+				
+			}
+			
+			else{
+				alert("Error! LocalStorage account type is not student or instructor.");
+				console.error("LocalStorage account type not student or instructor?")
+			}
+		});
+	};
+	
 	//	Waits until the page is loaded before running these functions.
 	$(document).ready(function(){
 		resetRadios();
@@ -346,6 +404,7 @@ var TALink = (function(){
 		attachLoginHandler();
 		attachPrefixDropdownTextHandler();
 		attachLogoutListener();
+		attachEditAccountListener();
 		
 		homeLoadUserData();
 		accountLoadUserData();
