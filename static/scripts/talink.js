@@ -275,6 +275,10 @@ var TALink = (function(){
 	
 	};
 	
+	var reloadLocalStorage = function(data){
+
+	};
+	
 	var attachLoginHandler = function(e){
 		
 		$(".login-form").on('click', ".login-button", function(e) {
@@ -285,9 +289,9 @@ var TALink = (function(){
 		
 			var onSuccess = function(data) {
 				window.location.href = "home.html";	//if we successfully logged into an account, go to the account page
-
-				window.localStorage.setItem("user_type", data["person"]["user_type"]);
 				
+				window.localStorage.setItem("user_type", data["person"]["user_type"]);
+						
 				window.localStorage.setItem("username", data["person"]["wsu_email"]);
 				window.localStorage.setItem("major", data["person"]["major"]);
 				window.localStorage.setItem("expected_grad", data["person"]["expected_grad"]);
@@ -371,9 +375,23 @@ var TALink = (function(){
 					accountInfo.expected_grad = "Fall " + $('#graduation-year').val();
 				}
 				
-				var onSuccess = function(data) {  
+				var onSuccess = function() {  
+					window.localStorage.setItem("user_type", accountInfo.user_type);
+							
+					window.localStorage.setItem("username", accountInfo.wsu_email);
+					window.localStorage.setItem("major", accountInfo.user_type);
+					window.localStorage.setItem("expected_grad", accountInfo.expected_grad);
+					window.localStorage.setItem("ta_before", accountInfo.ta_before);
+					window.localStorage.setItem("first_name", accountInfo.first_name);
+					window.localStorage.setItem("last_name", accountInfo.last_name);
+					window.localStorage.setItem("wsu_id", accountInfo.wsu_id);
+					window.localStorage.setItem("phone_number", accountInfo.phone_number);
+					window.localStorage.setItem("secondary_email", accountInfo.secondary_email);
+					window.localStorage.setItem("gpa", accountInfo.gpa);
+				
 					alert("Account edit successful!");
-					//window.location.href = "index.html";	//if we successfully created an account, go back to the login page
+					
+					window.location.href = "account.html";	//if we successfully created an account, go back to the login page
 				};
 				var onFailure = function() { 
 					alert("Account edit failed.");
@@ -381,7 +399,7 @@ var TALink = (function(){
 				};
 		
 				//make a post request, supplying the accountInfo object we just filled out
-				makePostRequest('/api/account/student/editProfile?space=' + accountSpace + '&username='+ localStorage.getItem("username") + '&password=' + localStorage.getItem("password"), accountInfo, onSuccess, onFailure);
+				makePostRequest('/api/account/student/editProfile?space=' + accountSpace + '&username='+ localStorage.getItem("username") + '&password=' + accountInfo.password, accountInfo, onSuccess, onFailure);
 			}
 			
 			else if (localStorage.getItem("user_type") == "Instructor"){
