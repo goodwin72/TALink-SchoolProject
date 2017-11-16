@@ -98,11 +98,11 @@ var TALink = (function(){
 			
 			//Check the correct radio button for expected grad semester
 			if (expectedGradSemester == "Fall"){
-				$("input:radio[name=graduation-semester]").filter('[value=Fall]').prop('checked', true);
+				$("input:radio[name=graduation-semester]").filter('[value=fall]').prop('checked', true);
 			}
 			
 			else if (expectedGradSemester == "Spring"){
-				$("input:radio[name=graduation-semester]").filter('[value=Spring]').prop('checked', true);
+				$("input:radio[name=graduation-semester]").filter('[value=spring]').prop('checked', true);
 			}
 			
 			//Fill in the expected graduation year field
@@ -227,7 +227,7 @@ var TALink = (function(){
 			accountInfo.ta_before = false;
 		}
 		
-		if ($("input[name=ta-prior]:checked").val() == "spring"){
+		if ($("input[name=graduation-semester]:checked").val() == "spring"){
 			accountInfo.expected_grad = "Spring " + $('#graduation-year').val();
 		}
 		else{
