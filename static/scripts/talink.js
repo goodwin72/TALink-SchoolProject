@@ -291,7 +291,7 @@ var TALink = (function(){
 				window.location.href = "home.html";	//if we successfully logged into an account, go to the account page
 				
 				window.localStorage.setItem("user_type", data["person"]["user_type"]);
-						
+				window.localStorage.setItem("password", lPassword);	
 				window.localStorage.setItem("username", data["person"]["wsu_email"]);
 				window.localStorage.setItem("major", data["person"]["major"]);
 				window.localStorage.setItem("expected_grad", data["person"]["expected_grad"]);
@@ -379,7 +379,7 @@ var TALink = (function(){
 					window.localStorage.setItem("user_type", accountInfo.user_type);
 							
 					window.localStorage.setItem("username", accountInfo.wsu_email);
-					window.localStorage.setItem("major", accountInfo.user_type);
+					window.localStorage.setItem("major", accountInfo.major);
 					window.localStorage.setItem("expected_grad", accountInfo.expected_grad);
 					window.localStorage.setItem("ta_before", accountInfo.ta_before);
 					window.localStorage.setItem("first_name", accountInfo.first_name);
