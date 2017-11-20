@@ -147,20 +147,30 @@
 						<h2>Change Password</h2>
 						<div class="form-group">
 							<label class="control-label">New Password</label>
-							<input type="password" name="new-password" id="new-password" class="form-control"
+							<input type="password" name="password" id="password" class="form-control"
 								title="Please enter a password" required>
 						</div>
 						
 						<div class="form-group">
-							<label class="control-label">Current Password</label>
-							<label class="control-label input-description">(Confirm)</label>
+							<label class="control-label">Confirm New Password</label>
 							<input type="password" name="confirm-password" id="confirm-password" class="form-control"
 								title="Please confirm your password" required>
 						</div>
 					</div>
 				</div>	
 				
+				<div class="divider">
+				</div>
+				
 				<div class="row">
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label class="control-label">Confirm Current Password</label>
+							<input type="password" name="confirm-current-password" id="confirm-current-password" class="form-control"
+								title="Please confirm your password" required>
+						</div>
+					</div>
+					
 					<div class="col-sm-12">
 						<input type="submit" value="Save" class="account-edit-button btn btn-default"/>	
 					</div>

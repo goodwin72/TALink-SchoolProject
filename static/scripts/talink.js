@@ -178,10 +178,20 @@ var TALink = (function(){
 	var confirmPassword = function(){
 		if($("#password").val() == $("#confirm-password").val()){
 			$("#confirm-password")[0].setCustomValidity("");
+			
+			$("#password").removeClass("error-border");
+			$("#confirm-password").removeClass("error-border");
+			
+			//console.log("Passwords match!");
 		}
 		
 		else{
 			$("#confirm-password")[0].setCustomValidity("Passwords do not match.");
+			
+			$("#password").addClass("error-border");
+			$("#confirm-password").addClass("error-border");			
+			
+			//console.log("Passwords don't match....");
 		}
 	};
 	
@@ -345,70 +355,119 @@ var TALink = (function(){
 		$(".account-edit-button").click(function(e){
 			e.preventDefault ();	// Tell the browser to skip its default click action
 			
-			if(localStorage.getItem("user_type") == "Student"){
-				var accountInfo = {};	//prepare the account object to send to the server
-				//And now we fill the object with information from the forms
-				accountInfo.user_type = "Student";
-				accountInfo.space = accountSpace;
-				accountInfo.first_name = $('#first-name').val();
-				accountInfo.last_name = $('#last-name').val();
-				accountInfo.wsu_id = $('#wsu-id').val();
-				accountInfo.wsu_email = $('#wsu-email').val();
-				accountInfo.password = $('#confirm-password').val(); /*change?*/
-				accountInfo.phone_number = $('#phone').val();
-				accountInfo.secondary_email = $('#personal-email').val();
-				accountInfo.major = $('#major').val();
-				accountInfo.gpa = $('#gpa').val();
-				accountInfo.course_preferences = [];
-				
-				if ($("input[name=ta-prior]:checked").val() == "yes"){
-					accountInfo.ta_before = true;
-				}
-				else{
-					accountInfo.ta_before = false;
-				}
-				
-				if ($("input[name=ta-prior]:checked").val() == "spring"){
-					accountInfo.expected_grad = "Spring " + $('#graduation-year').val();
-				}
-				else{
-					accountInfo.expected_grad = "Fall " + $('#graduation-year').val();
-				}
-				
-				var onSuccess = function() {  
-					window.localStorage.setItem("user_type", accountInfo.user_type);
-							
-					window.localStorage.setItem("username", accountInfo.wsu_email);
-					window.localStorage.setItem("major", accountInfo.user_type);
-					window.localStorage.setItem("expected_grad", accountInfo.expected_grad);
-					window.localStorage.setItem("ta_before", accountInfo.ta_before);
-					window.localStorage.setItem("first_name", accountInfo.first_name);
-					window.localStorage.setItem("last_name", accountInfo.last_name);
-					window.localStorage.setItem("wsu_id", accountInfo.wsu_id);
-					window.localStorage.setItem("phone_number", accountInfo.phone_number);
-					window.localStorage.setItem("secondary_email", accountInfo.secondary_email);
-					window.localStorage.setItem("gpa", accountInfo.gpa);
-				
-					alert("Account edit successful!");
+			if($("#password").val() == $("#confirm-password").val()){
+				if(localStorage.getItem("user_type") == "Student"){
+					var accountInfo = {};	//prepare the account object to send to the server
+					//And now we fill the object with information from the forms
+					accountInfo.user_type = "Student";
+					accountInfo.space = accountSpace;
+					accountInfo.first_name = $('#first-name').val();
+					accountInfo.last_name = $('#last-name').val();
+					accountInfo.wsu_id = $('#wsu-id').val();
+					accountInfo.wsu_email = $('#wsu-email').val();
+					accountInfo.phone_number = $('#phone').val();
+					accountInfo.secondary_email = $('#personal-email').val();
+					accountInfo.major = $('#major').val();
+					accountInfo.gpa = $('#gpa').val();
+					if($("#password").val() != ""){
+						accountInfo.password = $('#password').val();
+					}
+					else{
+						accountInfo.password = $('#confirm-current-password').val();
+					}
+					accountInfo.course_preferences = [];
 					
-					window.location.href = "account.html";	//if we successfully created an account, go back to the login page
-				};
-				var onFailure = function() { 
-					alert("Account edit failed.");
-					console.error('Edit account failed'); 
-				};
-		
-				//make a post request, supplying the accountInfo object we just filled out
-				makePostRequest('/api/account/student/editProfile?space=' + accountSpace + '&username='+ localStorage.getItem("username") + '&password=' + accountInfo.password, accountInfo, onSuccess, onFailure);
-			}
+					if ($("input[name=ta-prior]:checked").val() == "yes"){
+						accountInfo.ta_before = true;
+					}
+					else{
+						accountInfo.ta_before = false;
+					}
+					
+					if ($("input[name=ta-prior]:checked").val() == "spring"){
+						accountInfo.expected_grad = "Spring " + $('#graduation-year').val();
+					}
+					else{
+						accountInfo.expected_grad = "Fall " + $('#graduation-year').val();
+					}
+					
+					var onSuccess = function() {  
+						window.localStorage.setItem("user_type", accountInfo.user_type);
+								
+						window.localStorage.setItem("username", accountInfo.wsu_email);
+						window.localStorage.setItem("major", accountInfo.major);
+						window.localStorage.setItem("expected_grad", accountInfo.expected_grad);
+						window.localStorage.setItem("ta_before", accountInfo.ta_before);
+						window.localStorage.setItem("first_name", accountInfo.first_name);
+						window.localStorage.setItem("last_name", accountInfo.last_name);
+						window.localStorage.setItem("wsu_id", accountInfo.wsu_id);
+						window.localStorage.setItem("phone_number", accountInfo.phone_number);
+						window.localStorage.setItem("secondary_email", accountInfo.secondary_email);
+						window.localStorage.setItem("gpa", accountInfo.gpa);					
+					
+						alert("Account edit successful!");
+						
+						window.location.href = "account.html";	//if we successfully created an account, go back to the login page
+					};
+					var onFailure = function() { 
+						alert("Account edit failed.");
+						console.error('Edit account failed'); 
+					};
 			
-			else if (localStorage.getItem("user_type") == "Instructor"){
+					//make a post request, supplying the accountInfo object we just filled out
+					makePostRequest('/api/account/student/editProfile?space=' + accountSpace + '&username='+ localStorage.getItem("username") + '&password=' + $('#confirm-current-password').val(), accountInfo, onSuccess, onFailure);
+				}
 				
+				else if (localStorage.getItem("user_type") == "Instructor"){
+					var accountInfo = {};	//prepare the account object to send to the server
+					//And now we fill the object with information from the forms
+					accountInfo.user_type = "Instructor";
+					accountInfo.space = accountSpace;
+					accountInfo.first_name = $('#first-name').val();
+					accountInfo.last_name = $('#last-name').val();
+					accountInfo.wsu_id = $('#wsu-id').val();
+					accountInfo.wsu_email = $('#wsu-email').val();
+					accountInfo.phone_number = $('#phone').val();
+					accountInfo.secondary_email = $('#personal-email').val();
+					if($("#password").val() != ""){
+						accountInfo.password = $('#password').val();
+					}
+					else{
+						accountInfo.password = $('#confirm-current-password').val();
+					}
+					//accountInfo.course_preferences = [];
+					
+					var onSuccess = function() {  
+						window.localStorage.setItem("user_type", accountInfo.user_type);
+								
+						window.localStorage.setItem("username", accountInfo.wsu_email);
+						window.localStorage.setItem("first_name", accountInfo.first_name);
+						window.localStorage.setItem("last_name", accountInfo.last_name);
+						window.localStorage.setItem("wsu_id", accountInfo.wsu_id);
+						window.localStorage.setItem("phone_number", accountInfo.phone_number);
+						window.localStorage.setItem("secondary_email", accountInfo.secondary_email);
+					
+						alert("Account edit successful!");
+						
+						window.location.href = "account.html";	//if we successfully created an account, go back to the login page
+					};
+					var onFailure = function() { 
+						alert("Account edit failed.");
+						console.error('Edit account failed'); 
+					};
+			
+					//make a post request, supplying the accountInfo object we just filled out
+					makePostRequest('/api/account/instructor/editProfile?space=' + accountSpace + '&username='+ localStorage.getItem("username") + '&password=' + $('#confirm-current-password').val(), accountInfo, onSuccess, onFailure);
+				}
+				
+				else{
+					alert("Error! LocalStorage account type is not student or instructor.");
+					console.error("LocalStorage account type not student or instructor?")
+				}
 			}
 			
 			else{
-				alert("Error! LocalStorage account type is not student or instructor.");
-				console.error("LocalStorage account type not student or instructor?")
+				alert("Passwords do not match!");
 			}
 		});
 	};

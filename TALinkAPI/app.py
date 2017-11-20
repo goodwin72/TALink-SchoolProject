@@ -395,7 +395,7 @@ def updateInstructorInfo():
 	query = Instructor.query.filter_by(wsu_email=username).first()
 	if query is None:
 		return "No account exists with the given username", 500
-	if (validatePassword(username, password)) is False:
+	if bcrypt.check_password_hash(query.password, password) is False:
 		return "The username or password is incorrect", 500
 	
 	#---------- begin updating info ------------
