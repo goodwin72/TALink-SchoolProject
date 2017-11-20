@@ -353,7 +353,7 @@ def updateStudentInfo():
 	query = Student.query.filter_by(wsu_email=username).first()
 	if query is None:
 		return "No account exists with the given username", 500
-	if bcrypt.check_password_hash(query.password, password) is False:
+	if (validatePassword(username, password)) is False:
 		return "The username or password is incorrect", 500
 	
 	#---------- begin updating info ------------
@@ -499,7 +499,7 @@ def addApplication():
 	#if applicationValidation(application) is False:
 	#	return "One or more of the required fields were invalid", 500
 	if course_ids is None:
-		return "No courses were selected to apply to", 501
+		return "No courses were selected to apply to", 500
 	cids = course_ids.split(',', -1)	# Splits the string of ids into a list of ids
 	username = request.args.get('username', None)
 	password = request.args.get('password', None)
@@ -509,15 +509,19 @@ def addApplication():
 
 	query = Student.query.filter_by(wsu_email=username).first()
 	if query is None:
-		return "No student exists with the given username", 502
+		return "No student exists with the given username", 500
 	if (validatePassword(username, password)) is False:
-		return "The username or password is incorrect", 503
+		return "The username or password is incorrect", 500
 
 
 	for i in cids:
 		courseQuery = InstructorCourse.query.filter_by(course_id=i).first()
 		if courseQuery is None:
-			return "No course with that id exists", 504
+			return "No course with that id exists", 500
+		copyQuery = TAApplication.query.filter_by(student_id=query.account_id).filter_by(course_id=i).first()
+		if copyQuery is not None:
+			return "An application for that course from this student already exists", 500
+		
 		query.course_applications.append(application)	#add application to student's applications
 		courseQuery.applications.append(application)	# add application to the InstructorCourse's applications
 		db.session.add(application)		# add application to the TAApplication database
@@ -737,10 +741,8 @@ def validatePassword(username, password):
 	if query is None:
 		return False	# account does not exist
 		
-	if query.password != password:
-		return False	# passwords do not match	
-#	if bcrypt.check_password_hash(query.password, password) == False:
-#		return False
+	if bcrypt.check_password_hash(query.password, password) is False:
+		return "The username or password is incorrect", 500	
 
 	return True
 	

@@ -301,7 +301,7 @@ var TALink = (function(){
 				window.location.href = "home.html";	//if we successfully logged into an account, go to the account page
 				
 				window.localStorage.setItem("user_type", data["person"]["user_type"]);
-						
+				window.localStorage.setItem("password", lPassword);	
 				window.localStorage.setItem("username", data["person"]["wsu_email"]);
 				window.localStorage.setItem("major", data["person"]["major"]);
 				window.localStorage.setItem("expected_grad", data["person"]["expected_grad"]);
