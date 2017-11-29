@@ -69,6 +69,25 @@ var TALink = (function(){
 			$("#student-graduation-date").text(localStorage.getItem("expected_grad"));
 			$("#student-TA-history").text(localStorage.getItem("ta_before"));
 		}
+		
+		if(localStorage.getItem("user_type") == "Instructor"){
+			var onSuccess = function(data){
+				if(data["instructor"].length == 0){
+					//alert("No classes!");
+					$(".class-list").css("display", "none");;
+				}
+				else{
+					//alert("Has classes.");
+					$(".class-list-empty").css("display", "none");
+				}
+			}
+			
+			var onFailure = function(data){
+				alert("Failed to get list of classes.\nThis page probably won't look right.")
+			}
+			
+			makeGetRequest('/api/account/instructor/courses?space=' + accountSpace + '&username=' + localStorage.getItem("username") + '&password=' + localStorage.getItem("password"), onSuccess, onFailure);
+		}
 	};
 	
 	var accountLoadUserData = function(){
@@ -285,10 +304,6 @@ var TALink = (function(){
 	
 	};
 	
-	var reloadLocalStorage = function(data){
-
-	};
-	
 	var attachLoginHandler = function(e){
 		
 		$(".login-form").on('click', ".login-button", function(e) {
@@ -472,6 +487,36 @@ var TALink = (function(){
 		});
 	};
 	
+	var attachInstructorAddCourseListener = function(e){
+		$(".instructor-add-course-button").click(function(){
+			var courseInfo = {};
+			
+			courseInfo.course_name = $('#selected-prefix').text() + " " + $('#course-number').val();
+			courseInfo.section_name = $('#section-or-lab-number').val();
+			courseInfo.semester = "Fall";
+			courseInfo.days_lecture = "Monday";
+			courseInfo.time_lecture = "12:00pm";
+			
+			// alert("DEBUG" + "\n" +
+					// "----------------" + "\n" +
+					// "Course Name: " + courseInfo.course_name + "\n" +
+					// "Section: " + courseInfo.section_name + "\n" +
+					// "Semester: " + courseInfo.semester + "\n" +
+					// "Days: " + courseInfo.days_lecture + "\n" +
+					// "Time: " + courseInfo.time_lecture);
+			var onSuccess = function(){
+				alert("Successfully added course!")
+			}
+			
+			var onFailure = function(){
+				alert("Failed to add course.");
+			}
+			
+			makePostRequest('/api/account/instructor/addCourse?space=' + accountSpace + '&username=' + localStorage.getItem("username") + '&password=' + $('#confirm-current-password').val(), courseInfo, onSuccess, onFailure);
+		});
+	}
+	
+	
 	//	Waits until the page is loaded before running these functions.
 	$(document).ready(function(){
 		resetRadios();
@@ -482,39 +527,11 @@ var TALink = (function(){
 		attachPrefixDropdownTextHandler();
 		attachLogoutListener();
 		attachEditAccountListener();
+		attachInstructorAddCourseListener();
 		
 		homeLoadUserData();
 		accountLoadUserData();
-
-		/*$.ajax({
-			type: "GET",
-			url: "C:\Users\Jared\Documents\WSU\Cpts322\Group Project\team17\course-prefix-list.txt",
-			//data: data,
-			dataType: "text",
-			success: function (data){
-				alert("HEY LISTEN");
-				console.log(data);
-			},
-			error: function(){
-				console.log("nope");
-			}
-		});*/
 		
-		/*$(function() {
-            $.get("C:\Users\Jared\Documents\WSU\Cpts322\Group Project\team17\course-prefix-list.txt", function(data) {
-                alert("Hi!");
-            });
-        });/*
-		
-		
-		/*function reqListener () {
-		  console.log(this.responseText);
-		}
-
-		var oReq = new XMLHttpRequest();
-		oReq.addEventListener("load", reqListener);
-		oReq.open("GET", "http://www.example.org/example.txt");
-		oReq.send();*/
 	});
 	
 })();
