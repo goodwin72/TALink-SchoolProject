@@ -22,7 +22,7 @@ db = sqlalchemy.SQLAlchemy(app)
 class Student(db.Model):
 	__tablename__ = 'Student'
 	account_id = db.Column(db.Integer, primary_key=True)	#this is a unique id given to each account
-	user_type = db.Column(db.String(16))	#Should be Student, Instructor, or Admin; can add more later if needed
+	user_type = db.Column(db.String(16))	#Should be Student or Instructor
 	wsu_id = db.Column(db.String(16))
 	space = db.Column(db.String(128))		#the account space; not sure if needed
 	first_name = db.Column(db.String(64))
@@ -48,7 +48,6 @@ class CoursePreference(db.Model):
 	date_taken = db.Column(db.String(16)) # should be Fall XXXX, Spring XXXX, or Summer XXXX; the X's being a year
 	#date_applyfor = db.Column(db.String(16))	# the semester+year that is being applied for
 	ta_before = db.Column(db.Boolean, default=False)	# whether or not the student has TA'd for THIS class before
-	
 	
 class Instructor(db.Model):
 	__tablename__ = 'Instructor'
@@ -95,26 +94,13 @@ class TAApplication(db.Model):
 	# ***Note: Wondering why the TAApplication's db.ForeignKey()'s class name is lower case and has underscores?
 	# ***		it's because SQLAlchemy auto-converts camelcase class names (ie, InstructorCourse) into that format.
 	# ***		If you try write it as camelcase, you'll get an error.
-
-	
-class Admin(db.Model):
-	__tablename__ = 'Admin'
-	account_id = db.Column(db.Integer, primary_key=True)
-	user_type = db.Column(db.String(16))	
-	wsu_id = db.Column(db.String(16))
-	space = db.Column(db.String(128))
-	first_name = db.Column(db.String(64))
-	last_name = db.Column(db.String(64))
-	wsu_email = db.Column(db.String(128))
-	password = db.Column(db.String(128))
-	secondary_email = db.Column(db.String(128), default="N/A")
-	phone_number = db.Column(db.String(16), default="N/A")
-	#-----admin-unique information-----
 	
 	
-#------------------------------------------------------- Main Code ---------------------------------------------------------
-#	This section contains most of functions that are related to Post/Get requests
+	
+#------------------------------------------------------- Account Creation and Login ----------------------------------------
+#	This section contains functions involving creating accounts and logging into them
 #---------------------------------------------------------------------------------------------------------------------------
+
 
 base_url = '/api/'
 
@@ -136,11 +122,9 @@ def index():
 	
 	#Look for an existing account with the given username; starting with students
 	query = Student.query.filter_by(space=spaceName).filter_by(wsu_email=username).first()
-	#if no student account exists with that username, search through instructor accounts, then admin accounts, and finally return an error if still no matches
+	#if no student account exists with that username, search through instructor accounts and return an error if still no matches
 	if query is None:
 		query = Instructor.query.filter_by(space=spaceName).filter_by(wsu_email=username).first()
-	if query is None:
-		query = Admin.query.filter_by(space=spaceName).filter_by(wsu_email=username).first()
 	if query is None:
 		return "No account exists with the given username", 500
 	
@@ -157,9 +141,6 @@ def index():
 	
 	if query.user_type == "Instructor":
 		result = account_to_obj_instructor(query)
-
-	if query.user_type == "Admin":
-		result = account_to_obj_admin(query)
 		
 
 	return jsonify({"status": 1, "person": result})
@@ -169,6 +150,7 @@ def index():
 # creates an account using the given parameters
 @app.route(base_url + 'account/student', methods=['POST'])
 def create_student():
+	#What it expects in the requested json (all strings unless otherwise stated): user_type, wsu_id, space, first_name, last_name, wsu_email, password, secondary_email(optional), phone_number(optional), major, gpa, expected_grad, ta_before(boolean)
 	account = Student(**request.json)
 	if validateNewAccount(account) is False:
 		return "One or more required fields contained invalid values", 501
@@ -187,6 +169,7 @@ def create_student():
 # creates an account using the given parameters
 @app.route(base_url + 'account/instructor', methods=['POST'])
 def create_instructor():
+#What it expects in the requested json (all strings unless otherwise stated): user_type, wsu_id, space, first_name, last_name, wsu_email, password, secondary_email(optional), phone_number(optional)
 	account = Instructor(**request.json)
 	if validateNewAccount(account) is False:
 		return "One or more required fields contained invalid values", 500
@@ -199,27 +182,18 @@ def create_instructor():
 	
 	return jsonify({"status": 1, "user": account_to_obj_instructor(account)}), 200
 	
+	
+	
+#------------------------------------------------------- Course-related Creation and Removal ----------------------------------------
+#	This section contains functions involving creating InstructorCourses, CoursePreferences, TAApplications, and removing of them
+#------------------------------------------------------------------------------------------------------------------------------------
 
-# creates an admin account
-# creates an account using the given parameters
-@app.route(base_url + 'account/admin', methods=['POST'])
-def create_admin():
-	account = Admin(**request.json)
-	if validateNewAccount(account) is False:
-		return "One or more required fields contained invalid values", 500
-	if exists(account.wsu_email):
-		return "An account with that username/email already exists", 500
-	account.password = bcrypt.generate_password_hash(account.password).decode('utf-8')
-	db.session.add(account)
-	db.session.commit()
-	db.session.refresh(account)
-	
-	return jsonify({"status": 1, "user": account_to_obj_admin(account)}), 200
-	
-	
+
 # creates a new CoursePreference and adds it to the Student Account associated with the username provided
 @app.route(base_url + 'account/student/addCourse', methods=['POST'])
 def addCoursePreference():
+#What it expects in the requested json (all strings unless otherwise stated): course_name(should be course prefix + _ + course number), 
+#		grade_earned, date_taken, ta_before(Boolean)
 	course = CoursePreference(**request.json)
 	if coursePreferenceValidation(course) is False:
 		return "One or more of the required fields were invalid", 500
@@ -276,6 +250,7 @@ def removeCoursePreference():
 # creates a new InstructorCourse and adds it to the Instructor account associated with the username provided
 @app.route(base_url + 'account/instructor/addCourse', methods=['POST'])
 def addInstructorCourse():
+#What it expects in the requested json (all strings unless otherwise stated): course_name(should be course prefix + _ + course number), section name, semester, days_lecture, time_lecture
 	course = InstructorCourse(**request.json)
 	if courseValidation(course) is False:
 		return "One or more of the required fields were invalid", 501
@@ -339,164 +314,13 @@ def removeInstructorCourse():
 	return jsonify({"status": 1}), 200
 
 	
-# updates student profile information with new information
-# note, these update functions expect every field to contain a value. The frontend should default each field with the original value
-@app.route(base_url + 'account/student/editProfile', methods=['POST'])
-def updateStudentInfo():
-	info = request.json
-	if updateInfoValidation(info, "Student") is False:
-		return "One or more of the required fields were invalid", 500
-	username = request.args.get('username', None)
-	password = request.args.get('password', None)
-	if username is None:
-		return "Must provide username", 500
-	if password is None:
-		return "Must provide password", 500
-		
-	query = Student.query.filter_by(wsu_email=username).first()
-	if query is None:
-		return "No account exists with the given username", 500
-	if (validatePassword(username, password)) is False:
-		return "The username or password is incorrect", 500
-	
-	#---------- begin updating info ------------
-	query.wsu_email = info["wsu_email"]
-	query.wsu_id = info["wsu_id"]
-	query.first_name = info["first_name"]
-	query.last_name = info["last_name"]
-	query.password = bcrypt.generate_password_hash(info["password"]).decode('utf-8')
-	query.secondary_email = info["secondary_email"]
-	query.phone_number = info["phone_number"]
-	#--
-	query.major = info["major"]
-	query.gpa = info["gpa"]
-	query.expected_grad = info["expected_grad"]
-	query.ta_before = info["ta_before"]
-	#---------- end updating info ------------
-	
-	db.session.add(query)
-	db.session.commit()
-	db.session.refresh(query)
-	
-	return jsonify({"status": 1, "student": account_to_obj_student(query) }), 200
-
-	
-# updates instructor profile information with new information
-# note, these update functions expect every field to contain a value. The frontend should default each field with the original value
-@app.route(base_url + 'account/instructor/editProfile', methods=['POST'])
-def updateInstructorInfo():
-	info = request.json
-	if updateInfoValidation(info, "Instructor") is False:
-		return "One or more of the required fields were invalid", 500
-	username = request.args.get('username', None)
-	password = request.args.get('password', None)
-	if username is None:
-		return "Must provide username", 500
-	if password is None:
-		return "Must provide password", 500
-		
-	query = Instructor.query.filter_by(wsu_email=username).first()
-	if query is None:
-		return "No account exists with the given username", 500
-	if (validatePassword(username, password)) is False:
-		return "The username or password is incorrect", 500
-	
-	#---------- begin updating info ------------
-	query.wsu_email = info["wsu_email"]
-	query.wsu_id = info["wsu_id"]
-	query.first_name = info["first_name"]
-	query.last_name = info["last_name"]
-	query.password = bcrypt.generate_password_hash(info["password"]).decode('utf-8')
-	query.secondary_email = info["secondary_email"]
-	query.phone_number = info["phone_number"]
-	#--
-	#---------- end updating info ------------
-	
-	db.session.add(query)
-	db.session.commit()
-	db.session.refresh(query)
-	
-	return jsonify({"status": 1, "instructor": account_to_obj_instructor(query) }), 200
-	
-	
-# returns all of a given student's course preferences
-@app.route(base_url + 'account/student/coursePreferences', methods=['GET'])
-def getCoursePreferences():
-	username = request.args.get('username', None)
-	if username is None:
-		return "Must provide username", 500
-	query = Student.query.filter_by(wsu_email=username).first()
-	if query is None:
-		return "No account exists with the given username", 500
-	
-	result = []
-	for c in query.course_preferences:
-		result.append(preference_to_obj(c))
-		
-	return jsonify({"status": 1, "student": result})
-		
-		
-# returns all of a given instructor's Instructor Courses
-@app.route(base_url + 'account/instructor/courses', methods=['GET'])
-def getCoursesTaught():
-	username = request.args.get('username', None)
-	if username is None:
-		return "Must provide username", 500
-	query = Instructor.query.filter_by(wsu_email=username).first()
-	if query is None:
-		return "No account exists with the given username", 500
-	
-	result = []
-	for c in query.courses_taught:
-		result.append(instructorCourse_to_obj(c))
-		
-	return jsonify({"status": 1, "instructor": result})
-
-
-# returns all applications for a given InstructorCourse
-@app.route(base_url + 'account/instructor/courses/applications', methods=['GET'])
-def getCourseApplications():
-	cid = request.args.get('course_id', None)
-	if cid is None:
-		return "Must provide course id", 500
-	query = InstructorCourse.query.filter_by(course_id=cid).first()
-	if query is None:
-		return "No course exists with the given course id", 500
-
-	result = []
-	for c in query.applications:
-		result.append(taApplication_to_obj(c))
-
-	return jsonify({"status": 1, "applications": result})
-
-
-# returns all applications for a given Student
-@app.route(base_url + 'account/student/applications', methods=['GET'])
-def getStudentApplications():
-	username = request.args.get('username', None)
-	if username is None:
-		return "Must provide student username", 500
-	query = Student.query.filter_by(wsu_email=username).first()
-	if query is None:
-		return "No student exists with the given username", 500
-
-	result = []
-	for c in query.course_applications:
-		result.append(taApplication_to_obj(c))
-
-	return jsonify({"status": 1, "applications": result})
-
-
-
-
-
-
 # Adds a TAApplication to a Student and a InstructorCourse
 # The passed-in username and password are the login info for the student who is posting the application
 # may need to update to allow for multiple applications to be passed in at once
 @app.route(base_url + 'account/student/addApp', methods=['POST'])
 def addApplication():
-	# ----- Get Info and make sure it's valid -----
+#What it expects in the requested json (all strings unless otherwise stated): student_name, wsu_sid (wsu_id of the student), grade_earned, 
+#		date_taken(in format of: Season XXXX), ta_before(boolean)
 	application = TAApplication(**request.json)		#Note: This a Course Preference stuff mixed with student info
 	course_ids = request.args.get('course_ids', None)
 	#if applicationValidation(application) is False:
@@ -575,6 +399,189 @@ def removeApplication():
 	db.session.commit()
 
 	return jsonify({"status": 1}), 200
+	
+	
+#------------------------------------------------------- Account Manipulation -------------------------------------------------------
+#	This section contains functions involving editing account information
+#------------------------------------------------------------------------------------------------------------------------------------
+	
+	
+# updates student profile information with new information
+# note, these update functions expect every field to contain a value. The frontend should default each field with the original value
+@app.route(base_url + 'account/student/editProfile', methods=['POST'])
+def updateStudentInfo():
+#What it expects in the requested json (all strings unless otherwise stated): wsu_email, wsu_id, first_name, last_name, password, secondary_email, phone_number, major, gpa, expected_grad, ta_before
+	info = request.json
+	if updateInfoValidation(info, "Student") is False:
+		return "One or more of the required fields were invalid", 500
+	username = request.args.get('username', None)
+	password = request.args.get('password', None)
+	if username is None:
+		return "Must provide username", 500
+	if password is None:
+		return "Must provide password", 500
+		
+	query = Student.query.filter_by(wsu_email=username).first()
+	if query is None:
+		return "No account exists with the given username", 500
+	if (validatePassword(username, password)) is False:
+		return "The username or password is incorrect", 500
+	
+	#---------- begin updating info ------------
+	query.wsu_email = info["wsu_email"]
+	query.wsu_id = info["wsu_id"]
+	query.first_name = info["first_name"]
+	query.last_name = info["last_name"]
+	query.password = bcrypt.generate_password_hash(info["password"]).decode('utf-8')
+	query.secondary_email = info["secondary_email"]
+	query.phone_number = info["phone_number"]
+	#--
+	query.major = info["major"]
+	query.gpa = info["gpa"]
+	query.expected_grad = info["expected_grad"]
+	query.ta_before = info["ta_before"]
+	#---------- end updating info ------------
+	
+	db.session.add(query)
+	db.session.commit()
+	db.session.refresh(query)
+	
+	return jsonify({"status": 1, "student": account_to_obj_student(query) }), 200
+
+	
+# updates instructor profile information with new information
+# note, these update functions expect every field to contain a value. The frontend should default each field with the original value
+@app.route(base_url + 'account/instructor/editProfile', methods=['POST'])
+def updateInstructorInfo():
+#What it expects in the requested json (all strings unless otherwise stated): wsu_email, wsu_id, first_name, last_name, password, secondary_email, phone_number
+	info = request.json
+	if updateInfoValidation(info, "Instructor") is False:
+		return "One or more of the required fields were invalid", 500
+	username = request.args.get('username', None)
+	password = request.args.get('password', None)
+	if username is None:
+		return "Must provide username", 500
+	if password is None:
+		return "Must provide password", 500
+		
+	query = Instructor.query.filter_by(wsu_email=username).first()
+	if query is None:
+		return "No account exists with the given username", 500
+	if (validatePassword(username, password)) is False:
+		return "The username or password is incorrect", 500
+	
+	#---------- begin updating info ------------
+	query.wsu_email = info["wsu_email"]
+	query.wsu_id = info["wsu_id"]
+	query.first_name = info["first_name"]
+	query.last_name = info["last_name"]
+	query.password = bcrypt.generate_password_hash(info["password"]).decode('utf-8')
+	query.secondary_email = info["secondary_email"]
+	query.phone_number = info["phone_number"]
+	#--
+	#---------- end updating info ------------
+	
+	db.session.add(query)
+	db.session.commit()
+	db.session.refresh(query)
+	
+	return jsonify({"status": 1, "instructor": account_to_obj_instructor(query) }), 200
+	
+	
+	
+#------------------------------------------------------- Getting Information --------------------------------------------------------
+#	This section contains functions involving retrieving information and lists of class objects from accounts and tables
+#------------------------------------------------------------------------------------------------------------------------------------
+	
+	
+# returns all of a given student's course preferences
+@app.route(base_url + 'account/student/coursePreferences', methods=['GET'])
+def getCoursePreferences():
+	username = request.args.get('username', None)
+	if username is None:
+		return "Must provide username", 500
+	query = Student.query.filter_by(wsu_email=username).first()
+	if query is None:
+		return "No account exists with the given username", 500
+	
+	result = []
+	for c in query.course_preferences:
+		result.append(preference_to_obj(c))
+		
+	return jsonify({"status": 1, "student": result})
+		
+		
+# returns all of a given instructor's Instructor Courses
+@app.route(base_url + 'account/instructor/courses', methods=['GET'])
+def getCoursesTaught():
+	username = request.args.get('username', None)
+	if username is None:
+		return "Must provide username", 500
+	query = Instructor.query.filter_by(wsu_email=username).first()
+	if query is None:
+		return "No account exists with the given username", 500
+	
+	result = []
+	for c in query.courses_taught:
+		result.append(instructorCourse_to_obj(c))
+		
+	return jsonify({"status": 1, "instructor": result})
+
+
+# returns all applications for a given InstructorCourse
+@app.route(base_url + 'account/instructor/courses/applications', methods=['GET'])
+def getCourseApplications():
+	cid = request.args.get('course_id', None)
+	if cid is None:
+		return "Must provide course id", 500
+	query = InstructorCourse.query.filter_by(course_id=cid).first()
+	if query is None:
+		return "No course exists with the given course id", 500
+
+	result = []
+	for c in query.applications:
+		result.append(taApplication_to_obj(c))
+
+	return jsonify({"status": 1, "applications": result})
+
+
+# returns all applications for a given Student
+@app.route(base_url + 'account/student/applications', methods=['GET'])
+def getStudentApplications():
+	username = request.args.get('username', None)
+	if username is None:
+		return "Must provide student username", 500
+	query = Student.query.filter_by(wsu_email=username).first()
+	if query is None:
+		return "No student exists with the given username", 500
+
+	result = []
+	for c in query.course_applications:
+		result.append(taApplication_to_obj(c))
+
+	return jsonify({"status": 1, "applications": result})
+
+
+@app.route(base_url + 'account/student/courseSearch', methods=['GET'])
+def getCoursesByName():
+	search_name = request.args.get('search_name', None)
+	if search_name is None:
+		return "Must provide a course name to search", 500
+
+	courses = InstructorCourse.query.filter_by(course_name=search_name).all()
+	if courses is None:
+		return "No courses with that name exist", 500
+
+	result = []
+	for c in courses:
+		result.append(instructorCourse_to_obj(c))
+
+	return jsonify({"status": 1, "found_courses": result}), 200
+
+
+#------------------------------------------------------- TAship Manipulation --------------------------------------------------------
+#	This section contains functions involving setting and removing TAship for/from a course
+#------------------------------------------------------------------------------------------------------------------------------------
 
 
 # function for setting a student as TA for a course/lab section
@@ -641,28 +648,11 @@ def removeTA():
 	return jsonify({"status": 1}), 200
 	
 
-@app.route(base_url + 'account/student/courseSearch', methods=['GET'])
-def getCoursesByName():
-	search_name = request.args.get('search_name', None)
-	if search_name is None:
-		return "Must provide a course name to search", 500
-
-	courses = InstructorCourse.query.filter_by(course_name=search_name).all()
-	if courses is None:
-		return "No courses with that name exist", 500
-
-	result = []
-	for c in courses:
-		result.append(instructorCourse_to_obj(c))
-
-	return jsonify({"status": 1, "found_courses": result}), 200
 	
-
-	
-#--------------------------------------------- Testing Functions ----------------------------------------------
+#--------------------------------------------- Testing Functions ----------------------------------------------------------------------
 #	These are functions that are used for the automated testing; they can be used if needed, but were created for
 #	the intent of testing. 
-#-----------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------------------------
 	
 
 # This is a function created for testing purposes, used to see what accounts currently exist in the database.
@@ -673,15 +663,12 @@ def getAllAccounts():
 		return "Must provide space", 500
 	students = Student.query.filter_by(space=space).all()
 	instructors = Instructor.query.filter_by(space=space).all()
-	admins = Admin.query.filter_by(space=space).all()
 	
 	result = []
 	for s in students:
 		result.append(account_to_obj_student(s))
 	for i in instructors:
 		result.append(account_to_obj_instructor(i))
-	for a in admins:
-		result.append(account_to_obj_admin(a))
 	
 	return jsonify({"status": 1, "all_accounts": result})
 	
@@ -695,7 +682,6 @@ def deleteAllAccounts():
 
 	Student.query.filter_by(space=space).delete()
 	Instructor.query.filter_by(space=space).delete()
-	Admin.query.filter_by(space=space).delete()
 	InstructorCourse.query.delete()
 	CoursePreference.query.delete()
 	TAApplication.query.delete()
@@ -737,10 +723,10 @@ def getAllTAApplications():
 	
 	return jsonify({"status": 1, "all_TAApplications": result})
 	
-#--------------------------------------------- Validation Functions ----------------------------------------------
+#--------------------------------------------- Validation Functions ---------------------------------------------------------------------
 #	These are functions that are used for validating information; checking if something exists, is null, 
 #	making sure all fields are filled out correctly, checking the password (outside of logging in), etc.
-#-----------------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------------------------------------
 	
 	
 # a commonly-called function that takes a username and password and confirms if they are correct; should be called before 
@@ -758,8 +744,6 @@ def validatePassword(username, password):
 	if query is None:
 		query = Instructor.query.filter_by(wsu_email=username).first()
 	if query is None:
-		query = Admin.query.filter_by(wsu_email=username).first()
-	if query is None:
 		return False	# account does not exist
 		
 	if bcrypt.check_password_hash(query.password, password) is False:
@@ -774,8 +758,6 @@ def exists(username):
 	query = Student.query.filter_by(wsu_email=username).first()
 	if query is None:
 		query = Instructor.query.filter_by(wsu_email=username).first()
-	if query is None:
-		query = Admin.query.filter_by(wsu_email=username).first()
 	if query is None:
 		return False
 
@@ -798,7 +780,7 @@ def updateStudentInfoValidation(data):
 	return True
 
 	
-# makes sure the updated info for each shared Student/Instructor/Admin field won't cause
+# makes sure the updated info for each shared Student/Instructor field won't cause
 # problems when overwriting the original values. Returns False if there is a problem, True otherwise.
 # for right now, it only makes sure each field has a value.
 def updateInfoValidation(data, userType):
@@ -890,9 +872,9 @@ def validateNewStudent(account):
 		return False
 	return True
 
-#----------------------------------------- [row to object / account to obj] definitions --------------------------
+#----------------------------------------- [row to object / account to obj] definitions ------------------------------------------------
 #	These definitions convert a class' information into a readable json format
-#-----------------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------------------------------------------
 
 def account_to_obj_student(user):
 	user = {
@@ -929,23 +911,6 @@ def account_to_obj_instructor(user):
 			"secondary_email": user.secondary_email,
 			"phone_number": user.phone_number
 			#---------------Instructor-unique info------------
-        }
-	return user
-	
-	
-def account_to_obj_admin(user):
-	user = {
-			"user_id": user.user_id,
-			"user_type": user.user_type,
-			"wsu_id": user.wsu_id,
-			"space": user.space,
-			"first_name": user.first_name,
-			"last_name": user.last_name,
-			"wsu_email": user.wsu_email,
-			"password": user.password,
-			"secondary_email": user.secondary_email,
-			"phone_number": user.phone_number
-			#---------------Admin-unique info------------
         }
 	return user
 

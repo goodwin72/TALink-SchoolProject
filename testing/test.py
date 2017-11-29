@@ -197,6 +197,7 @@ class TestTALink(testLib.AccountTestCase):
 		tUrl = "/api/account/instructor/addCourse?username="+respCreate['user']['wsu_email']+"&password="+respCreate['user']['password']
 		respPref = self.makeRequest(tUrl, method="POST",
 									data = { 'course_name' : 'CptS_322',
+											 'section_name' : '01 Lab',
 											 'semester' : 'Fall',
 										  	 'days_lecture': 'N/A',
 										  	 'time_lecture': 'N/A'
@@ -382,6 +383,7 @@ class TestTALink(testLib.AccountTestCase):
 		tUrl = "/api/account/instructor/addCourse?username="+respCreate['user']['wsu_email']+"&password="+respCreate['user']['password']
 		respPref = self.makeRequest(tUrl, method="POST",
 									data = { 'course_name' : 'CptS_322',
+											 'section_name' : '01 Lab',
 											 'semester' : 'Fall',
 										  	 'days_lecture': 'N/A',
 										  	 'time_lecture': 'N/A'
