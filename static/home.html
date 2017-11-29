@@ -74,7 +74,7 @@
 					<div class="form-group">
 						<div class="form-inline">
 							<div class="row">
-								<div class="col-sm-4">
+								<div class="col-sm-3">
 									<label class="control-label">Prefix</label>
 								</div>
 								
@@ -88,9 +88,134 @@
 							</div>
 							
 							<div class="row">
-								<div class="col-sm-4">
-									<input type="text" name="course-prefix" id="course-prefix" class="form-control"
-										title="Enter the course prefix" required/>								
+								<div class="col-sm-3">
+									<div id="course-prefix-dropdown" class="dropdown">
+										<button class="btn btn-default dropdown-toggle" id="course-prefix-dropdown-btn" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+											<div id="selected-prefix">ACCTG</div>
+											<span class="caret"></span>
+										</button>
+										
+										<div class="dropdown-menu scroll-dropdown" aria-labelledby="dropdownMenuButton">
+											<li><a class="dropdown-item" href="#">ACCTG</a></li>
+											<li><a class="dropdown-item" href="#">AERO</a></li>
+											<li><a class="dropdown-item" href="#">AFS</a></li>
+											<li><a class="dropdown-item" href="#">AG_ED</a></li>
+											<li><a class="dropdown-item" href="#">AGRI</a></li>
+											<li><a class="dropdown-item" href="#">AGTM</a></li>
+											<li><a class="dropdown-item" href="#">AMDT</a></li>
+											<li><a class="dropdown-item" href="#">AMER_ST</a></li>
+											<li><a class="dropdown-item" href="#">ANIM_SCI</a></li>
+											<li><a class="dropdown-item" href="#">ANTH</a></li>											
+											<li><a class="dropdown-item" href="#">ARABIC</a></li>
+											<li><a class="dropdown-item" href="#">ARCH</a></li>
+											<li><a class="dropdown-item" href="#">ASIA</a></li>
+											<li><a class="dropdown-item" href="#">ASTRONOM</a></li>
+											<li><a class="dropdown-item" href="#">ATH_T</a></li>
+											<li><a class="dropdown-item" href="#">B_A</a></li>
+											<li><a class="dropdown-item" href="#">B_LAW</a></li>
+											<li><a class="dropdown-item" href="#">BIO_ENG</a></li>
+											<li><a class="dropdown-item" href="#">BIOLOGY</a></li>
+											<li><a class="dropdown-item" href="#">BSYSE</a></li>
+											<li><a class="dropdown-item" href="#">CAS</a></li>
+											<li><a class="dropdown-item" href="#">CE</a></li>
+											<li><a class="dropdown-item" href="#">CES</a></li>
+											<li><a class="dropdown-item" href="#">CHE</a></li>
+											<li><a class="dropdown-item" href="#">CHEM</a></li>
+											<li><a class="dropdown-item" href="#">CHINESE</a></li>
+											<li><a class="dropdown-item" href="#">COM</a></li>
+											<li><a class="dropdown-item" href="#">COMJOUR</a></li>
+											<li><a class="dropdown-item" href="#">COMSOC</a></li>
+											<li><a class="dropdown-item" href="#">COMSTRAT</a></li>
+											<li><a class="dropdown-item" href="#">COUN_PSY</a></li>
+											<li><a class="dropdown-item" href="#">CPT_S</a></li>
+											<li><a class="dropdown-item" href="#">CRM_J</a></li>
+											<li><a class="dropdown-item" href="#">CROP_SCI</a></li>
+											<li><a class="dropdown-item" href="#">CSSTE</a></li>
+											<li><a class="dropdown-item" href="#">CST_M</a></li>
+											<li><a class="dropdown-item" href="#">DESIGN</a></li>
+											<li><a class="dropdown-item" href="#">E_A</a></li>
+											<li><a class="dropdown-item" href="#">E_M</a></li>
+											<li><a class="dropdown-item" href="#">E_MIC</a></li>
+											<li><a class="dropdown-item" href="#">ECONS</a></li>
+											<li><a class="dropdown-item" href="#">ED_AD</a></li>
+											<li><a class="dropdown-item" href="#">ED_MTHSC</a></li>
+											<li><a class="dropdown-item" href="#">ED_PSYCH</a></li>
+											<li><a class="dropdown-item" href="#">ED_RES</a></li>
+											<li><a class="dropdown-item" href="#">ENGLISH</a></li>
+											<li><a class="dropdown-item" href="#">ENGR</a></li>
+											<li><a class="dropdown-item" href="#">ENTOM</a></li>
+											<li><a class="dropdown-item" href="#">ENTRP</a></li>
+											<li><a class="dropdown-item" href="#">ENVR_SCI</a></li>
+											<li><a class="dropdown-item" href="#">FIN</a></li>
+											<li><a class="dropdown-item" href="#">FINE_ART</a></li>
+											<li><a class="dropdown-item" href="#">FOR_LANG</a></li>
+											<li><a class="dropdown-item" href="#">FRENCH</a></li>
+											<li><a class="dropdown-item" href="#">FS</a></li>
+											<li><a class="dropdown-item" href="#">GEOLOGY</a></li>
+											<li><a class="dropdown-item" href="#">GERMAN</a></li>
+											<li><a class="dropdown-item" href="#">GLANHLTH</a></li>
+											<li><a class="dropdown-item" href="#">H_D</a></li>
+											<li><a class="dropdown-item" href="#">HBM</a></li>
+											<li><a class="dropdown-item" href="#">HISTORY</a></li>
+											<li><a class="dropdown-item" href="#">HONORS</a></li>
+											<li><a class="dropdown-item" href="#">HORT</a></li>
+											<li><a class="dropdown-item" href="#">HUMANITY</a></li>
+											<li><a class="dropdown-item" href="#">I_BUS</a></li>
+											<li><a class="dropdown-item" href="#">I_D</a></li>
+											<li><a class="dropdown-item" href="#">INTERDIS</a></li>
+											<li><a class="dropdown-item" href="#">IPM</a></li>
+											<li><a class="dropdown-item" href="#">ISE</a></li>
+											<li><a class="dropdown-item" href="#">ITALIAN</a></li>
+											<li><a class="dropdown-item" href="#">JAPANESE</a></li>
+											<li><a class="dropdown-item" href="#">KINES</a></li>
+											<li><a class="dropdown-item" href="#">KOREAN</a></li>
+											<li><a class="dropdown-item" href="#">LLT</a></li>
+											<li><a class="dropdown-item" href="#">LND_ARCH</a></li>
+											<li><a class="dropdown-item" href="#">MATH</a></li>
+											<li><a class="dropdown-item" href="#">MATSE</a></li>
+											<li><a class="dropdown-item" href="#">MBIOS</a></li>
+											<li><a class="dropdown-item" href="#">ME</a></li>
+											<li><a class="dropdown-item" href="#">MGMT</a></li>
+											<li><a class="dropdown-item" href="#">MGTOP</a></li>
+											<li><a class="dropdown-item" href="#">MIL_SCI</a></li>
+											<li><a class="dropdown-item" href="#">MIS</a></li>
+											<li><a class="dropdown-item" href="#">MKTG</a></li>
+											<li><a class="dropdown-item" href="#">MPS</a></li>
+											<li><a class="dropdown-item" href="#">MSE</a></li>
+											<li><a class="dropdown-item" href="#">MUS</a></li>
+											<li><a class="dropdown-item" href="#">NATRS</a></li>
+											<li><a class="dropdown-item" href="#">NEUROSCI</a></li>
+											<li><a class="dropdown-item" href="#">NSE</a></li>
+											<li><a class="dropdown-item" href="#">NURS</a></li>
+											<li><a class="dropdown-item" href="#">PE_ACTIV</a></li>
+											<li><a class="dropdown-item" href="#">PHARMSCI</a></li>
+											<li><a class="dropdown-item" href="#">PHIL</a></li>
+											<li><a class="dropdown-item" href="#">PHYSICS</a></li>
+											<li><a class="dropdown-item" href="#">PL_P</a></li>
+											<li><a class="dropdown-item" href="#">POL_S</a></li>
+											<li><a class="dropdown-item" href="#">PREV_SCI</a></li>
+											<li><a class="dropdown-item" href="#">PSYCH</a></li>
+											<li><a class="dropdown-item" href="#">RUSSIAN</a></li>
+											<li><a class="dropdown-item" href="#">SCIENCE</a></li>
+											<li><a class="dropdown-item" href="#">SDC</a></li>
+											<li><a class="dropdown-item" href="#">SHS</a></li>
+											<li><a class="dropdown-item" href="#">SOC</a></li>
+											<li><a class="dropdown-item" href="#">SOIL_SCI</a></li>
+											<li><a class="dropdown-item" href="#">SPANISH</a></li>
+											<li><a class="dropdown-item" href="#">SPEC_ED</a></li>
+											<li><a class="dropdown-item" href="#">SPMGT</a></li>
+											<li><a class="dropdown-item" href="#">STAT</a></li>
+											<li><a class="dropdown-item" href="#">TCH_LRN</a></li>
+											<li><a class="dropdown-item" href="#">UNIV</a></li>
+											<li><a class="dropdown-item" href="#">VET_CLIN</a></li>
+											<li><a class="dropdown-item" href="#">VET_MED</a></li>
+											<li><a class="dropdown-item" href="#">VET_MICR</a></li>
+											<li><a class="dropdown-item" href="#">VET_PATH</a></li>
+											<li><a class="dropdown-item" href="#">VET_PH</a></li>
+											<li><a class="dropdown-item" href="#">VIT_ENOL</a></li>
+											<li><a class="dropdown-item" href="#">WOMEN_ST</a></li>											
+										</div>
+									</div>							
 								</div>
 								
 								<div class="col-sm-4">
@@ -152,11 +277,125 @@
 											<span class="caret"></span>
 										</button>
 										
-										<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+										<div class="dropdown-menu scroll-dropdown" aria-labelledby="dropdownMenuButton">
 											<li><a class="dropdown-item" href="#">ACCTG</a></li>
-											<li><a class="dropdown-item" href="#">Cpt_S</a></li>
-											<li><a class="dropdown-item" href="#">DTC</a></li>
-											<li><a class="dropdown-item" href="#">TEST</a></li>
+											<li><a class="dropdown-item" href="#">AERO</a></li>
+											<li><a class="dropdown-item" href="#">AFS</a></li>
+											<li><a class="dropdown-item" href="#">AG_ED</a></li>
+											<li><a class="dropdown-item" href="#">AGRI</a></li>
+											<li><a class="dropdown-item" href="#">AGTM</a></li>
+											<li><a class="dropdown-item" href="#">AMDT</a></li>
+											<li><a class="dropdown-item" href="#">AMER_ST</a></li>
+											<li><a class="dropdown-item" href="#">ANIM_SCI</a></li>
+											<li><a class="dropdown-item" href="#">ANTH</a></li>											
+											<li><a class="dropdown-item" href="#">ARABIC</a></li>
+											<li><a class="dropdown-item" href="#">ARCH</a></li>
+											<li><a class="dropdown-item" href="#">ASIA</a></li>
+											<li><a class="dropdown-item" href="#">ASTRONOM</a></li>
+											<li><a class="dropdown-item" href="#">ATH_T</a></li>
+											<li><a class="dropdown-item" href="#">B_A</a></li>
+											<li><a class="dropdown-item" href="#">B_LAW</a></li>
+											<li><a class="dropdown-item" href="#">BIO_ENG</a></li>
+											<li><a class="dropdown-item" href="#">BIOLOGY</a></li>
+											<li><a class="dropdown-item" href="#">BSYSE</a></li>
+											<li><a class="dropdown-item" href="#">CAS</a></li>
+											<li><a class="dropdown-item" href="#">CE</a></li>
+											<li><a class="dropdown-item" href="#">CES</a></li>
+											<li><a class="dropdown-item" href="#">CHE</a></li>
+											<li><a class="dropdown-item" href="#">CHEM</a></li>
+											<li><a class="dropdown-item" href="#">CHINESE</a></li>
+											<li><a class="dropdown-item" href="#">COM</a></li>
+											<li><a class="dropdown-item" href="#">COMJOUR</a></li>
+											<li><a class="dropdown-item" href="#">COMSOC</a></li>
+											<li><a class="dropdown-item" href="#">COMSTRAT</a></li>
+											<li><a class="dropdown-item" href="#">COUN_PSY</a></li>
+											<li><a class="dropdown-item" href="#">CPT_S</a></li>
+											<li><a class="dropdown-item" href="#">CRM_J</a></li>
+											<li><a class="dropdown-item" href="#">CROP_SCI</a></li>
+											<li><a class="dropdown-item" href="#">CSSTE</a></li>
+											<li><a class="dropdown-item" href="#">CST_M</a></li>
+											<li><a class="dropdown-item" href="#">DESIGN</a></li>
+											<li><a class="dropdown-item" href="#">E_A</a></li>
+											<li><a class="dropdown-item" href="#">E_M</a></li>
+											<li><a class="dropdown-item" href="#">E_MIC</a></li>
+											<li><a class="dropdown-item" href="#">ECONS</a></li>
+											<li><a class="dropdown-item" href="#">ED_AD</a></li>
+											<li><a class="dropdown-item" href="#">ED_MTHSC</a></li>
+											<li><a class="dropdown-item" href="#">ED_PSYCH</a></li>
+											<li><a class="dropdown-item" href="#">ED_RES</a></li>
+											<li><a class="dropdown-item" href="#">ENGLISH</a></li>
+											<li><a class="dropdown-item" href="#">ENGR</a></li>
+											<li><a class="dropdown-item" href="#">ENTOM</a></li>
+											<li><a class="dropdown-item" href="#">ENTRP</a></li>
+											<li><a class="dropdown-item" href="#">ENVR_SCI</a></li>
+											<li><a class="dropdown-item" href="#">FIN</a></li>
+											<li><a class="dropdown-item" href="#">FINE_ART</a></li>
+											<li><a class="dropdown-item" href="#">FOR_LANG</a></li>
+											<li><a class="dropdown-item" href="#">FRENCH</a></li>
+											<li><a class="dropdown-item" href="#">FS</a></li>
+											<li><a class="dropdown-item" href="#">GEOLOGY</a></li>
+											<li><a class="dropdown-item" href="#">GERMAN</a></li>
+											<li><a class="dropdown-item" href="#">GLANHLTH</a></li>
+											<li><a class="dropdown-item" href="#">H_D</a></li>
+											<li><a class="dropdown-item" href="#">HBM</a></li>
+											<li><a class="dropdown-item" href="#">HISTORY</a></li>
+											<li><a class="dropdown-item" href="#">HONORS</a></li>
+											<li><a class="dropdown-item" href="#">HORT</a></li>
+											<li><a class="dropdown-item" href="#">HUMANITY</a></li>
+											<li><a class="dropdown-item" href="#">I_BUS</a></li>
+											<li><a class="dropdown-item" href="#">I_D</a></li>
+											<li><a class="dropdown-item" href="#">INTERDIS</a></li>
+											<li><a class="dropdown-item" href="#">IPM</a></li>
+											<li><a class="dropdown-item" href="#">ISE</a></li>
+											<li><a class="dropdown-item" href="#">ITALIAN</a></li>
+											<li><a class="dropdown-item" href="#">JAPANESE</a></li>
+											<li><a class="dropdown-item" href="#">KINES</a></li>
+											<li><a class="dropdown-item" href="#">KOREAN</a></li>
+											<li><a class="dropdown-item" href="#">LLT</a></li>
+											<li><a class="dropdown-item" href="#">LND_ARCH</a></li>
+											<li><a class="dropdown-item" href="#">MATH</a></li>
+											<li><a class="dropdown-item" href="#">MATSE</a></li>
+											<li><a class="dropdown-item" href="#">MBIOS</a></li>
+											<li><a class="dropdown-item" href="#">ME</a></li>
+											<li><a class="dropdown-item" href="#">MGMT</a></li>
+											<li><a class="dropdown-item" href="#">MGTOP</a></li>
+											<li><a class="dropdown-item" href="#">MIL_SCI</a></li>
+											<li><a class="dropdown-item" href="#">MIS</a></li>
+											<li><a class="dropdown-item" href="#">MKTG</a></li>
+											<li><a class="dropdown-item" href="#">MPS</a></li>
+											<li><a class="dropdown-item" href="#">MSE</a></li>
+											<li><a class="dropdown-item" href="#">MUS</a></li>
+											<li><a class="dropdown-item" href="#">NATRS</a></li>
+											<li><a class="dropdown-item" href="#">NEUROSCI</a></li>
+											<li><a class="dropdown-item" href="#">NSE</a></li>
+											<li><a class="dropdown-item" href="#">NURS</a></li>
+											<li><a class="dropdown-item" href="#">PE_ACTIV</a></li>
+											<li><a class="dropdown-item" href="#">PHARMSCI</a></li>
+											<li><a class="dropdown-item" href="#">PHIL</a></li>
+											<li><a class="dropdown-item" href="#">PHYSICS</a></li>
+											<li><a class="dropdown-item" href="#">PL_P</a></li>
+											<li><a class="dropdown-item" href="#">POL_S</a></li>
+											<li><a class="dropdown-item" href="#">PREV_SCI</a></li>
+											<li><a class="dropdown-item" href="#">PSYCH</a></li>
+											<li><a class="dropdown-item" href="#">RUSSIAN</a></li>
+											<li><a class="dropdown-item" href="#">SCIENCE</a></li>
+											<li><a class="dropdown-item" href="#">SDC</a></li>
+											<li><a class="dropdown-item" href="#">SHS</a></li>
+											<li><a class="dropdown-item" href="#">SOC</a></li>
+											<li><a class="dropdown-item" href="#">SOIL_SCI</a></li>
+											<li><a class="dropdown-item" href="#">SPANISH</a></li>
+											<li><a class="dropdown-item" href="#">SPEC_ED</a></li>
+											<li><a class="dropdown-item" href="#">SPMGT</a></li>
+											<li><a class="dropdown-item" href="#">STAT</a></li>
+											<li><a class="dropdown-item" href="#">TCH_LRN</a></li>
+											<li><a class="dropdown-item" href="#">UNIV</a></li>
+											<li><a class="dropdown-item" href="#">VET_CLIN</a></li>
+											<li><a class="dropdown-item" href="#">VET_MED</a></li>
+											<li><a class="dropdown-item" href="#">VET_MICR</a></li>
+											<li><a class="dropdown-item" href="#">VET_PATH</a></li>
+											<li><a class="dropdown-item" href="#">VET_PH</a></li>
+											<li><a class="dropdown-item" href="#">VIT_ENOL</a></li>
+											<li><a class="dropdown-item" href="#">WOMEN_ST</a></li>	
 										</div>
 									</div>							
 								</div>
@@ -192,6 +431,67 @@
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 					<button type="button" class="btn btn-primary">Add course</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal fade" id="modal-instructor-class-info" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel">Course Info</h4>
+				</div>
+				
+				<div class="modal-body">
+					<div class="form-group">
+						<div class="form-inline">
+							<div class="row">
+								<div class="col-sm-4">
+									<label class="control-label">temp</label>
+								</div>
+								
+								<div class="col-sm-4">
+									<label class="control-label">temp</label>
+								</div>
+								
+								<div class="col-sm-4">
+									<label class="control-label">temp</label>
+								</div>
+							</div>
+							
+							<div class="row">
+								<div class="col-sm-4">
+									<input type="text" name="course-prefix" id="course-prefix" class="form-control"
+										title="Enter the course prefix" required/>								
+								</div>
+								
+								<div class="col-sm-4">
+									<input type="text" name="course-number" id="course-number" class="form-control"
+										title="Enter the course number" required/>								
+								</div>
+								
+								<div class="col-sm-4">
+									<input type="text" name="section-or-lab-number" id="section-or-lab-number" class="form-control"
+										title="Enter the section or lab number" required/>								
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="control-label radio-label">Is this course a temp?</label>
+						<input type="radio" name="ta-prior" id="course-is-lab-yes" value="yes">
+						<label>temp</label>
+						<input type="radio" name="ta-prior" id="course-is-lab-no" value="no" checked>
+						<label>temp</label>
+					</div>						
+				</div>
+				
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary">Add temp</button>
 				</div>
 			</div>
 		</div>
@@ -342,7 +642,7 @@
 				<div class="border-bottom"></div>
 				
 				<div class="row">
-					<div class="col-xs-10">
+					<div class="col-xs-10 instructor-class-info">
 						<dl class="dl-horizontal">
 							<dt class="h3">Cpts 223</dt>
 							<dd></dd>
@@ -364,7 +664,7 @@
 				</div>
 				
 				<div class="row">
-					<div class="col-xs-10">
+					<div class="col-xs-10 instructor-class-info">
 						<dl class="dl-horizontal">
 							<dt class="h3">Cpts 223</dt>
 							<dd></dd>
@@ -386,7 +686,7 @@
 				</div>
 				
 				<div class="row">
-					<div class="col-xs-10">
+					<div class="col-xs-10 instructor-class-info">
 						<dl class="dl-horizontal">
 							<dt class="h3">Cpts 223</dt>
 							<dd></dd>

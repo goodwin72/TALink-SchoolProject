@@ -485,8 +485,36 @@ var TALink = (function(){
 		
 		homeLoadUserData();
 		accountLoadUserData();
+
+		/*$.ajax({
+			type: "GET",
+			url: "C:\Users\Jared\Documents\WSU\Cpts322\Group Project\team17\course-prefix-list.txt",
+			//data: data,
+			dataType: "text",
+			success: function (data){
+				alert("HEY LISTEN");
+				console.log(data);
+			},
+			error: function(){
+				console.log("nope");
+			}
+		});*/
+		
+		/*$(function() {
+            $.get("C:\Users\Jared\Documents\WSU\Cpts322\Group Project\team17\course-prefix-list.txt", function(data) {
+                alert("Hi!");
+            });
+        });/*
 		
 		
+		/*function reqListener () {
+		  console.log(this.responseText);
+		}
+
+		var oReq = new XMLHttpRequest();
+		oReq.addEventListener("load", reqListener);
+		oReq.open("GET", "http://www.example.org/example.txt");
+		oReq.send();*/
 	});
 	
 })();
