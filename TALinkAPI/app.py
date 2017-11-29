@@ -69,6 +69,8 @@ class InstructorCourse(db.Model):
 	course_id = db.Column(db.Integer, primary_key=True)
 	person_id = db.Column(db.Integer, db.ForeignKey('Instructor.account_id'))	# this is the id of the user an instance of this class belongs to
 	course_name = db.Column(db.String(8))	# this refers to the course prefix + number, so 'Cpt_S 322' as example
+	section_name = db.Column(db.String(8))
+	instructor_name = db.Column(db.String(128))
 	semester = db.Column(db.String(16)) # the semester and year the course is offered
 	days_lecture = db.Column(db.String(8), default="N/A")
 	time_lecture = db.Column(db.String(32), default="N/A")
@@ -293,6 +295,7 @@ def addInstructorCourse():
 	if (validatePassword(username, password)) is False:
 		return "The username or password is incorrect", 506
 	
+	course.instructor_name = query.first_name + " " + query.last_name
 	course.person_id = query.account_id
 	query.courses_taught.append(course)
 	db.session.add(course)
@@ -636,6 +639,24 @@ def removeTA():
 	db.session.refresh(course)
 
 	return jsonify({"status": 1}), 200
+	
+
+@app.route(base_url + 'account/student/courseSearch', methods=['GET'])
+def getCoursesByName():
+	search_name = request.args.get('search_name', None)
+	if search_name is None:
+		return "Must provide a course name to search", 500
+
+	courses = InstructorCourse.query.filter_by(course_name=search_name).all()
+	if courses is None:
+		return "No courses with that name exist", 500
+
+	result = []
+	for c in courses:
+		result.append(instructorCourse_to_obj(c))
+
+	return jsonify({"status": 1, "found_courses": result}), 200
+	
 
 	
 #--------------------------------------------- Testing Functions ----------------------------------------------
