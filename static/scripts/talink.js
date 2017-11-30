@@ -68,25 +68,51 @@ var TALink = (function(){
 			$("#student-major").text(localStorage.getItem("major"));
 			$("#student-graduation-date").text(localStorage.getItem("expected_grad"));
 			$("#student-TA-history").text(localStorage.getItem("ta_before"));
-		}
-		
-		if(localStorage.getItem("user_type") == "Instructor"){
-			var onSuccess = function(data){
-				if(data["instructor"].length == 0){
-					//alert("No classes!");
-					$(".class-list").css("display", "none");;
+			
+			if(localStorage.getItem("user_type") == "Instructor"){
+				var onSuccess = function(data){
+					if(data["instructor"].length == 0){
+						//alert("No classes!");
+						$(".instructor.class-list").css("display", "none");
+					}
+					else{
+						//alert("Has classes.");
+						$(".instructor.class-list-empty").css("display", "none");
+					}
 				}
-				else{
-					//alert("Has classes.");
-					$(".class-list-empty").css("display", "none");
+				
+				var onFailure = function(data){
+					alert("Failed to get list of classes.\nThis page probably won't look right.")
 				}
+				
+				makeGetRequest('/api/account/instructor/courses?space=' + accountSpace + '&username=' + localStorage.getItem("username") + '&password=' + localStorage.getItem("password"), onSuccess, onFailure);
 			}
 			
-			var onFailure = function(data){
-				alert("Failed to get list of classes.\nThis page probably won't look right.")
+			else if(localStorage.getItem("user_type") == "Student"){
+				var onSuccess = function(data){
+					if(data["student"].length == 0){
+						//alert("No classes!");
+						$(".student.class-list").css("display", "none");
+						$(".student.class-list-empty").css("display", "initial");
+					}
+					else{
+						//alert("Has classes.");
+						$(".student.class-list-empty").css("display", "none");
+						$(".student.class-list").css("display", "initial");
+						
+					}
+				}
+				
+				var onFailure = function(data){
+					alert("Failed to get list of classes.\nThis page probably won't look right.")
+				}
+				
+				makeGetRequest('/api/account/student/coursePreferences?space=' + accountSpace + '&username=' + localStorage.getItem("username") + '&password=' + localStorage.getItem("password"), onSuccess, onFailure);
 			}
 			
-			makeGetRequest('/api/account/instructor/courses?space=' + accountSpace + '&username=' + localStorage.getItem("username") + '&password=' + localStorage.getItem("password"), onSuccess, onFailure);
+			else{
+				alert("Error: User not student or instructor?");
+			}
 		}
 	};
 	
@@ -516,6 +542,12 @@ var TALink = (function(){
 		});
 	}
 	
+	var attachInstructorEditCourseListener = function(){
+		$(".instructor-class-info").click(function(){
+			
+		});
+	}
+	
 	
 	//	Waits until the page is loaded before running these functions.
 	$(document).ready(function(){
@@ -528,6 +560,7 @@ var TALink = (function(){
 		attachLogoutListener();
 		attachEditAccountListener();
 		attachInstructorAddCourseListener();
+		attachInstructorEditCourseListener();
 		
 		homeLoadUserData();
 		accountLoadUserData();
