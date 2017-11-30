@@ -74,10 +74,12 @@ var TALink = (function(){
 					if(data["instructor"].length == 0){
 						//alert("No classes!");
 						$(".instructor.class-list").css("display", "none");
+						$(".instructor.class-list-empty").css("display", "initial");
 					}
 					else{
 						//alert("Has classes.");
 						$(".instructor.class-list-empty").css("display", "none");
+						$(".instructor.class-list").css("display", "initial");
 					}
 				}
 				
