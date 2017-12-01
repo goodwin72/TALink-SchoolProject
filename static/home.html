@@ -231,12 +231,58 @@
 							</div>
 						</div>
 					</div>
+							
+					<div class="form-group">
+						<div class="form-inline">
+							<div class="row">					
+								<div class="col-sm-4">
+									<label class="control-label">Days</label>
+									<label class="control-label input-description"> (ex: 'MWF', 'TTh')</label>
+								</div>
+								
+								<div class="col-sm-4">
+									<label class="control-label">Time (Military)</label>
+									<label class="control-label input-description">(ex: '12:10pm - 13:00pm')</label>
+								</div>
+							</div>
+							
+							<div class="row">
+								<div class="col-sm-4">
+									<input type="text" name="course-days" id="course-days" class="form-control"
+										title="Enter the days the course will be taught (ex: 'MWF', 'TTh')" required/>								
+								</div>
+								
+								<div class="col-sm-4">
+									<input type="text" name="course-time" id="course-time" class="form-control"
+										title="Enter the times this course will start and end" required/>								
+								</div>
+							</div>
+						</div>
+					</div>					
+						
+					<div class="form-group">
+						<label class="control-label radio-label">Semester</label>
+						<div class="form-inline">
+							<input type="radio" name="course-semester" id="course-semester-fall" 
+								value="fall" checked>
+							<label>Fall</label>
+							<input type="radio" name="course-semester" id="course-semester-spring" 
+								value="spring">
+							<label>Spring</label>
+							<input type="radio" name="course-semester" id="course-semester-spring" 
+								value="summer">
+							<label>Summer</label>
+							<input type="text" name="course-year" id="course-year" placeholder="Year" 
+								class="form-control" title="Please enter the year this course will be taken" 
+								pattern="[0-9]+" required>
+						</div>
+					</div>
 					
 					<div class="form-group">
 						<label class="control-label radio-label">Is this course a lab?</label>
-						<input type="radio" name="ta-prior" id="course-is-lab-yes" value="yes">
+						<input type="radio" name="course-is-lab" id="course-is-lab-yes" value="yes">
 						<label>Yes</label>
-						<input type="radio" name="ta-prior" id="course-is-lab-no" value="no" checked>
+						<input type="radio" name="course-is-lab" id="course-is-lab-no" value="no" checked>
 						<label>No</label>
 					</div>						
 				</div>
@@ -423,9 +469,9 @@
 					
 					<!--<div class="form-group">
 						<label class="control-label radio-label">temp?</label>
-						<input type="radio" name="ta-prior" id="course-is-lab-yes" value="yes">
+						<input type="radio" name="course-is-lab" id="course-is-lab-yes" value="yes">
 						<label>Yes</label>
-						<input type="radio" name="ta-prior" id="course-is-lab-no" value="no" checked>
+						<input type="radio" name="course-is-lab" id="course-is-lab-no" value="no" checked>
 						<label>No</label>
 					</div>-->					
 				</div>
@@ -484,9 +530,9 @@
 					
 					<div class="form-group">
 						<label class="control-label radio-label">Is this course a temp?</label>
-						<input type="radio" name="ta-prior" id="course-is-lab-yes" value="yes">
+						<input type="radio" name="course-is-lab" id="course-is-lab-yes" value="yes">
 						<label>temp</label>
-						<input type="radio" name="ta-prior" id="course-is-lab-no" value="no" checked>
+						<input type="radio" name="course-is-lab" id="course-is-lab-no" value="no" checked>
 						<label>temp</label>
 					</div>						
 				</div>
@@ -539,7 +585,7 @@
 			<div class="container student class-list">
 				<div class="row">
 					<div class="col-sm-6">
-						<h2>Applied For:</h2>
+						<h2>Your Applications</h2>
 					</div>
 					
 					<div class="col-sm-6 text-right">
@@ -633,7 +679,7 @@
 			<div class="container instructor class-list">
 				<div class="row">
 					<div class="col-sm-6">
-						<h2>Applied For:</h2>
+						<h2>Your Courses</h2>
 					</div>
 					
 					<div class="col-sm-6 text-right">
