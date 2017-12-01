@@ -521,26 +521,48 @@ var TALink = (function(){
 			
 			courseInfo.course_name = $('#selected-prefix').text() + " " + $('#course-number').val();
 			courseInfo.section_name = $('#section-or-lab-number').val();
-			courseInfo.semester = "Fall";
-			courseInfo.days_lecture = "Monday";
-			courseInfo.time_lecture = "12:00pm";
 			
+			//Get the semester from the user's radio selection.
+			//Note: The backend requires the year and semester to be sent as a field named "semester" (so, courseInfo.semester)
+			if ($("input[name=course-semester]:checked").val() == "fall"){
+				courseInfo.semester = "Fall " + $('#course-year').val();
+			}
+			else if ($("input[name=course-semester]:checked").val() == "spring"){
+				courseInfo.semester = "Spring " + $('#course-year').val();
+			}
+			else if ($("input[name=course-semester]:checked").val() == "summer"){
+				courseInfo.semester = "Summer " + $('#course-year').val();
+			}
+			courseInfo.days_lecture = $('#course-days').val();
+			courseInfo.time_lecture = $('#course-time').val();
+			
+			//Get whether this class is a lab from the user's radio selection.
+			//	If yes, this will add " Lab" to the end of the class name.
+			if ($("input[name=course-is-lab]:checked").val() == "yes"){
+				courseInfo.course_name += " Lab";
+			}
+			else if ($("input[name=course-is-lab]:checked").val() == "no"){
+				//do nothing
+			}
+		
 			// alert("DEBUG" + "\n" +
 					// "----------------" + "\n" +
 					// "Course Name: " + courseInfo.course_name + "\n" +
 					// "Section: " + courseInfo.section_name + "\n" +
-					// "Semester: " + courseInfo.semester + "\n" +
+					// "Year and Semester: " + courseInfo.semester + "\n" +
 					// "Days: " + courseInfo.days_lecture + "\n" +
 					// "Time: " + courseInfo.time_lecture);
+
 			var onSuccess = function(){
 				alert("Successfully added course!")
+				window.location.href = "home.html";	//if we successfully added a course, reload home.html
 			}
 			
 			var onFailure = function(){
 				alert("Failed to add course.");
 			}
 			
-			makePostRequest('/api/account/instructor/addCourse?space=' + accountSpace + '&username=' + localStorage.getItem("username") + '&password=' + $('#confirm-current-password').val(), courseInfo, onSuccess, onFailure);
+			makePostRequest('/api/account/instructor/addCourse?space=' + accountSpace + '&username=' + localStorage.getItem("username") + '&password=' + localStorage.getItem("password"), courseInfo, onSuccess, onFailure);
 		});
 	}
 	
