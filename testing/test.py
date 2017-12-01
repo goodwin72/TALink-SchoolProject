@@ -132,46 +132,46 @@ class TestTALink(testLib.AccountTestCase):
 		self.assertEqual(3.6, respGet['person']['gpa'])	#confirming the returned result contained correct data
 		self.assertEqual('John', respGet['person']['first_name'])
 		
-	def testAddCoursePreference(self):
-		"""
-		Test adding a course preference to a student account
-		"""
-		respCreate = self.makeRequest("/api/account/student", method="POST",
-                                    data = { 'user_type' : 'Student',
-											 'wsu_id' : '112233445',
-                                             'space' : self.accountSpace,
-                                             'first_name' : 'John',
-											 'last_name' : 'Doe',
-											 'wsu_email' : 'john.doe@wsu.edu',
-											 'password' : 'test',
-											 'secondary_email' : "",
-											 'phone_number' : '111-222-3333',
-											 #---student-specific stuff below
-											 'major' : 'BS Computer Science',
-											 'gpa' : 3.6,
-											 'expected_grad' : 'Fall 2020',
-											 'ta_before' : False
-                                             })
-		self.assertSuccessResponse(respCreate)
-		self.assertEqual(3.6, respCreate['user']['gpa'])	#confirming the returned result contained correct data
-		self.assertEqual('John', respCreate['user']['first_name'])
+	# def testAddCoursePreference(self):
+		# """
+		# Test adding a course preference to a student account
+		# """
+		# respCreate = self.makeRequest("/api/account/student", method="POST",
+                                    # data = { 'user_type' : 'Student',
+											 # 'wsu_id' : '112233445',
+                                             # 'space' : self.accountSpace,
+                                             # 'first_name' : 'John',
+											 # 'last_name' : 'Doe',
+											 # 'wsu_email' : 'john.doe@wsu.edu',
+											 # 'password' : 'test',
+											 # 'secondary_email' : "",
+											 # 'phone_number' : '111-222-3333',
+											 # #---student-specific stuff below
+											 # 'major' : 'BS Computer Science',
+											 # 'gpa' : 3.6,
+											 # 'expected_grad' : 'Fall 2020',
+											 # 'ta_before' : False
+                                             # })
+		# self.assertSuccessResponse(respCreate)
+		# self.assertEqual(3.6, respCreate['user']['gpa'])	#confirming the returned result contained correct data
+		# self.assertEqual('John', respCreate['user']['first_name'])
 		
-		#Now we will test adding a course preference
-		tUrl = "/api/account/student/addCourse?username="+respCreate['user']['wsu_email']+"&password="+respCreate['user']['password']
-		respPref = self.makeRequest(tUrl, method="POST",
-									data = { 'course_name' : 'CptS 322',
-											 'grade_earned' : 'A',
-											 'date_taken' : 'Fall 2019',
-											 'ta_before' : False
-											})
-		self.assertEqual('CptS 322', respPref['course']['course_name'])
-		self.assertEqual(False, respPref['course']['ta_before'])
+		# #Now we will test adding a course preference
+		# tUrl = "/api/account/student/addCourse?username="+respCreate['user']['wsu_email']+"&password="+respCreate['user']['password']
+		# respPref = self.makeRequest(tUrl, method="POST",
+									# data = { 'course_name' : 'CptS 322',
+											 # 'grade_earned' : 'A',
+											 # 'date_taken' : 'Fall 2019',
+											 # 'ta_before' : False
+											# })
+		# self.assertEqual('CptS 322', respPref['course']['course_name'])
+		# self.assertEqual(False, respPref['course']['ta_before'])
 		
-		#Now we make sure the course preference was added to the student's account
-		tUrl = "api/account/student/coursePreferences?username="+respCreate['user']['wsu_email']
-		respGet = self.makeRequest(tUrl, method="GET")
-		self.assertEqual('CptS 322', respGet['student'][0]['course_name'])
-		self.assertEqual(False, respGet['student'][0]['ta_before'])
+		# #Now we make sure the course preference was added to the student's account
+		# tUrl = "api/account/student/coursePreferences?username="+respCreate['user']['wsu_email']
+		# respGet = self.makeRequest(tUrl, method="GET")
+		# self.assertEqual('CptS 322', respGet['student'][0]['course_name'])
+		# self.assertEqual(False, respGet['student'][0]['ta_before'])
 		
 	def testAddInstructorCourse(self):
 		"""
@@ -306,56 +306,56 @@ class TestTALink(testLib.AccountTestCase):
 		self.assertEqual(True, respGet['person']['ta_before'])
 
 	
-	def testRemoveCoursePreference(self):
-		"""
-		Test removing a course preference to a student account
-		"""
-		respCreate = self.makeRequest("/api/account/student", method="POST",
-                                    data = { 'user_type' : 'Student',
-											 'wsu_id' : '112233445',
-                                             'space' : self.accountSpace,
-                                             'first_name' : 'John',
-											 'last_name' : 'Doe',
-											 'wsu_email' : 'john.doe@wsu.edu',
-											 'password' : 'test',
-											 'secondary_email' : "",
-											 'phone_number' : '111-222-3333',
-											 #---student-specific stuff below
-											 'major' : 'BS Computer Science',
-											 'gpa' : 3.6,
-											 'expected_grad' : 'Fall 2020',
-											 'ta_before' : False
-                                             })
-		self.assertSuccessResponse(respCreate)
-		self.assertEqual(3.6, respCreate['user']['gpa'])	#confirming the returned result contained correct data
-		self.assertEqual('John', respCreate['user']['first_name'])
+	# def testRemoveCoursePreference(self):
+		# """
+		# Test removing a course preference to a student account
+		# """
+		# respCreate = self.makeRequest("/api/account/student", method="POST",
+                                    # data = { 'user_type' : 'Student',
+											 # 'wsu_id' : '112233445',
+                                             # 'space' : self.accountSpace,
+                                             # 'first_name' : 'John',
+											 # 'last_name' : 'Doe',
+											 # 'wsu_email' : 'john.doe@wsu.edu',
+											 # 'password' : 'test',
+											 # 'secondary_email' : "",
+											 # 'phone_number' : '111-222-3333',
+											 # #---student-specific stuff below
+											 # 'major' : 'BS Computer Science',
+											 # 'gpa' : 3.6,
+											 # 'expected_grad' : 'Fall 2020',
+											 # 'ta_before' : False
+                                             # })
+		# self.assertSuccessResponse(respCreate)
+		# self.assertEqual(3.6, respCreate['user']['gpa'])	#confirming the returned result contained correct data
+		# self.assertEqual('John', respCreate['user']['first_name'])
 		
-		#Now we will test adding a course preference
-		tUrl = "/api/account/student/addCourse?username="+respCreate['user']['wsu_email']+"&password="+respCreate['user']['password']
-		respPref = self.makeRequest(tUrl, method="POST",
-									data = { 'course_name' : 'CptS 322',
-											 'grade_earned' : 'A',
-											 'date_taken' : 'Fall 2019',
-											 'ta_before' : False
-											})
-		self.assertEqual('CptS 322', respPref['course']['course_name'])
-		self.assertEqual(False, respPref['course']['ta_before'])
+		# #Now we will test adding a course preference
+		# tUrl = "/api/account/student/addCourse?username="+respCreate['user']['wsu_email']+"&password="+respCreate['user']['password']
+		# respPref = self.makeRequest(tUrl, method="POST",
+									# data = { 'course_name' : 'CptS 322',
+											 # 'grade_earned' : 'A',
+											 # 'date_taken' : 'Fall 2019',
+											 # 'ta_before' : False
+											# })
+		# self.assertEqual('CptS 322', respPref['course']['course_name'])
+		# self.assertEqual(False, respPref['course']['ta_before'])
 	
 		
-		#Now we will test removing the course preference
-		tUrl = "/api/account/student/removePreference?username="+respCreate['user']['wsu_email']+"&password="+respCreate['user']['password']+"&pref_id="+str(respPref['course']['pref_id'])
-		respRemove = self.makeRequest(tUrl, method="DELETE")
-		self.assertSuccessResponse(respRemove)
-		#make sure the coursePreference isn't in the student's account
-		tUrl = "/api/account/student/coursePreferences?username="+respCreate['user']['wsu_email']
-		respGet = self.makeRequest(tUrl, method="GET")
-		self.assertSuccessResponse(respGet)
-		self.assertEqual([], respGet['student'])
-		#make sure the coursePreference isn't in the database still
-		tUrl = "/api/account/getAllCoursePref"
-		respGet = self.makeRequest(tUrl, method="GET")
-		self.assertSuccessResponse(respGet)
-		self.assertEqual([], respGet['all_CoursePref'])
+		# #Now we will test removing the course preference
+		# tUrl = "/api/account/student/removePreference?username="+respCreate['user']['wsu_email']+"&password="+respCreate['user']['password']+"&pref_id="+str(respPref['course']['pref_id'])
+		# respRemove = self.makeRequest(tUrl, method="DELETE")
+		# self.assertSuccessResponse(respRemove)
+		# #make sure the coursePreference isn't in the student's account
+		# tUrl = "/api/account/student/coursePreferences?username="+respCreate['user']['wsu_email']
+		# respGet = self.makeRequest(tUrl, method="GET")
+		# self.assertSuccessResponse(respGet)
+		# self.assertEqual([], respGet['student'])
+		# #make sure the coursePreference isn't in the database still
+		# tUrl = "/api/account/getAllCoursePref"
+		# respGet = self.makeRequest(tUrl, method="GET")
+		# self.assertSuccessResponse(respGet)
+		# self.assertEqual([], respGet['all_CoursePref'])
 		
 		
 

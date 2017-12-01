@@ -36,18 +36,8 @@ class Student(db.Model):
 	gpa = db.Column(db.Float)			#their cumulative gpa
 	expected_grad = db.Column(db.String(16))	#will be Fall XXXX or Spring XXXX, the X's being a year
 	ta_before = db.Column(db.Boolean, default=False)	#if the student has been a TA before, Yes/No
-	course_preferences = db.relationship('CoursePreference', backref='student') # should be a list of CoursePreferences
 	course_applications = db.relationship('TAApplication', backref='student') # all applications a student has applied to
 	assigned_ta = db.Column(db.Boolean, default=False) #whether or not the student is already a TA
-	
-class CoursePreference(db.Model):
-	pref_id = db.Column(db.Integer, primary_key=True)
-	person_id = db.Column(db.Integer, db.ForeignKey('Student.account_id'))	# this is the id of the user an instance of this class belongs to
-	course_name = db.Column(db.String(8))	# this refers to the course prefix + number, so 'Cpt_S 322' as example
-	grade_earned = db.Column(db.String(4))
-	date_taken = db.Column(db.String(16)) # should be Fall XXXX, Spring XXXX, or Summer XXXX; the X's being a year
-	#date_applyfor = db.Column(db.String(16))	# the semester+year that is being applied for
-	ta_before = db.Column(db.Boolean, default=False)	# whether or not the student has TA'd for THIS class before
 	
 class Instructor(db.Model):
 	__tablename__ = 'Instructor'
@@ -186,68 +176,9 @@ def create_instructor():
 	
 	
 #------------------------------------------------------- Course-related Creation and Removal ----------------------------------------
-#	This section contains functions involving creating InstructorCourses, CoursePreferences, TAApplications, and removing of them
+#	This section contains functions involving creating InstructorCourses, TAApplications, and removing of them
 #------------------------------------------------------------------------------------------------------------------------------------
 
-
-# creates a new CoursePreference and adds it to the Student Account associated with the username provided
-@app.route(base_url + 'account/student/addCourse', methods=['POST'])
-def addCoursePreference():
-#What it expects in the requested json (all strings unless otherwise stated): course_name(should be course prefix + _ + course number), 
-#		grade_earned, date_taken, ta_before(Boolean)
-	course = CoursePreference(**request.json)
-	if coursePreferenceValidation(course) is False:
-		return "One or more of the required fields were invalid", 500
-	username = request.args.get('username', None)
-	password = request.args.get('password', None)
-	if username is None:
-		return "Must provide username", 500
-	if password is None:
-		return "Must provide password", 500
-		
-	query = Student.query.filter_by(wsu_email=username).first()
-	if query is None:
-		return "No account exists with the given username", 500
-	prefQuery = CoursePreference.query.filter_by(person_id=query.account_id).filter_by(course_name=course.course_name).first()
-	if prefQuery is not None:
-		return "A preference for that course already exists", 500
-	if (validatePassword(username, password)) is False:
-		return "The username or password is incorrect", 500
-	
-	course.person_id = query.account_id 		#might auto-work due to foreignKey
-	query.course_preferences.append(course)	#add this course preference to the student's course_preferences list
-	db.session.add(course)
-	db.session.commit()
-	db.session.refresh(course)
-	
-	return jsonify({"status": 1, "course": preference_to_obj(course)}), 200
-	
-	
-# given a course preference id, delete it from the database and the Students's preference list
-@app.route(base_url + 'account/student/removePreference', methods=['DELETE'])
-def removeCoursePreference():
-	pid = request.args.get('pref_id', None)
-	if pid is None:
-		return "Must provide pref_id", 500
-	username = request.args.get('username', None)
-	password = request.args.get('password', None)
-	if (validatePassword(username, password)) is False:
-		return "The username or password is incorrect", 500
-	
-	pref = CoursePreference.query.filter_by(pref_id=pid).first() #obtain the CoursePreference we want to delete
-	
-	# making sure this CoursePreference will be removed from the Student's list
-	for c in pref.student.course_preferences:
-		if c.pref_id == pid:
-			pref.student.course_preferences.remove(c)
-
-	db.session.delete(pref) # remove the CoursePreference from the database
-	db.session.commit()
-	# do we need a refresh line?
-
-	return jsonify({"status": 1}), 200
-
-	
 # creates a new InstructorCourse and adds it to the Instructor account associated with the username provided
 @app.route(base_url + 'account/instructor/addCourse', methods=['POST'])
 def addInstructorCourse():
@@ -321,7 +252,7 @@ def removeInstructorCourse():
 def addApplication():
 #What it expects in the requested json (all strings unless otherwise stated): student_name, wsu_sid (wsu_id of the student), grade_earned, 
 #		date_taken(in format of: Season XXXX), ta_before(boolean)
-	application = TAApplication(**request.json)		#Note: This a Course Preference stuff mixed with student info
+	application = TAApplication(**request.json)
 	course_ids = request.args.get('course_ids', None)
 	#if applicationValidation(application) is False:
 	#	return "One or more of the required fields were invalid", 500
@@ -495,24 +426,6 @@ def updateInstructorInfo():
 #------------------------------------------------------- Getting Information --------------------------------------------------------
 #	This section contains functions involving retrieving information and lists of class objects from accounts and tables
 #------------------------------------------------------------------------------------------------------------------------------------
-	
-	
-# returns all of a given student's course preferences
-@app.route(base_url + 'account/student/coursePreferences', methods=['GET'])
-def getCoursePreferences():
-	username = request.args.get('username', None)
-	if username is None:
-		return "Must provide username", 500
-	query = Student.query.filter_by(wsu_email=username).first()
-	if query is None:
-		return "No account exists with the given username", 500
-	
-	result = []
-	for c in query.course_preferences:
-		result.append(preference_to_obj(c))
-		
-	return jsonify({"status": 1, "student": result})
-		
 		
 # returns all of a given instructor's Instructor Courses
 @app.route(base_url + 'account/instructor/courses', methods=['GET'])
@@ -686,23 +599,11 @@ def deleteAllAccounts():
 	Student.query.filter_by(space=space).delete()
 	Instructor.query.filter_by(space=space).delete()
 	InstructorCourse.query.delete()
-	CoursePreference.query.delete()
 	TAApplication.query.delete()
 	
 	db.session.commit()
 	
 	return jsonify({"status": 1}), 200
-	
-	
-@app.route(base_url + 'account/getAllCoursePref', methods=['GET'])
-def getAllCoursePref():
-	preferences = CoursePreference.query.all()
-	
-	result = []
-	for preference in preferences:
-		result.append(preference_to_obj(preference))
-	
-	return jsonify({"status": 1, "all_CoursePref": result})
 	
 	
 @app.route(base_url + 'account/getAllInstructorCourses', methods=['GET'])
@@ -826,20 +727,6 @@ def courseValidation(data):
 	#if data.ta_name is None or data.ta_name == "":
 	#	return False
 	return True
-
-	
-# validates a given CoursePreference to ensure each required field has a valid value.	
-def coursePreferenceValidation(data):
-	
-	if data.course_name is None or data.course_name == "":
-		return False
-	if data.grade_earned is None or data.grade_earned == "":
-		return False
-	if data.date_taken is None or data.date_taken == "":
-		return False
-	if data.ta_before != False and data.ta_before != True:
-		return False
-	return True
 	
 	
 def validateNewAccount(account):
@@ -916,18 +803,7 @@ def account_to_obj_instructor(user):
 			#---------------Instructor-unique info------------
         }
 	return user
-
 	
-def preference_to_obj(course):
-	course = {
-			"pref_id": course.pref_id,
-			"person_id": course.person_id,
-			"course_name": course.course_name,
-			"grade_earned": course.grade_earned,
-			"date_taken": course.date_taken,
-			"ta_before": course.ta_before
-		}
-	return course
 	
 def instructorCourse_to_obj(course):
 	

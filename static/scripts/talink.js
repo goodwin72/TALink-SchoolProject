@@ -585,6 +585,7 @@ var TALink = (function(){
 		attachEditAccountListener();
 		attachInstructorAddCourseListener();
 		attachInstructorEditCourseListener();
+		attachStudentViewPreferencesHandler();
 		
 		homeLoadUserData();
 		accountLoadUserData();

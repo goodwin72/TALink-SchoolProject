@@ -81,6 +81,10 @@
 	font-size: 20px;
 }
 
+#account-info h3{
+	font-size: 16px;
+}
+
 #account-info dd{
 	margin-bottom: 8px;
 }
