@@ -92,15 +92,29 @@ var TALink = (function(){
 			
 			else if(localStorage.getItem("user_type") == "Student"){
 				var onSuccess = function(data){
+<<<<<<< HEAD
+					if(data["applications"].length == 0){
+						//alert("No apps!");
+=======
 					if(data["student"].length == 0){
 						//alert("No classes!");
+>>>>>>> e0848c60e0f7ab17ac757298c6f7c49c0d1d213f
 						$(".student.class-list").css("display", "none");
 						$(".student.class-list-empty").css("display", "initial");
 					}
 					else{
+<<<<<<< HEAD
+						//alert("Has apps.");						
+						
+=======
 						//alert("Has classes.");
+>>>>>>> e0848c60e0f7ab17ac757298c6f7c49c0d1d213f
 						$(".student.class-list-empty").css("display", "none");
 						$(".student.class-list").css("display", "initial");
+						
+						for(i = 0; i < data["applications"].length; i++){
+							fillStudentApplicationData(data["applications"][i].app_id, data["applications"][i].course_name, data["applications"][i].instructor_name, data["applications"][i].grade_earned, data["applications"][i].date_taken, data["applications"][i].ta_before);
+						}
 						
 					}
 				}
@@ -550,6 +564,58 @@ var TALink = (function(){
 		});
 	}
 	
+	
+	var fillCourseData = function(course_id, course_name, course_section, course_TA, num_applications){
+		$('.class-list').append($('<div/>')
+			.attr("id", course_id.toString())
+			.addClass("row")
+			.append($('<div/>')
+				.addClass("col-xs-10 instructor-class-info")
+				.attr("data-toggle", "modal")
+				.attr("data-target", "#modal-instructor-class-info")
+				.append($('<dl/>')
+					.addClass("dl-horizontal")
+					.append($('<dt/>').addClass("h3").text(course_name + " " + course_section), $('<dd/>'),
+						//$('<dt/>').text("Section number:"), $('<dd/>').text(course_section.toString()),
+						$('<dt/>').text("TA Chosen:"), $('<dd/>').text(course_TA),
+						$('<dt/>').text("Number of applicants:"), $('<dd/>').text(num_applications.toString())
+					)
+				)
+			, $('<div/>')
+			.addClass("col-xs-2 text-right")
+			.append('<p/>')
+				.addClass('h3')
+				.text('x')
+			)
+		)
+	}
+	
+	
+	var fillStudentApplicationData = function(app_id, course_name, instructor_name, grade_earned, date_taken, ta_before){
+		$('.class-list').append($('<div/>')
+			.attr("id", app_id.toString())
+			.addClass("row")
+			.append($('<div/>')
+				.addClass("col-xs-10 student-app-info")
+				.append($('<dl/>')
+					.addClass("dl-horizontal")
+					.append($('<dt/>').addClass("h3").text(course_name), $('<dd/>'),
+						$('<dt/>').text("Instructor:"), $('<dd/>').text(instructor_name),
+						$('<dt/>').text("Grade Earned:"), $('<dd/>').text(grade_earned),
+						$('<dt/>').text("Date Class was Taken:"), $('<dd/>').text(date_taken),
+						$('<dt/>').text("TA'd this class before:"), $('<dd/>').text(ta_before.toString())
+						
+					)
+				)
+			, $('<div/>')
+			.addClass("col-xs-2 text-right")
+			.append('<p/>')
+				.addClass('h3')
+				.text('x')
+			)
+		)
+	}
+	
     var attachStudentCourseSearchListener = function(e){
         var onSuccess = function(data){
             //if you're here you have access to the full JSON object of found courses
@@ -582,6 +648,7 @@ var TALink = (function(){
 //           makeGetRequest('/api/account/instructor/courses/applications' + '?course_id=' + document.getElementById("selected-prefix").innerHTML + '+' + document.getElementById("course-search-number").value, onSuccess, onFailure);
 //        });
     }
+
 	
 	//	Waits until the page is loaded before running these functions.
 	$(document).ready(function(){
