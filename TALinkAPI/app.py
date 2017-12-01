@@ -473,7 +473,7 @@ def getStudentApplications():
 
 	result = []
 	for c in query.course_applications:
-		result.append(taApplication_to_obj(c))
+		result.append(taApplication_to_obj_Student_Version(c))
 
 	return jsonify({"status": 1, "applications": result})
 
@@ -829,6 +829,18 @@ def taApplication_to_obj(taApp):
 			"app_id": taApp.app_id,
 			"student_name": taApp.student_name,
 			"wsu_sid": taApp.wsu_sid,
+			"grade_earned": taApp.grade_earned,
+			"date_taken": taApp.date_taken,
+			"ta_before": taApp.ta_before
+        }
+	return application
+	
+	
+def taApplication_to_obj_Student_Version(taApp):
+	application = {
+			"app_id": taApp.app_id,
+			"instructor_name": taApp.course.instructor_name,
+			"course_name": taApp.course.course_name + " " + taApp.course.section_name,
 			"grade_earned": taApp.grade_earned,
 			"date_taken": taApp.date_taken,
 			"ta_before": taApp.ta_before

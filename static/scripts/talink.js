@@ -600,21 +600,23 @@ var TALink = (function(){
 		)
 	}
 	
-		//incomplete; this commit only fixed a bug
-		var fillStudentApplicationData = function(course_name, course_section, course_TA, num_applications){
+	
+	var fillStudentApplicationData = function(course_name, instructor_name, grade_earned, date_taken, ta_before){
 		$('.class-list').append($('<div/>')
 			.attr("id", "1")
 			.addClass("row")
 			.append($('<div/>')
-				.addClass("col-xs-10 instructor-class-info")
+				.addClass("col-xs-10 student-app-info")
 				.attr("data-toggle", "modal")
-				.attr("data-target", "#modal-instructor-class-info")
+				.attr("data-target", "#modal-student-app-info")
 				.append($('<dl/>')
 					.addClass("dl-horizontal")
-					.append($('<dt/>').addClass("h3").text(course_name + " " + course_section), $('<dd/>'),
-						//$('<dt/>').text("Section number:"), $('<dd/>').text(course_section.toString()),
-						$('<dt/>').text("TA Chosen:"), $('<dd/>').text(course_TA),
-						$('<dt/>').text("Number of applicants:"), $('<dd/>').text(num_applications.toString())
+					.append($('<dt/>').addClass("h3").text(course_name), $('<dd/>'),
+						$('<dt/>').text("Instructor:"), $('<dd/>').text(instructor_name),
+						$('<dt/>').text("Grade Earned:"), $('<dd/>').text(grade_earned),
+						$('<dt/>').text("Date Class was Taken:"), $('<dd/>').text(date_taken),
+						$('<dt/>').text("TA'd this class before:"), $('<dd/>').text(ta_before.toString())
+						
 					)
 				)
 			)
