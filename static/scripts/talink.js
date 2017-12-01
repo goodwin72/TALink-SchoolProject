@@ -279,7 +279,6 @@ var TALink = (function(){
 		accountInfo.secondary_email = $('#personal-email').val();
 		accountInfo.major = $('#major').val();
 		accountInfo.gpa = $('#gpa').val();
-		accountInfo.course_preferences = [];
 		
 		if ($("input[name=ta-prior]:checked").val() == "yes"){
 			accountInfo.ta_before = true;
@@ -422,7 +421,6 @@ var TALink = (function(){
 					else{
 						accountInfo.password = $('#confirm-current-password').val();
 					}
-					accountInfo.course_preferences = [];
 					
 					if ($("input[name=ta-prior]:checked").val() == "yes"){
 						accountInfo.ta_before = true;
@@ -482,7 +480,6 @@ var TALink = (function(){
 					else{
 						accountInfo.password = $('#confirm-current-password').val();
 					}
-					//accountInfo.course_preferences = [];
 					
 					var onSuccess = function() {  
 						window.localStorage.setItem("user_type", accountInfo.user_type);
