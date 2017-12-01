@@ -74,6 +74,7 @@ class InstructorCourse(db.Model):
 	days_lecture = db.Column(db.String(8), default="N/A")
 	time_lecture = db.Column(db.String(32), default="N/A")
 	applications = db.relationship('TAApplication', backref='course') # a list of TA Applications
+	app_count = db.Column(db.Integer, default=0)	#the number of applications a course has
 	ta_chosen = db.Column(db.Boolean, default=False)# whether or not a TA has been chosen for this course/lab section
 	ta_username = db.Column(db.String(128), default="No TA Chosen.")
 	ta_name = db.Column(db.String(128), default = "No TA Chosen.")
@@ -104,12 +105,12 @@ class TAApplication(db.Model):
 
 base_url = '/api/'
 
-# index
+# login
 # loads an account in the given space that matches the given username
 # if the password does not match the password in the given user account, will not return account info
 # return JSON
 @app.route(base_url + 'account')
-def index():
+def login():
 	spaceName = request.args.get('space', None) 
 	if spaceName is None:
 		return "Must provide space", 500
@@ -250,25 +251,24 @@ def removeCoursePreference():
 # creates a new InstructorCourse and adds it to the Instructor account associated with the username provided
 @app.route(base_url + 'account/instructor/addCourse', methods=['POST'])
 def addInstructorCourse():
-#What it expects in the requested json (all strings unless otherwise stated): course_name(should be course prefix + _ + course number), section name, semester, days_lecture, time_lecture
+#What it expects in the requested json (all strings unless otherwise stated): course_name(should be course prefix + _ + course number),
+#		section name, semester, days_lecture, time_lecture
 	course = InstructorCourse(**request.json)
 	if courseValidation(course) is False:
-		return "One or more of the required fields were invalid", 501
+		return "One or more of the required fields were invalid", 500
 	username = request.args.get('username', None)
 	password = request.args.get('password', None)
 	if username is None:
-		return "Must provide username", 502
+		return "Must provide username", 500
 	if password is None:
-		return "Must provide password", 503
+		return "Must provide password", 500
 		
 	query = Instructor.query.filter_by(wsu_email=username).first()
 	if query is None:
-		return "No account exists with the given username", 504
+		return "No account exists with the given username", 500
 	courseQuery = InstructorCourse.query.filter_by(course_id=query.account_id).filter_by(course_name=course.course_name).first()
-	if courseQuery is not None:
-		return "An InstructorCourse for that course already exists", 505
 	if (validatePassword(username, password)) is False:
-		return "The username or password is incorrect", 506
+		return "The username or password is incorrect", 500
 	
 	course.instructor_name = query.first_name + " " + query.last_name
 	course.person_id = query.account_id
@@ -351,6 +351,7 @@ def addApplication():
 		
 		query.course_applications.append(application)	#add application to student's applications
 		courseQuery.applications.append(application)	# add application to the InstructorCourse's applications
+		courseQuery.app_count += 1
 		db.session.add(application)		# add application to the TAApplication database
 		db.session.commit()
 		db.session.refresh(application)
@@ -376,6 +377,8 @@ def removeApplication():
 	application = TAApplication.query.filter_by(app_id=app_id).first()  # obtain the TAApplication we want to delete
 	if application is None:
 		return "No application with that id exists", 500
+		
+	application.course.app_count -= 1 #reduces the number of applications to an account
 
 	# making sure ta_chosen stuff if correct
 	if application.course.ta_username == application.student.wsu_email:	#if the student was chosen as ta for that course
@@ -939,7 +942,8 @@ def instructorCourse_to_obj(course):
 			"time_lecture": course.time_lecture,
 			"ta_chosen": course.ta_chosen,
 			"ta_username": course.ta_username,
-			"ta_name": course.ta_name
+			"ta_name": course.ta_name,
+			"app_count": course.app_count
 		}
 	return course
 	
