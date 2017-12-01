@@ -231,61 +231,13 @@
 							</div>
 						</div>
 					</div>
-							
-					<div class="form-group">
-						<div class="form-inline">
-							<div class="row">					
-								<div class="col-sm-4">
-									<label class="control-label">Days Course Meets</label>
-									<label class="control-label input-description"> (ex: 'MWF', 'TTh')</label>
-								</div>
-								
-								<div class="col-sm-4">
-									<label class="control-label">Time Course Meets</label>
-									<label class="control-label input-description">(ex: '12:10pm - 13:00pm')</label>
-								</div>
-							</div>
-							
-							<div class="row">
-								<div class="col-sm-4">
-									<input type="text" name="course-days" id="course-days" class="form-control"
-										title="Enter the days the course will be taught (ex: 'MWF', 'TTh')" required/>								
-								</div>
-								
-								<div class="col-sm-4">
-									<input type="text" name="course-time" id="course-time" class="form-control"
-										title="Enter the times this course will start and end" required/>								
-								</div>
-							</div>
-						</div>
-					</div>					
-						
-					<div class="form-group">
-						<label class="control-label radio-label">Semester</label>
-						<div class="form-inline">
-							<input type="radio" name="course-semester" id="course-semester-fall" 
-								value="fall" checked>
-							<label>Fall</label>
-							<input type="radio" name="course-semester" id="course-semester-spring" 
-								value="spring">
-							<label>Spring</label>
-							<input type="radio" name="course-semester" id="course-semester-spring" 
-								value="summer">
-							<label>Summer</label>
-							<input type="text" name="course-year" id="course-year" placeholder="Year" 
-								class="form-control" title="Please enter the year this course will be taken" 
-								pattern="[0-9]+" required>
-						</div>
-					</div>
 					
 					<div class="form-group">
 						<label class="control-label radio-label">Is this course a lab?</label>
-						<div class="form-inline">
-							<input type="radio" name="course-is-lab" id="course-is-lab-yes" value="yes">
-							<label>Yes</label>
-							<input type="radio" name="course-is-lab" id="course-is-lab-no" value="no" checked>
-							<label>No</label>
-						</div>
+						<input type="radio" name="ta-prior" id="course-is-lab-yes" value="yes">
+						<label>Yes</label>
+						<input type="radio" name="ta-prior" id="course-is-lab-no" value="no" checked>
+						<label>No</label>
 					</div>						
 				</div>
 				
@@ -302,7 +254,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title" id="myModalLabel">Search for Courses to Apply to:</h4>
+					<h4 class="modal-title" id="myModalLabel">Apply for TA</h4>
 				</div>
 				
 				<div class="modal-body">
@@ -310,7 +262,7 @@
 						<div class="form-inline">
 							<div class="row">
 								<div class="col-sm-3">
-									<label class="control-label">Course Prefix</label>
+									<label class="control-label">Prefix</label>
 								</div>
 								
 								<div class="col-sm-6">
@@ -453,7 +405,7 @@
 								<div class="col-sm-6">		
 									<div class="form-group">
 										<!-- "form-control" gives forms Bootstrap styling -->
-										<input type="text" class="form-control" placeholder="ex: 101"/>
+										<input type="text" class="form-control" id="course-search-number" placeholder="ex: 101"/>
 									</div>
 								</div>
 							</div>
@@ -463,7 +415,7 @@
 									<!-- "btn" gives the standard Bootstrap button styling.
 										"btn-default" makes the button white instaed of gray, and gives 
 										it a subtle border. -->
-									<button type="button" class="btn btn-default">Search for Courses</button>
+									<button type="button" class="btn btn-default" id="courseSearch">Search</button>
 								</div>
 							</div>
 						</div>
@@ -471,16 +423,16 @@
 					
 					<!--<div class="form-group">
 						<label class="control-label radio-label">temp?</label>
-						<input type="radio" name="course-is-lab" id="course-is-lab-yes" value="yes">
+						<input type="radio" name="ta-prior" id="course-is-lab-yes" value="yes">
 						<label>Yes</label>
-						<input type="radio" name="course-is-lab" id="course-is-lab-no" value="no" checked>
+						<input type="radio" name="ta-prior" id="course-is-lab-no" value="no" checked>
 						<label>No</label>
 					</div>-->					
 				</div>
 				
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary">Add course</button>
+					<button type="button" class="btn btn-primary">Add Course</button>
 				</div>
 			</div>
 		</div>
@@ -532,9 +484,9 @@
 					
 					<div class="form-group">
 						<label class="control-label radio-label">Is this course a temp?</label>
-						<input type="radio" name="course-is-lab" id="course-is-lab-yes" value="yes">
+						<input type="radio" name="ta-prior" id="course-is-lab-yes" value="yes">
 						<label>temp</label>
-						<input type="radio" name="course-is-lab" id="course-is-lab-no" value="no" checked>
+						<input type="radio" name="ta-prior" id="course-is-lab-no" value="no" checked>
 						<label>temp</label>
 					</div>						
 				</div>
@@ -574,7 +526,7 @@
 			<div class="student class-list-empty">
 				<h2>Welcome!</h2>
 				<p>You have not applied to TA any courses.</p>
-				<p><button type="button" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#modal-student-add-class">Apply to Courses &raquo;</button></p>
+				<p><button type="button" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#modal-student-add-class">Add Course &raquo;</button></p>
 			</div>
 			
 			<div class="instructor class-list-empty">
@@ -587,11 +539,11 @@
 			<div class="container student class-list">
 				<div class="row">
 					<div class="col-sm-6">
-						<h2>Your Applications</h2>
+						<h2>Applied For:</h2>
 					</div>
 					
 					<div class="col-sm-6 text-right">
-						<p><button type="button" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#modal-student-add-class">Search for Courses to Apply to &raquo;</button></p>
+						<p><button type="button" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#modal-student-add-class">Apply for TA &raquo;</button></p>
 					</div>
 				</div>
 				
@@ -681,7 +633,7 @@
 			<div class="container instructor class-list">
 				<div class="row">
 					<div class="col-sm-6">
-						<h2>Your Courses</h2>
+						<h2>Applied For:</h2>
 					</div>
 					
 					<div class="col-sm-6 text-right">
@@ -691,28 +643,6 @@
 				
 				<div class="border-bottom"></div>
 				
-<!-- 			<div class="row">
-					<div class="col-xs-10 instructor-class-info" data-toggle="modal" data-target="#modal-instructor-class-info">
-						<dl class="dl-horizontal">
-							<dt class="h3">Cpts 223</dt>
-							<dd></dd>
-							
-							<dt>Section number:</dt>
-							<dd>01</dd>
-							
-							<dt>Assigned to:</dt>
-							<dd>Tyler Walker</dd>
-							
-							<dt>Number of applicants:</dt>
-							<dd>4</dd>
-						</dl>
-					</div>
-					
-					<div class="col-xs-2 text-right">
-						<p class="h3">x</p>
-					</div>
-				</div>
-				
 				<div class="row">
 					<div class="col-xs-10 instructor-class-info" data-toggle="modal" data-target="#modal-instructor-class-info">
 						<dl class="dl-horizontal">
@@ -754,7 +684,29 @@
 					
 					<div class="col-xs-2 text-right">
 						<p class="h3">x</p>
-					</div> -->
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-xs-10 instructor-class-info" data-toggle="modal" data-target="#modal-instructor-class-info">
+						<dl class="dl-horizontal">
+							<dt class="h3">Cpts 223</dt>
+							<dd></dd>
+							
+							<dt>Section number:</dt>
+							<dd>01</dd>
+							
+							<dt>Assigned to:</dt>
+							<dd>Tyler Walker</dd>
+							
+							<dt>Number of applicants:</dt>
+							<dd>4</dd>
+						</dl>
+					</div>
+					
+					<div class="col-xs-2 text-right">
+						<p class="h3">x</p>
+					</div>
 				</div>
 			</div>
 		</div>
