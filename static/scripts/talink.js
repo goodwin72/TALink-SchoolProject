@@ -92,23 +92,13 @@ var TALink = (function(){
 			
 			else if(localStorage.getItem("user_type") == "Student"){
 				var onSuccess = function(data){
-<<<<<<< HEAD
 					if(data["applications"].length == 0){
 						//alert("No apps!");
-=======
-					if(data["student"].length == 0){
-						//alert("No classes!");
->>>>>>> e0848c60e0f7ab17ac757298c6f7c49c0d1d213f
 						$(".student.class-list").css("display", "none");
 						$(".student.class-list-empty").css("display", "initial");
 					}
 					else{
-<<<<<<< HEAD
 						//alert("Has apps.");						
-						
-=======
-						//alert("Has classes.");
->>>>>>> e0848c60e0f7ab17ac757298c6f7c49c0d1d213f
 						$(".student.class-list-empty").css("display", "none");
 						$(".student.class-list").css("display", "initial");
 						
@@ -120,10 +110,10 @@ var TALink = (function(){
 				}
 				
 				var onFailure = function(data){
-					alert("Failed to get list of classes.\nThis page probably won't look right.")
+					alert("Failed to get list of applications.\nThis page probably won't look right.")
 				}
 				
-				makeGetRequest('/api/account/student/coursePreferences?space=' + accountSpace + '&username=' + localStorage.getItem("username") + '&password=' + localStorage.getItem("password"), onSuccess, onFailure);
+				makeGetRequest('/api/account/student/applications?username=' + localStorage.getItem("username"), onSuccess, onFailure);
 			}
 			
 			else{
@@ -647,7 +637,7 @@ var TALink = (function(){
 //          
 //           makeGetRequest('/api/account/instructor/courses/applications' + '?course_id=' + document.getElementById("selected-prefix").innerHTML + '+' + document.getElementById("course-search-number").value, onSuccess, onFailure);
 //        });
-    }
+    //}
 
 	
 	//	Waits until the page is loaded before running these functions.
@@ -661,7 +651,7 @@ var TALink = (function(){
 		attachLogoutListener();
 		attachEditAccountListener();
 		attachInstructorAddCourseListener();
-		attachInstructorEditCourseListener();
+		//attachInstructorEditCourseListener();
         attachStudentCourseSearchListener();
 		
 		homeLoadUserData();
