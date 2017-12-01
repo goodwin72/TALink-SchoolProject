@@ -252,13 +252,12 @@ def removeInstructorCourse():
 def addApplication():
 #What it expects in the requested json (all strings unless otherwise stated): student_name, wsu_sid (wsu_id of the student), grade_earned, 
 #		date_taken(in format of: Season XXXX), ta_before(boolean)
-	application = TAApplication(**request.json)
 	course_ids = request.args.get('course_ids', None)
 	#if applicationValidation(application) is False:
 	#	return "One or more of the required fields were invalid", 500
 	if course_ids is None:
 		return "No courses were selected to apply to", 500
-	cids = course_ids.split(',', -1)	# Splits the string of ids into a list of ids
+	cids = course_ids.split('-')	# Splits the string of ids into a list of ids
 	username = request.args.get('username', None)
 	password = request.args.get('password', None)
 	# ----- ----- ----- ----- ----- ----- ----- -----
@@ -271,23 +270,31 @@ def addApplication():
 	if (validatePassword(username, password)) is False:
 		return "The username or password is incorrect", 500
 
+	result = []
 
 	for i in cids:
-		courseQuery = InstructorCourse.query.filter_by(course_id=i).first()
+		courseQuery = InstructorCourse.query.filter_by(course_id=int(i)).first()
 		if courseQuery is None:
-			return "No course with that id exists", 500
-		copyQuery = TAApplication.query.filter_by(student_id=query.account_id).filter_by(course_id=i).first()
+			return "No course with that id = " + i + " exists", 500
+		copyQuery = TAApplication.query.filter_by(student_id=query.account_id).filter_by(course_id=int(i)).first()
 		if copyQuery is not None:
-			return "An application for that course from this student already exists", 500
+			return "An application for that course" + i + " from this student already exists", 500
+		
+		application = TAApplication(**request.json)
+		result.append(taApplication_to_obj(application))
 		
 		query.course_applications.append(application)	#add application to student's applications
 		courseQuery.applications.append(application)	# add application to the InstructorCourse's applications
 		courseQuery.app_count += 1
 		db.session.add(application)		# add application to the TAApplication database
+		db.session.add(query)
+		db.session.add(courseQuery)
 		db.session.commit()
 		db.session.refresh(application)
+		db.session.refresh(query)
+		db.session.refresh(courseQuery)
 
-	return jsonify({"status": 1, "application": taApplication_to_obj(application)}), 200
+	return jsonify({"status": 1, "application": result}), 200
 
 
 # Removes a TAApplication from a Student and a InstructorCourse.

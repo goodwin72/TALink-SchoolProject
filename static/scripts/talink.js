@@ -103,14 +103,19 @@ var TALink = (function(){
 			else if(localStorage.getItem("user_type") == "Student"){
 				var onSuccess = function(data){
 					if(data["applications"].length == 0){
-						alert("No apps!");
+						//alert("No apps!");
 						$(".student.class-list").css("display", "none");
 						$(".student.class-list-empty").css("display", "initial");
 					}
 					else{
-						alert("Has apps.");
+						//alert("Has apps.");						
+						
 						$(".student.class-list-empty").css("display", "none");
 						$(".student.class-list").css("display", "initial");
+						
+						for(i = 0; i < data["applications"].length; i++){
+							fillStudentApplicationData(data["applications"][i].app_id, data["applications"][i].course_name, data["applications"][i].instructor_name, data["applications"][i].grade_earned, data["applications"][i].date_taken, data["applications"][i].ta_before);
+						}
 						
 					}
 				}
@@ -606,14 +611,12 @@ var TALink = (function(){
 	}
 	
 	
-	var fillStudentApplicationData = function(course_name, instructor_name, grade_earned, date_taken, ta_before){
+	var fillStudentApplicationData = function(app_id, course_name, instructor_name, grade_earned, date_taken, ta_before){
 		$('.class-list').append($('<div/>')
 			.attr("id", app_id.toString())
 			.addClass("row")
 			.append($('<div/>')
 				.addClass("col-xs-10 student-app-info")
-				.attr("data-toggle", "modal")
-				.attr("data-target", "#modal-student-app-info")
 				.append($('<dl/>')
 					.addClass("dl-horizontal")
 					.append($('<dt/>').addClass("h3").text(course_name), $('<dd/>'),
