@@ -52,6 +52,23 @@ var TALink = (function(){
         });
     };
 	
+	 /**
+     * HTTP POST request
+     * @param  {string}   url       URL path, e.g. "/api/account"
+     * @param  {function} onSuccess   callback method to execute upon request success (200 status)
+     * @param  {function} onFailure   callback method to execute upon request failure (non-200 status)
+     * @return {None}
+     */
+    var makeDeleteRequest = function(url, onSuccess, onFailure) {
+        $.ajax({
+            type: 'DELETE',
+            url: apiUrl + url,
+            dataType: "json",
+            success: onSuccess,
+            error: onFailure
+        });
+    };
+	
 	var homeLoadUserData = function(){
 		var pathnameSplit = window.location.pathname.split("/");
 		var pathname = pathnameSplit[pathnameSplit.length - 1];
@@ -596,11 +613,14 @@ var TALink = (function(){
 						$('<dt/>').text("Number of applicants:"), $('<dd/>').text(num_applications.toString())
 					)
 				)
+			//Firefox and Chrome are combining this div and p tag, which is causing
+			//	slightly strange behavior. Not sure why, or how to fix it - it doesn't
+			//	hinder functionality, though.
 			, $('<div/>')
 			.addClass("col-xs-2 text-right")
 			.append('<p/>')
-				.addClass('h3')
-				.text('x')
+				.addClass("h3 delete-course")
+				.text("x")
 			)
 		)
 	}
@@ -633,6 +653,36 @@ var TALink = (function(){
 		)
 	}
 	
+	var attachDeleteCourseListener = function(e){
+		console.log(this);
+		$(".class-list").on('click', '.delete-course', function(e){
+			var courseListingDocumentElement = (e.target).parentNode;
+			var courseListingId = $((e.target).parentNode).attr('id');
+			
+			//console.log($((e.target).parentNode).attr('id'));
+			
+			var onSuccess = function(){
+				alert("Successfully deleted course!");
+				window.location.href = "home.html";	//if we successfully deleted a course, reload home.html
+			}
+			
+			var onFailure = function(){
+				alert("Failed to delete course.");
+			}
+			
+			if(localStorage.getItem("user_type") == "Instructor"){
+				makeDeleteRequest('/api/account/instructor/removeCourse?space=' + accountSpace + '&username='+ localStorage.getItem("username") + '&password=' + localStorage.getItem("password") + '&course_id=' + courseListingId, onSuccess, onFailure);
+			}
+			
+			else if(localStorage.getItem("user_type") == "Student"){
+				makeDeleteRequest('/api/account/student/removeApp?space=' + accountSpace + '&username='+ localStorage.getItem("username") + '&password=' + localStorage.getItem("password") + '&course_id=' + courseListingId, onSuccess, onFailure);
+			}
+			
+			else{
+				alert("Error: Could not delete course - user not student or instructor?")
+			}
+		});
+	}
 	
 	//	Waits until the page is loaded before running these functions.
 	$(document).ready(function(){
@@ -646,6 +696,7 @@ var TALink = (function(){
 		attachEditAccountListener();
 		attachInstructorAddCourseListener();
 		attachInstructorEditCourseListener();
+		attachDeleteCourseListener();
 		
 		homeLoadUserData();
 		accountLoadUserData();
