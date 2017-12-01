@@ -582,7 +582,7 @@ var TALink = (function(){
 	
 	var fillCourseData = function(course_id, course_name, course_section, course_TA, num_applications){
 		$('.class-list').append($('<div/>')
-			.attr("id", "1")
+			.attr("id", course_id.toString())
 			.addClass("row")
 			.append($('<div/>')
 				.addClass("col-xs-10 instructor-class-info")
@@ -596,6 +596,11 @@ var TALink = (function(){
 						$('<dt/>').text("Number of applicants:"), $('<dd/>').text(num_applications.toString())
 					)
 				)
+			, $('<div/>')
+			.addClass("col-xs-2 text-right")
+			.append('<p/>')
+				.addClass('h3')
+				.text('x')
 			)
 		)
 	}
@@ -603,7 +608,7 @@ var TALink = (function(){
 	
 	var fillStudentApplicationData = function(course_name, instructor_name, grade_earned, date_taken, ta_before){
 		$('.class-list').append($('<div/>')
-			.attr("id", course_id.toString())
+			.attr("id", app_id.toString())
 			.addClass("row")
 			.append($('<div/>')
 				.addClass("col-xs-10 student-app-info")
