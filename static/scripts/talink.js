@@ -87,7 +87,7 @@ var TALink = (function(){
 						
 						//alert("hi");
 						for(i = 0; i < data["instructor"].length; i++){
-							fillClassData(data["instructor"][i].course_name, data["instructor"][i].section_name, data["instructor"][i].ta_name, data["instructor"][i].app_count);
+							fillCourseData(data["instructor"][i].course_name, data["instructor"][i].section_name, data["instructor"][i].ta_name, data["instructor"][i].app_count);
 						}
 						
 					}
@@ -102,13 +102,13 @@ var TALink = (function(){
 			
 			else if(localStorage.getItem("user_type") == "Student"){
 				var onSuccess = function(data){
-					if(data["student"].length == 0){
-						//alert("No classes!");
+					if(data["applications"].length == 0){
+						alert("No apps!");
 						$(".student.class-list").css("display", "none");
 						$(".student.class-list-empty").css("display", "initial");
 					}
 					else{
-						//alert("Has classes.");
+						alert("Has apps.");
 						$(".student.class-list-empty").css("display", "none");
 						$(".student.class-list").css("display", "initial");
 						
@@ -116,10 +116,10 @@ var TALink = (function(){
 				}
 				
 				var onFailure = function(data){
-					alert("Failed to get list of classes.\nThis page probably won't look right.")
+					alert("Failed to get list of applications.\nThis page probably won't look right.")
 				}
 				
-				makeGetRequest('/api/account/student/coursePreferences?space=' + accountSpace + '&username=' + localStorage.getItem("username") + '&password=' + localStorage.getItem("password"), onSuccess, onFailure);
+				makeGetRequest('/api/account/student/applications?space=' + accountSpace + '&username=' + localStorage.getItem("username") + '&password=' + localStorage.getItem("password"), onSuccess, onFailure);
 			}
 			
 			else{
@@ -285,7 +285,6 @@ var TALink = (function(){
 		accountInfo.secondary_email = $('#personal-email').val();
 		accountInfo.major = $('#major').val();
 		accountInfo.gpa = $('#gpa').val();
-		accountInfo.course_preferences = [];
 		
 		if ($("input[name=ta-prior]:checked").val() == "yes"){
 			accountInfo.ta_before = true;
@@ -428,7 +427,6 @@ var TALink = (function(){
 					else{
 						accountInfo.password = $('#confirm-current-password').val();
 					}
-					accountInfo.course_preferences = [];
 					
 					if ($("input[name=ta-prior]:checked").val() == "yes"){
 						accountInfo.ta_before = true;
@@ -488,7 +486,6 @@ var TALink = (function(){
 					else{
 						accountInfo.password = $('#confirm-current-password').val();
 					}
-					//accountInfo.course_preferences = [];
 					
 					var onSuccess = function() {  
 						window.localStorage.setItem("user_type", accountInfo.user_type);
@@ -583,7 +580,28 @@ var TALink = (function(){
 	}
 	
 	
-	var fillClassData = function(course_name, course_section, course_TA, num_applications){
+	var fillCourseData = function(course_name, course_section, course_TA, num_applications){
+		$('.class-list').append($('<div/>')
+			.attr("id", "1")
+			.addClass("row")
+			.append($('<div/>')
+				.addClass("col-xs-10 instructor-class-info")
+				.attr("data-toggle", "modal")
+				.attr("data-target", "#modal-instructor-class-info")
+				.append($('<dl/>')
+					.addClass("dl-horizontal")
+					.append($('<dt/>').addClass("h3").text(course_name + " " + course_section), $('<dd/>'),
+						//$('<dt/>').text("Section number:"), $('<dd/>').text(course_section.toString()),
+						$('<dt/>').text("TA Chosen:"), $('<dd/>').text(course_TA),
+						$('<dt/>').text("Number of applicants:"), $('<dd/>').text(num_applications.toString())
+					)
+				)
+			)
+		)
+	}
+	
+		//incomplete; this commit only fixed a bug
+		var fillStudentApplicationData = function(course_name, course_section, course_TA, num_applications){
 		$('.class-list').append($('<div/>')
 			.attr("id", "1")
 			.addClass("row")
