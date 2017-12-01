@@ -819,7 +819,8 @@ def instructorCourse_to_obj(course):
 			"ta_chosen": course.ta_chosen,
 			"ta_username": course.ta_username,
 			"ta_name": course.ta_name,
-			"app_count": course.app_count
+			"app_count": course.app_count,
+			"section_name": course.section_name
 		}
 	return course
 	

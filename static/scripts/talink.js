@@ -85,9 +85,9 @@ var TALink = (function(){
 						
 						//Fill the list of classes with the professor's added courses.		
 						
-						alert("hi");
+						//alert("hi");
 						for(i = 0; i < data["instructor"].length; i++){
-							fillClassData(data["instructor"][i].course_name, "??", data["instructor"][i].ta_name, data["instructor"][i].app_count);
+							fillClassData(data["instructor"][i].course_name, data["instructor"][i].section_name, data["instructor"][i].ta_name, data["instructor"][i].app_count);
 						}
 						
 					}
@@ -547,9 +547,9 @@ var TALink = (function(){
 			courseInfo.time_lecture = $('#course-time').val();
 			
 			//Get whether this class is a lab from the user's radio selection.
-			//	If yes, this will add " Lab" to the end of the class name.
+			//	If yes, this will add " Lab" to the beginning of the section name.
 			if ($("input[name=course-is-lab]:checked").val() == "yes"){
-				courseInfo.course_name += " Lab";
+				courseInfo.section_name = "Lab-" + courseInfo.section_name;
 			}
 			else if ($("input[name=course-is-lab]:checked").val() == "no"){
 				//do nothing
@@ -593,9 +593,9 @@ var TALink = (function(){
 				.attr("data-target", "#modal-instructor-class-info")
 				.append($('<dl/>')
 					.addClass("dl-horizontal")
-					.append($('<dt/>').addClass("h3").text(course_name.toString()), $('<dd/>'),
-						$('<dt/>').text("Section number:"), $('<dd/>').text(course_section.toString()),
-						$('<dt/>').text("Assigned to:"), $('<dd/>').text(course_TA.toString()),
+					.append($('<dt/>').addClass("h3").text(course_name + " " + course_section), $('<dd/>'),
+						//$('<dt/>').text("Section number:"), $('<dd/>').text(course_section.toString()),
+						$('<dt/>').text("TA Chosen:"), $('<dd/>').text(course_TA),
 						$('<dt/>').text("Number of applicants:"), $('<dd/>').text(num_applications.toString())
 					)
 				)
@@ -616,7 +616,6 @@ var TALink = (function(){
 		attachEditAccountListener();
 		attachInstructorAddCourseListener();
 		attachInstructorEditCourseListener();
-		attachStudentViewPreferencesHandler();
 		
 		homeLoadUserData();
 		accountLoadUserData();
