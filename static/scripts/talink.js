@@ -87,7 +87,7 @@ var TALink = (function(){
 						
 						//alert("hi");
 						for(i = 0; i < data["instructor"].length; i++){
-							fillClassData(data["instructor"][i].course_name, data["instructor"][i].section_name, data["instructor"][i].ta_name, data["instructor"][i].app_count);
+							fillCourseData(data["instructor"][i].course_id, data["instructor"][i].course_name, data["instructor"][i].section_name, data["instructor"][i].ta_name, data["instructor"][i].app_count);
 						}
 						
 					}
@@ -583,9 +583,9 @@ var TALink = (function(){
 	}
 	
 	
-	var fillClassData = function(course_name, course_section, course_TA, num_applications){
+	var fillCourseData = function(course_id, course_name, course_section, course_TA, num_applications){
 		$('.class-list').append($('<div/>')
-			.attr("id", "1")
+			.attr("id", course_id.toString())
 			.addClass("row")
 			.append($('<div/>')
 				.addClass("col-xs-10 instructor-class-info")
@@ -599,6 +599,11 @@ var TALink = (function(){
 						$('<dt/>').text("Number of applicants:"), $('<dd/>').text(num_applications.toString())
 					)
 				)
+			, $('<div/>')
+			.addClass("col-xs-2 text-right")
+			.append('<p/>')
+				.addClass('h3')
+				.text('x')
 			)
 		)
 	}
