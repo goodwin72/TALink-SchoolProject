@@ -71,15 +71,25 @@ var TALink = (function(){
 			
 			if(localStorage.getItem("user_type") == "Instructor"){
 				var onSuccess = function(data){
+					//If the instructor has no courses...
 					if(data["instructor"].length == 0){
-						//alert("No classes!");
+						//Show the HTML for no classes.
 						$(".instructor.class-list").css("display", "none");
 						$(".instructor.class-list-empty").css("display", "initial");
 					}
+					//Else, if they do...
 					else{
-						//alert("Has classes.");
+						//Show the HTML for having classes.
 						$(".instructor.class-list-empty").css("display", "none");
 						$(".instructor.class-list").css("display", "initial");
+						
+						//Fill the list of classes with the professor's added courses.		
+						
+						alert("hi");
+						for(i = 0; i < data["instructor"].length; i++){
+							fillClassData(data["instructor"][i].course_name, "??", data["instructor"][i].ta_name, data["instructor"][i].app_count);
+						}
+						
 					}
 				}
 				
@@ -570,6 +580,27 @@ var TALink = (function(){
 		$(".instructor-class-info").click(function(){
 			
 		});
+	}
+	
+	
+	var fillClassData = function(course_name, course_section, course_TA, num_applications){
+		$('.class-list').append($('<div/>')
+			.attr("id", "1")
+			.addClass("row")
+			.append($('<div/>')
+				.addClass("col-xs-10 instructor-class-info")
+				.attr("data-toggle", "modal")
+				.attr("data-target", "#modal-instructor-class-info")
+				.append($('<dl/>')
+					.addClass("dl-horizontal")
+					.append($('<dt/>').addClass("h3").text(course_name.toString()), $('<dd/>'),
+						$('<dt/>').text("Section number:"), $('<dd/>').text(course_section.toString()),
+						$('<dt/>').text("Assigned to:"), $('<dd/>').text(course_TA.toString()),
+						$('<dt/>').text("Number of applicants:"), $('<dd/>').text(num_applications.toString())
+					)
+				)
+			)
+		)
 	}
 	
 	
