@@ -52,23 +52,6 @@ var TALink = (function(){
         });
     };
 	
-	 /**
-     * HTTP POST request
-     * @param  {string}   url       URL path, e.g. "/api/account"
-     * @param  {function} onSuccess   callback method to execute upon request success (200 status)
-     * @param  {function} onFailure   callback method to execute upon request failure (non-200 status)
-     * @return {None}
-     */
-    var makeDeleteRequest = function(url, onSuccess, onFailure) {
-        $.ajax({
-            type: 'DELETE',
-            url: apiUrl + url,
-            dataType: "json",
-            success: onSuccess,
-            error: onFailure
-        });
-    };
-	
 	var homeLoadUserData = function(){
 		var pathnameSplit = window.location.pathname.split("/");
 		var pathname = pathnameSplit[pathnameSplit.length - 1];
@@ -88,25 +71,15 @@ var TALink = (function(){
 			
 			if(localStorage.getItem("user_type") == "Instructor"){
 				var onSuccess = function(data){
-					//If the instructor has no courses...
 					if(data["instructor"].length == 0){
-						//Show the HTML for no classes.
+						//alert("No classes!");
 						$(".instructor.class-list").css("display", "none");
 						$(".instructor.class-list-empty").css("display", "initial");
 					}
-					//Else, if they do...
 					else{
-						//Show the HTML for having classes.
+						//alert("Has classes.");
 						$(".instructor.class-list-empty").css("display", "none");
 						$(".instructor.class-list").css("display", "initial");
-						
-						//Fill the list of classes with the professor's added courses.		
-						
-						//alert("hi");
-						for(i = 0; i < data["instructor"].length; i++){
-							fillCourseData(data["instructor"][i].course_id, data["instructor"][i].course_name, data["instructor"][i].section_name, data["instructor"][i].ta_name, data["instructor"][i].app_count);
-						}
-						
 					}
 				}
 				
@@ -119,13 +92,13 @@ var TALink = (function(){
 			
 			else if(localStorage.getItem("user_type") == "Student"){
 				var onSuccess = function(data){
-					if(data["applications"].length == 0){
-						alert("No apps!");
+					if(data["student"].length == 0){
+						//alert("No classes!");
 						$(".student.class-list").css("display", "none");
 						$(".student.class-list-empty").css("display", "initial");
 					}
 					else{
-						alert("Has apps.");
+						//alert("Has classes.");
 						$(".student.class-list-empty").css("display", "none");
 						$(".student.class-list").css("display", "initial");
 						
@@ -133,10 +106,10 @@ var TALink = (function(){
 				}
 				
 				var onFailure = function(data){
-					alert("Failed to get list of applications.\nThis page probably won't look right.")
+					alert("Failed to get list of classes.\nThis page probably won't look right.")
 				}
 				
-				makeGetRequest('/api/account/student/applications?space=' + accountSpace + '&username=' + localStorage.getItem("username") + '&password=' + localStorage.getItem("password"), onSuccess, onFailure);
+				makeGetRequest('/api/account/student/coursePreferences?space=' + accountSpace + '&username=' + localStorage.getItem("username") + '&password=' + localStorage.getItem("password"), onSuccess, onFailure);
 			}
 			
 			else{
@@ -302,6 +275,7 @@ var TALink = (function(){
 		accountInfo.secondary_email = $('#personal-email').val();
 		accountInfo.major = $('#major').val();
 		accountInfo.gpa = $('#gpa').val();
+		accountInfo.course_preferences = [];
 		
 		if ($("input[name=ta-prior]:checked").val() == "yes"){
 			accountInfo.ta_before = true;
@@ -444,6 +418,7 @@ var TALink = (function(){
 					else{
 						accountInfo.password = $('#confirm-current-password').val();
 					}
+					accountInfo.course_preferences = [];
 					
 					if ($("input[name=ta-prior]:checked").val() == "yes"){
 						accountInfo.ta_before = true;
@@ -503,6 +478,7 @@ var TALink = (function(){
 					else{
 						accountInfo.password = $('#confirm-current-password').val();
 					}
+					//accountInfo.course_preferences = [];
 					
 					var onSuccess = function() {  
 						window.localStorage.setItem("user_type", accountInfo.user_type);
@@ -545,48 +521,26 @@ var TALink = (function(){
 			
 			courseInfo.course_name = $('#selected-prefix').text() + " " + $('#course-number').val();
 			courseInfo.section_name = $('#section-or-lab-number').val();
+			courseInfo.semester = "Fall";
+			courseInfo.days_lecture = "Monday";
+			courseInfo.time_lecture = "12:00pm";
 			
-			//Get the semester from the user's radio selection.
-			//Note: The backend requires the year and semester to be sent as a field named "semester" (so, courseInfo.semester)
-			if ($("input[name=course-semester]:checked").val() == "fall"){
-				courseInfo.semester = "Fall " + $('#course-year').val();
-			}
-			else if ($("input[name=course-semester]:checked").val() == "spring"){
-				courseInfo.semester = "Spring " + $('#course-year').val();
-			}
-			else if ($("input[name=course-semester]:checked").val() == "summer"){
-				courseInfo.semester = "Summer " + $('#course-year').val();
-			}
-			courseInfo.days_lecture = $('#course-days').val();
-			courseInfo.time_lecture = $('#course-time').val();
-			
-			//Get whether this class is a lab from the user's radio selection.
-			//	If yes, this will add " Lab" to the beginning of the section name.
-			if ($("input[name=course-is-lab]:checked").val() == "yes"){
-				courseInfo.section_name = "Lab-" + courseInfo.section_name;
-			}
-			else if ($("input[name=course-is-lab]:checked").val() == "no"){
-				//do nothing
-			}
-		
 			// alert("DEBUG" + "\n" +
 					// "----------------" + "\n" +
 					// "Course Name: " + courseInfo.course_name + "\n" +
 					// "Section: " + courseInfo.section_name + "\n" +
-					// "Year and Semester: " + courseInfo.semester + "\n" +
+					// "Semester: " + courseInfo.semester + "\n" +
 					// "Days: " + courseInfo.days_lecture + "\n" +
 					// "Time: " + courseInfo.time_lecture);
-
 			var onSuccess = function(){
 				alert("Successfully added course!")
-				window.location.href = "home.html";	//if we successfully added a course, reload home.html
 			}
 			
 			var onFailure = function(){
 				alert("Failed to add course.");
 			}
 			
-			makePostRequest('/api/account/instructor/addCourse?space=' + accountSpace + '&username=' + localStorage.getItem("username") + '&password=' + localStorage.getItem("password"), courseInfo, onSuccess, onFailure);
+			makePostRequest('/api/account/instructor/addCourse?space=' + accountSpace + '&username=' + localStorage.getItem("username") + '&password=' + $('#confirm-current-password').val(), courseInfo, onSuccess, onFailure);
 		});
 	}
 	
@@ -596,93 +550,38 @@ var TALink = (function(){
 		});
 	}
 	
-	
-	var fillCourseData = function(course_id, course_name, course_section, course_TA, num_applications){
-		$('.class-list').append($('<div/>')
-			.attr("id", course_id.toString())
-			.addClass("row")
-			.append($('<div/>')
-				.addClass("col-xs-10 instructor-class-info")
-				.attr("data-toggle", "modal")
-				.attr("data-target", "#modal-instructor-class-info")
-				.append($('<dl/>')
-					.addClass("dl-horizontal")
-					.append($('<dt/>').addClass("h3").text(course_name + " " + course_section), $('<dd/>'),
-						//$('<dt/>').text("Section number:"), $('<dd/>').text(course_section.toString()),
-						$('<dt/>').text("TA Chosen:"), $('<dd/>').text(course_TA),
-						$('<dt/>').text("Number of applicants:"), $('<dd/>').text(num_applications.toString())
-					)
-				)
-			//Firefox and Chrome are combining this div and p tag, which is causing
-			//	slightly strange behavior. Not sure why, or how to fix it - it doesn't
-			//	hinder functionality, though.
-			, $('<div/>')
-			.addClass("col-xs-2 text-right")
-			.append('<p/>')
-				.addClass("h3 delete-course")
-				.text("x")
-			)
-		)
-	}
-	
-	
-	var fillStudentApplicationData = function(course_name, instructor_name, grade_earned, date_taken, ta_before){
-		$('.class-list').append($('<div/>')
-			.attr("id", app_id.toString())
-			.addClass("row")
-			.append($('<div/>')
-				.addClass("col-xs-10 student-app-info")
-				.attr("data-toggle", "modal")
-				.attr("data-target", "#modal-student-app-info")
-				.append($('<dl/>')
-					.addClass("dl-horizontal")
-					.append($('<dt/>').addClass("h3").text(course_name), $('<dd/>'),
-						$('<dt/>').text("Instructor:"), $('<dd/>').text(instructor_name),
-						$('<dt/>').text("Grade Earned:"), $('<dd/>').text(grade_earned),
-						$('<dt/>').text("Date Class was Taken:"), $('<dd/>').text(date_taken),
-						$('<dt/>').text("TA'd this class before:"), $('<dd/>').text(ta_before.toString())
-						
-					)
-				)
-			, $('<div/>')
-			.addClass("col-xs-2 text-right")
-			.append('<p/>')
-				.addClass('h3')
-				.text('x')
-			)
-		)
-	}
-	
-	var attachDeleteCourseListener = function(e){
-		console.log(this);
-		$(".class-list").on('click', '.delete-course', function(e){
-			var courseListingDocumentElement = (e.target).parentNode;
-			var courseListingId = $((e.target).parentNode).attr('id');
-			
-			//console.log($((e.target).parentNode).attr('id'));
-			
-			var onSuccess = function(){
-				alert("Successfully deleted course!");
-				window.location.href = "home.html";	//if we successfully deleted a course, reload home.html
-			}
-			
-			var onFailure = function(){
-				alert("Failed to delete course.");
-			}
-			
-			if(localStorage.getItem("user_type") == "Instructor"){
-				makeDeleteRequest('/api/account/instructor/removeCourse?space=' + accountSpace + '&username='+ localStorage.getItem("username") + '&password=' + localStorage.getItem("password") + '&course_id=' + courseListingId, onSuccess, onFailure);
-			}
-			
-			else if(localStorage.getItem("user_type") == "Student"){
-				makeDeleteRequest('/api/account/student/removeApp?space=' + accountSpace + '&username='+ localStorage.getItem("username") + '&password=' + localStorage.getItem("password") + '&course_id=' + courseListingId, onSuccess, onFailure);
-			}
-			
-			else{
-				alert("Error: Could not delete course - user not student or instructor?")
-			}
-		});
-	}
+    var attachStudentCourseSearchListener = function(e){
+        var onSuccess = function(data){
+            //if you're here you have access to the full JSON object of found courses
+        }
+        var onFailure = function(){
+            window.alert("get request failed @ api/account/student/courseSearch");
+        }
+        
+        //window.alert(document.getElementById("selected-prefix")).innerHTML;
+        
+        $("#courseSearch").click(function(){
+          
+           makeGetRequest('/api/account/student/courseSearch' + '?search_name=' + document.getElementById("selected-prefix").innerHTML + '+' + document.getElementById("course-search-number").value, onSuccess, onFailure);
+        });
+    }
+    
+//      var attachInstructorCourseApplicantListener = function(e){
+//        var onSuccess = function(data){
+//            //if you're here you have access to the full JSON object of applicants
+//            
+//        }
+//        var onFailure = function(){
+//            window.alert("bad");
+//        }
+//        
+//        //window.alert(document.getElementById("selected-prefix")).innerHTML;
+//        
+//        $(".instructor-class-info").click(function(){
+//          
+//           makeGetRequest('/api/account/instructor/courses/applications' + '?course_id=' + document.getElementById("selected-prefix").innerHTML + '+' + document.getElementById("course-search-number").value, onSuccess, onFailure);
+//        });
+    }
 	
 	//	Waits until the page is loaded before running these functions.
 	$(document).ready(function(){
@@ -696,7 +595,7 @@ var TALink = (function(){
 		attachEditAccountListener();
 		attachInstructorAddCourseListener();
 		attachInstructorEditCourseListener();
-		attachDeleteCourseListener();
+        attachStudentCourseSearchListener();
 		
 		homeLoadUserData();
 		accountLoadUserData();
