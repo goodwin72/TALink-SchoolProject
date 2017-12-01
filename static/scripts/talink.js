@@ -71,25 +71,15 @@ var TALink = (function(){
 			
 			if(localStorage.getItem("user_type") == "Instructor"){
 				var onSuccess = function(data){
-					//If the instructor has no courses...
 					if(data["instructor"].length == 0){
-						//Show the HTML for no classes.
+						//alert("No classes!");
 						$(".instructor.class-list").css("display", "none");
 						$(".instructor.class-list-empty").css("display", "initial");
 					}
-					//Else, if they do...
 					else{
-						//Show the HTML for having classes.
+						//alert("Has classes.");
 						$(".instructor.class-list-empty").css("display", "none");
 						$(".instructor.class-list").css("display", "initial");
-						
-						//Fill the list of classes with the professor's added courses.		
-						
-						//alert("hi");
-						for(i = 0; i < data["instructor"].length; i++){
-							fillCourseData(data["instructor"][i].course_id, data["instructor"][i].course_name, data["instructor"][i].section_name, data["instructor"][i].ta_name, data["instructor"][i].app_count);
-						}
-						
 					}
 				}
 				
@@ -102,14 +92,23 @@ var TALink = (function(){
 			
 			else if(localStorage.getItem("user_type") == "Student"){
 				var onSuccess = function(data){
+<<<<<<< HEAD
 					if(data["applications"].length == 0){
 						//alert("No apps!");
+=======
+					if(data["student"].length == 0){
+						//alert("No classes!");
+>>>>>>> e0848c60e0f7ab17ac757298c6f7c49c0d1d213f
 						$(".student.class-list").css("display", "none");
 						$(".student.class-list-empty").css("display", "initial");
 					}
 					else{
+<<<<<<< HEAD
 						//alert("Has apps.");						
 						
+=======
+						//alert("Has classes.");
+>>>>>>> e0848c60e0f7ab17ac757298c6f7c49c0d1d213f
 						$(".student.class-list-empty").css("display", "none");
 						$(".student.class-list").css("display", "initial");
 						
@@ -121,10 +120,10 @@ var TALink = (function(){
 				}
 				
 				var onFailure = function(data){
-					alert("Failed to get list of applications.\nThis page probably won't look right.")
+					alert("Failed to get list of classes.\nThis page probably won't look right.")
 				}
 				
-				makeGetRequest('/api/account/student/applications?space=' + accountSpace + '&username=' + localStorage.getItem("username") + '&password=' + localStorage.getItem("password"), onSuccess, onFailure);
+				makeGetRequest('/api/account/student/coursePreferences?space=' + accountSpace + '&username=' + localStorage.getItem("username") + '&password=' + localStorage.getItem("password"), onSuccess, onFailure);
 			}
 			
 			else{
@@ -290,6 +289,7 @@ var TALink = (function(){
 		accountInfo.secondary_email = $('#personal-email').val();
 		accountInfo.major = $('#major').val();
 		accountInfo.gpa = $('#gpa').val();
+		accountInfo.course_preferences = [];
 		
 		if ($("input[name=ta-prior]:checked").val() == "yes"){
 			accountInfo.ta_before = true;
@@ -432,6 +432,7 @@ var TALink = (function(){
 					else{
 						accountInfo.password = $('#confirm-current-password').val();
 					}
+					accountInfo.course_preferences = [];
 					
 					if ($("input[name=ta-prior]:checked").val() == "yes"){
 						accountInfo.ta_before = true;
@@ -491,6 +492,7 @@ var TALink = (function(){
 					else{
 						accountInfo.password = $('#confirm-current-password').val();
 					}
+					//accountInfo.course_preferences = [];
 					
 					var onSuccess = function() {  
 						window.localStorage.setItem("user_type", accountInfo.user_type);
@@ -533,48 +535,26 @@ var TALink = (function(){
 			
 			courseInfo.course_name = $('#selected-prefix').text() + " " + $('#course-number').val();
 			courseInfo.section_name = $('#section-or-lab-number').val();
+			courseInfo.semester = "Fall";
+			courseInfo.days_lecture = "Monday";
+			courseInfo.time_lecture = "12:00pm";
 			
-			//Get the semester from the user's radio selection.
-			//Note: The backend requires the year and semester to be sent as a field named "semester" (so, courseInfo.semester)
-			if ($("input[name=course-semester]:checked").val() == "fall"){
-				courseInfo.semester = "Fall " + $('#course-year').val();
-			}
-			else if ($("input[name=course-semester]:checked").val() == "spring"){
-				courseInfo.semester = "Spring " + $('#course-year').val();
-			}
-			else if ($("input[name=course-semester]:checked").val() == "summer"){
-				courseInfo.semester = "Summer " + $('#course-year').val();
-			}
-			courseInfo.days_lecture = $('#course-days').val();
-			courseInfo.time_lecture = $('#course-time').val();
-			
-			//Get whether this class is a lab from the user's radio selection.
-			//	If yes, this will add " Lab" to the beginning of the section name.
-			if ($("input[name=course-is-lab]:checked").val() == "yes"){
-				courseInfo.section_name = "Lab-" + courseInfo.section_name;
-			}
-			else if ($("input[name=course-is-lab]:checked").val() == "no"){
-				//do nothing
-			}
-		
 			// alert("DEBUG" + "\n" +
 					// "----------------" + "\n" +
 					// "Course Name: " + courseInfo.course_name + "\n" +
 					// "Section: " + courseInfo.section_name + "\n" +
-					// "Year and Semester: " + courseInfo.semester + "\n" +
+					// "Semester: " + courseInfo.semester + "\n" +
 					// "Days: " + courseInfo.days_lecture + "\n" +
 					// "Time: " + courseInfo.time_lecture);
-
 			var onSuccess = function(){
 				alert("Successfully added course!")
-				window.location.href = "home.html";	//if we successfully added a course, reload home.html
 			}
 			
 			var onFailure = function(){
 				alert("Failed to add course.");
 			}
 			
-			makePostRequest('/api/account/instructor/addCourse?space=' + accountSpace + '&username=' + localStorage.getItem("username") + '&password=' + localStorage.getItem("password"), courseInfo, onSuccess, onFailure);
+			makePostRequest('/api/account/instructor/addCourse?space=' + accountSpace + '&username=' + localStorage.getItem("username") + '&password=' + $('#confirm-current-password').val(), courseInfo, onSuccess, onFailure);
 		});
 	}
 	
@@ -636,6 +616,39 @@ var TALink = (function(){
 		)
 	}
 	
+    var attachStudentCourseSearchListener = function(e){
+        var onSuccess = function(data){
+            //if you're here you have access to the full JSON object of found courses
+        }
+        var onFailure = function(){
+            window.alert("get request failed @ api/account/student/courseSearch");
+        }
+        
+        //window.alert(document.getElementById("selected-prefix")).innerHTML;
+        
+        $("#courseSearch").click(function(){
+          
+           makeGetRequest('/api/account/student/courseSearch' + '?search_name=' + document.getElementById("selected-prefix").innerHTML + '+' + document.getElementById("course-search-number").value, onSuccess, onFailure);
+        });
+    }
+    
+//      var attachInstructorCourseApplicantListener = function(e){
+//        var onSuccess = function(data){
+//            //if you're here you have access to the full JSON object of applicants
+//            
+//        }
+//        var onFailure = function(){
+//            window.alert("bad");
+//        }
+//        
+//        //window.alert(document.getElementById("selected-prefix")).innerHTML;
+//        
+//        $(".instructor-class-info").click(function(){
+//          
+//           makeGetRequest('/api/account/instructor/courses/applications' + '?course_id=' + document.getElementById("selected-prefix").innerHTML + '+' + document.getElementById("course-search-number").value, onSuccess, onFailure);
+//        });
+    }
+
 	
 	//	Waits until the page is loaded before running these functions.
 	$(document).ready(function(){
@@ -649,6 +662,7 @@ var TALink = (function(){
 		attachEditAccountListener();
 		attachInstructorAddCourseListener();
 		attachInstructorEditCourseListener();
+        attachStudentCourseSearchListener();
 		
 		homeLoadUserData();
 		accountLoadUserData();
