@@ -612,7 +612,7 @@ var TALink = (function(){
 	
 	//data["instructor"][i].course_id, data["instructor"][i].course_name, data["instructor"][i].section_name, data["instructor"][i].ta_name, data["instructor"][i].app_count
 	var fillCourseData = function(data){
-		$('.class-list').append($('<div/>')
+		$('.class-list2').append($('<div/>')
 			.attr("id", data["instructor"][i].course_id.toString())
 			.addClass("row")
 			.append($('<div/>')
@@ -643,7 +643,7 @@ var TALink = (function(){
 	
 	
 	var fillStudentApplicationData = function(app_id, course_name, instructor_name, grade_earned, date_taken, ta_before){
-		$('.class-list').append($('<div/>')
+		$('.class-list2').append($('<div/>')
 			.attr("id", app_id.toString())
 			.addClass("row")
 			.append($('<div/>')
@@ -716,21 +716,25 @@ var TALink = (function(){
 	
     
       var attachInstructorCourseApplicantListener = function(e){
-        var onSuccess = function(data){
-            console.log(data);
+        
+        //window.alert(document.getElementById("selected-prefix")).innerHTML;
+        $(".class-list2").on("click", ".row", function(e){
+           //var x = $(e.target).attr('id');
+		   alert("went into function")
+		   alert($(this).attr("class"))
+           console.log(e.target.closest(".row").id);
+		   var x = e.target.closest(".row").id;
+           alert(x); //x
+           alert("hi!"); //debugging
+		   
+		var onSuccess = function(data){
+			console.log(data);
             
         }
         var onFailure = function(){
             window.alert("bad");
         }
-        
-        //window.alert(document.getElementById("selected-prefix")).innerHTML;
-        
-        $(".class-list").on("click", ".row", function(e){
-           var x = $(e.target).attr('id');
-           console.log(e.target.closest(".row").id);
-           alert(x); //x
-           alert("hi!"); //debugging
+		   
            makeGetRequest('/api/account/instructor/courses/applications' + '?course_id=' + e.target.closest(".row").id, onSuccess, onFailure);
         });
     }
@@ -749,8 +753,8 @@ var TALink = (function(){
 		attachInstructorAddCourseListener();
 		//attachInstructorEditCourseListener();
         attachStudentCourseSearchListener();
-		attachDeleteCourseListener();
 		attachInstructorCourseApplicantListener();
+		attachDeleteCourseListener();
 		homeLoadUserData();
 		accountLoadUserData();
 		
