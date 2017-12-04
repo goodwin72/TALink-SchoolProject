@@ -669,7 +669,7 @@ var TALink = (function(){
 	
 	var attachDeleteCourseListener = function(e){
  		console.log(this);
- 		$(".class-list").on('click', '.delete-course', function(e){
+ 		$(".class-list2").on('click', '.delete-course', function(e){
  			var courseListingDocumentElement = (e.target).parentNode;
  			var courseListingId = $((e.target).parentNode).attr('id');
  			
@@ -718,10 +718,9 @@ var TALink = (function(){
       var attachInstructorCourseApplicantListener = function(e){
         
         //window.alert(document.getElementById("selected-prefix")).innerHTML;
-        $(".class-list2").on("click", ".row", function(e){
+        $(".class-list2").on("click", ".instructor-class-info", function(e){
            //var x = $(e.target).attr('id');
-		   alert("went into function")
-		   alert($(this).attr("class"))
+		   alert($(this).text())
            console.log(e.target.closest(".row").id);
 		   var x = e.target.closest(".row").id;
            alert(x); //x
