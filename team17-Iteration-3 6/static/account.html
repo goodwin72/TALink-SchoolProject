@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- [Bootstrap] The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+	<link rel="icon" href="images/favicon.ico">
+
+	<title>WSUTALink | Account</title>
+
+	<!-- [Bootstrap] Bootstrap core CSS -->
+	<link href="styles/bootstrap.min.css" rel="stylesheet">
+	
+	<link rel="stylesheet" type="text/css" href="styles/main.css">
+
+</head>
+
+<body>
+	<!-- TODO: Make a Bootstrap alert for successful login -->
+	
+	<!-- Navbar is the Bootstrap class for creating a navbar section. Navbar-default
+		gives it its basic styling. Navbar-static-top is used for a navbar that covers
+		the whole screen, but isn't fixed to the top. (See this link for a good comparison
+		of the different classes for this: https://getbootstrap.com/docs/3.3/examples/navbar/)-->
+	<nav class="navbar navbar-default navbar-static-top">
+		<!-- Container classes are a key component of Bootstrap - its grid system relies on them.
+			That said, containers have padding, so elements that should appear in a line on the page 
+			shouldn't use nested containers. 
+			In this project, I put the basic info in a container, and the class list as a container 
+			in that container - the extra padding works perfectly here. -->
+		<div class="container">
+			<!-- ...I don't fully understand a few of these navbar classes myself - a lot of this was
+				trial-and-error. -->
+			<div class="navbar-header">
+				<div class="navbar-left">	
+					<a class="navbar-brand" href="home.html">WSU TALink</a>
+				</div>
+				
+				<!-- Dropdown button - should only be visible at mobile sizes. -->
+				<!-- BUG: Why does this take a whole line in mobile-resolution views? -->
+				<button type="button" class="navbar-toggle collapsed navbar-right" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+
+			</div>
+			
+			<div id="navbar" class="navbar-collapse collapse navbar-right">
+				<ul class="nav navbar-nav">
+					<li><a href="home.html">Home</a></li>
+					<li class="active"><a href="account.html">Account</a></li>
+					<li><a id="logout-button" href="#">Log Out</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<!-- See home.html for comments on Bootstrap classes and concepts. -->
+	<div class="container">
+		<div class="jumbotron" id="account-info"> 
+			<h1>Account Info</h1>
+			<h3>You can view and edit account information here.</h3>
+			<form class="account-edit-form" method="post" action="account.html">
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label class="control-label">Name</label>
+							<div class="form-inline">
+								<input type="text" name="first-name" id="first-name" class="form-control"
+									placeholder="First" title="Please enter your first name" required/>
+								<input type="text" name="last-name" id="last-name" class="form-control"
+									placeholder="Last" title="Please enter your last name" required/>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="control-label">WSU Email</label>
+							<label class="control-label input-description">This will be your username.</label>
+							<input type="email" name="wsu-email" id="wsu-email" class="form-control"
+								title="Please enter your WSU email" required>
+						</div>
+
+						<div class="form-group">
+							<label class="control-label">WSU ID</label>
+							<input type="text" name="wsu-id" id="wsu-id" class="form-control"
+								title="Please enter your WSU ID" pattern="[0-9]+" required>
+						</div>	
+
+						<div class="form-group">
+							<label class="control-label">Phone</label>
+							<label class="control-label input-description">(xxx-xxx-xxxx)</label>
+							<input type="text" name="phone" id="phone" class="form-control"
+								title="Please enter your phone number" pattern="[0-9]{3}[ |-][0-9]{3}[ |-][0-9]{4}" required>
+						</div>	
+						
+						<div class="form-group">
+							<label class="control-label">Personal Email (Optional)</label>
+							<input type="email" name="personal-email" id="personal-email" class="form-control"
+								title="Personal email is optional">
+						</div>
+						
+						<div class="divider form-student">
+						</div>
+						
+						<!-- "form-student" fields should be hidden by default, and shown only if the user is a student. -->
+						<div class="form-group form-student">
+							<label class="control-label">Major</label>
+							<input type="text" name="major" id="major" class="form-control"
+								title="Please enter a major. (Undecided is valid!)" required>				
+						</div>
+						
+						<div class="form-group form-student">
+							<label class="control-label">Cumulative GPA</label>
+							<input type="text" name="gpa" id="gpa" class="form-control"
+								title="Please enter your GPA, in number format" pattern="[0-4][.][0-9]" required>					
+						</div>
+						
+						<div class="form-group form-student">
+							<label class="control-label radio-label">Expected Graduation Date</label>
+							<div class="form-inline">
+								<input type="radio" name="graduation-semester" id="graduation-semester-fall" 
+									value="fall" checked>
+								<label>Fall</label>
+								<input type="radio" name="graduation-semester" id="graduation-semester-spring" 
+									value="spring">
+								<label>Spring</label>
+								<input type="text" name="graduation-year" id="graduation-year" placeholder="Year" 
+									class="form-control" title="Please enter your expected graduation year" 
+									pattern="[0-9]+" required>
+							</div>
+						</div>
+						
+						<div class="form-group form-student">
+							<label class="control-label radio-label">Have you served as a TA before?</label>
+							<input type="radio" name="ta-prior" id="ta-prior-yes" value="yes">
+							<label>Yes</label>
+							<input type="radio" name="ta-prior" id="ta-prior-no" value="no" checked>
+							<label>No</label>
+						</div>
+					</div>
+					
+					<div class="col-sm-6">			
+						<h2>Change Password</h2>
+						<div class="form-group">
+							<label class="control-label">New Password</label>
+							<input type="password" name="password" id="password" class="form-control"
+								title="Please enter a password" required>
+						</div>
+						
+						<div class="form-group">
+							<label class="control-label">Confirm New Password</label>
+							<input type="password" name="confirm-password" id="confirm-password" class="form-control"
+								title="Please confirm your password" required>
+						</div>
+					</div>
+				</div>	
+				
+				<div class="divider">
+				</div>
+				
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label class="control-label">Confirm Current Password</label>
+							<input type="password" name="confirm-current-password" id="confirm-current-password" class="form-control"
+								title="Please confirm your password" required>
+						</div>
+					</div>
+					
+					<div class="col-sm-12">
+						<input type="submit" value="Save Changes" class="account-edit-button btn btn-default"/>	
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	
+	<!-- [Bootstrap] Bootstrap core JavaScript
+	================================================== -->
+	<!-- [Bootstrap] Placed at the end of the document so the pages load faster -->
+	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
+	<script src="scripts/jquery.min.js"></script>
+	<script src="scripts/bootstrap.min.js"></script>
+	<script type="text/javascript" src="scripts/talink.js"></script>
+</body>

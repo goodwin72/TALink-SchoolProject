@@ -104,7 +104,7 @@ var TALink = (function(){
 						
 						//alert("hi")
 						for(i = 0; i < data["instructor"].length; i++){
-							fillCourseData(data);
+							fillCourseData(data["instructor"][i].course_id, data["instructor"][i].course_name, data["instructor"][i].section_name, data["instructor"][i].ta_name, data["instructor"][i].app_count);
 						}
 					
 					}
@@ -477,7 +477,7 @@ var TALink = (function(){
 						window.localStorage.setItem("secondary_email", accountInfo.secondary_email);
 						window.localStorage.setItem("gpa", accountInfo.gpa);					
 					
-						//alert("Account edit successful!");
+						alert("Account edit successful!");
 						
 						window.location.href = "account.html";	//if we successfully created an account, go back to the login page
 					};
@@ -518,7 +518,7 @@ var TALink = (function(){
 						window.localStorage.setItem("phone_number", accountInfo.phone_number);
 						window.localStorage.setItem("secondary_email", accountInfo.secondary_email);
 					
-						//alert("Account edit successful!");
+						alert("Account edit successful!");
 						
 						window.location.href = "account.html";	//if we successfully created an account, go back to the login page
 					};
@@ -538,7 +538,7 @@ var TALink = (function(){
 			}
 			
 			else{
-				alert("Error: Passwords do not match!");
+				alert("Passwords do not match!");
 			}
 		});
 	};
@@ -582,7 +582,7 @@ var TALink = (function(){
 					// "Time: " + courseInfo.time_lecture);
 					
 			var onSuccess = function(){
-				//alert("Successfully added course!")
+				alert("Successfully added course!")
 				window.location.href = "home.html"; //if we successfully added a course, reload home.html
 			}
 			
@@ -600,10 +600,10 @@ var TALink = (function(){
 		});
 	}
 	
-	//data["instructor"][i].course_id, data["instructor"][i].course_name, data["instructor"][i].section_name, data["instructor"][i].ta_name, data["instructor"][i].app_count
-	var fillCourseData = function(data){
+	
+	var fillCourseData = function(course_id, course_name, course_section, course_TA, num_applications){
 		$('.class-list').append($('<div/>')
-			.attr("id", data["instructor"][i].course_id.toString())
+			.attr("id", course_id.toString())
 			.addClass("row")
 			.append($('<div/>')
 				.addClass("col-xs-10 instructor-class-info")
@@ -611,12 +611,10 @@ var TALink = (function(){
 				.attr("data-target", "#modal-instructor-class-info")
 				.append($('<dl/>')
 					.addClass("dl-horizontal")
-					.append($('<dt/>').addClass("h3").text(data["instructor"][i].course_name + " " + data["instructor"][i].section_name), $('<dd/>'),
+					.append($('<dt/>').addClass("h3").text(course_name + " " + course_section), $('<dd/>'),
 						//$('<dt/>').text("Section number:"), $('<dd/>').text(course_section.toString()),
-						$('<dt/>').text("TA Chosen:"), $('<dd/>').text(data["instructor"][i].ta_name),
-						$('<dt/>').text("Meeting Days:"), $('<dd/>').text(data["instructor"][i].days_lecture),
-						$('<dt/>').text("Meeting Times:"), $('<dd/>').text(data["instructor"][i].time_lecture),
-						$('<dt/>').text("Number of applicants:"), $('<dd/>').text(data["instructor"][i].app_count.toString())
+						$('<dt/>').text("TA Chosen:"), $('<dd/>').text(course_TA),
+						$('<dt/>').text("Number of applicants:"), $('<dd/>').text(num_applications.toString())
 					)
 				)
 				//
@@ -666,7 +664,7 @@ var TALink = (function(){
  			//console.log($((e.target).parentNode).attr('id'));
  			
  			var onSuccess = function(){
- 				//alert("Successfully deleted course!");
+ 				alert("Successfully deleted course!");
  				window.location.href = "home.html";	//if we successfully deleted a course, reload home.html
 			}
  			
@@ -705,25 +703,22 @@ var TALink = (function(){
     }
 	
     
-      var attachInstructorCourseApplicantListener = function(e){
-        var onSuccess = function(data){
-            console.log(data);
-            
-        }
-        var onFailure = function(){
-            window.alert("bad");
-        }
-        
-        //window.alert(document.getElementById("selected-prefix")).innerHTML;
-        
-        $(".class-list").on("click", ".row", function(e){
-           var x = $(e.target).attr('id');
-           console.log(e.target.closest(".row").id);
-           alert(x); //x
-           alert("hi!"); //debugging
-           makeGetRequest('/api/account/instructor/courses/applications' + '?course_id=' + e.target.closest(".row").id, onSuccess, onFailure);
-        });
-    }
+//      var attachInstructorCourseApplicantListener = function(e){
+//        var onSuccess = function(data){
+//            //if you're here you have access to the full JSON object of applicants
+//            
+//        }
+//        var onFailure = function(){
+//            window.alert("bad");
+//        }
+//        
+//        //window.alert(document.getElementById("selected-prefix")).innerHTML;
+//        
+//        $(".instructor-class-info").click(function(){
+//          
+//           makeGetRequest('/api/account/instructor/courses/applications' + '?course_id=' + document.getElementById("selected-prefix").innerHTML + '+' + document.getElementById("course-search-number").value, onSuccess, onFailure);
+//        });
+    //}
 
 	
 	//	Waits until the page is loaded before running these functions.
@@ -740,7 +735,7 @@ var TALink = (function(){
 		//attachInstructorEditCourseListener();
         attachStudentCourseSearchListener();
 		attachDeleteCourseListener();
-		attachInstructorCourseApplicantListener();
+		
 		homeLoadUserData();
 		accountLoadUserData();
 		
