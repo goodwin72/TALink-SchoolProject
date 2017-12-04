@@ -86,9 +86,11 @@ var TALink = (function(){
 			$("#student-graduation-date").text(localStorage.getItem("expected_grad"));
 			$("#student-TA-history").text(localStorage.getItem("ta_before"));
 			$("#student-TA-gpa").text(localStorage.getItem("gpa"));
+			$("#student-TA-chosen").css('color','orange');
 			if (localStorage.getItem("assigned_ta") == true){
 				//$("#student-TA-chosen").text(localStorage.getItem("assigned_ta"));
-				$("#student-TA-chosen").text("You've been chosen as a TA!")
+				$("#student-TA-chosen").text("You've been chosen as a TA!");
+				$("#student-TA-chosen").css('color','green');
 			}
 			
 			if(localStorage.getItem("user_type") == "Instructor"){
