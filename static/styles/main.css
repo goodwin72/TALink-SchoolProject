@@ -135,3 +135,7 @@ body .student{
 		for striped tables is very specific (see: CSS specificity rules), and 
 		don't see an issue with it for now.*/
 }
+
+#course-search-results{
+	display: none;
+}

@@ -715,11 +715,13 @@ var TALink = (function(){
 
 			for (var i = 0; i < data["found_courses"].length; i++){
 				alert(data["found_courses"][i].course_name + "\n" +
-				data["found_courses"][i].days_lecture + "\n" +
-				"\n");
+					data["found_courses"][i].days_lecture + "\n" +
+					"\n");
 
 				//console.log(data["found_courses"][i].course_name);
 			}
+			
+			$("#course-search-results").css("display", "table");
         }
         var onFailure = function(){
             window.alert("get request failed @ api/account/student/courseSearch");
