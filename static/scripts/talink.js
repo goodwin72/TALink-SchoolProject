@@ -420,10 +420,22 @@ var TALink = (function(){
 		});
 	};
 	
-	var attachPrefixDropdownTextHandler = function(){
-		$("#course-prefix-dropdown").on('click', 'li a', function(){
-			$("#selected-prefix:first-child").text($(this).text());
-			$("#selected-prefix:first-child").val($(this).text());
+	var attachPrefixDropdownTextHandler = function(e){
+		$(".course-prefix-dropdown").on('click', 'li a', function(e){
+			
+			console.log($(e.target).text());
+			var replaceText = $(e.target).text();
+		
+			$(".selected-prefix").each(function(e){
+				console.log($(this).text());
+				$(this).text( replaceText );
+			})
+		
+			// $(".selected-prefix-group").each(function(e){
+				// console.log($(this));
+				// $(this).find(".selected-prefix").text($(e.target).text());
+				// $(this).find(".selected-prefix").val($(e.target).text());				
+			// })
 		});
 	};
 	
@@ -700,17 +712,23 @@ var TALink = (function(){
 	
     var attachStudentCourseSearchListener = function(e){
         var onSuccess = function(data){
-            //if you're here you have access to the full JSON object of found courses
+
+			for (var i = 0; i < data["found_courses"].length; i++){
+				alert(data["found_courses"][i].course_name + "\n" +
+				data["found_courses"][i].days_lecture + "\n" +
+				"\n");
+
+				//console.log(data["found_courses"][i].course_name);
+			}
         }
         var onFailure = function(){
             window.alert("get request failed @ api/account/student/courseSearch");
         }
         
-        //window.alert(document.getElementById("selected-prefix")).innerHTML;
-        
-        $("#courseSearch").click(function(){
-          
-           makeGetRequest('/api/account/student/courseSearch' + '?search_name=' + document.getElementById("selected-prefix").innerHTML + '+' + document.getElementById("course-search-number").value, onSuccess, onFailure);
+        $("#course-search-button").click(function(){
+			//console.log($("#modal-student-add-class .selected-prefix").text());
+			//console.log($("#modal-student-add-class .selected-prefix").text() + ' ' + $("#course-search-number").val());
+			makeGetRequest('/api/account/student/courseSearch' + '?search_name=' + $("#modal-student-add-class .selected-prefix").text() + ' ' + $("#course-search-number").val(), onSuccess, onFailure);
         });
     }
 	

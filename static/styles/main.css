@@ -100,9 +100,6 @@ body .student{
 	
 }
 
-#selected-prefix{
-	display: inline;
-}
 
 .error-border{
 	border: 1px solid red;
