@@ -485,8 +485,8 @@
 											</tr>
 										</thead>
 										
-										<tbody>
-											<tr>
+										<tbody id="course-search-results-table-body">
+											<!--<tr>
 												<th>&#x2610</th>
 												<th scope="row">ANTH</th>
 												<td>101-1</td>
@@ -511,7 +511,7 @@
 												<td>Fall 2017</td>												
 												<td>TTh</td>
 												<td>10:10am - 12:25pm</td>
-											</tr>
+											</tr>-->
 										</tbody>
 									</table>
 								</div>
@@ -599,6 +599,26 @@
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 					<button type="button" class="btn btn-primary">Add temp</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal fade" id="modal-confirm-removal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel">Confirm Action</h4>
+				</div>
+				
+				<div class="modal-body">
+					<p> Are you sure you want to remove this course?</p>
+				</div>
+				
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+					<button type="button" class="btn btn-primary">Remove</button>
 				</div>
 			</div>
 		</div>

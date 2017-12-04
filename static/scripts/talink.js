@@ -743,14 +743,19 @@ var TALink = (function(){
 	
     var attachStudentCourseSearchListener = function(e){
         var onSuccess = function(data){
-
+		$("#course-search-results-table-body").html("");
+		
 			for (var i = 0; i < data["found_courses"].length; i++){
 				alert(data["found_courses"][i].course_name + "\n" +
-				data["found_courses"][i].days_lecture + "\n" +
-				"\n");
+					data["found_courses"][i].days_lecture + "\n" +
+					"\n");
+					
+				makeCourseSearchTableEntry(data["found_courses"][i]);
 
 				//console.log(data["found_courses"][i].course_name);
 			}
+			
+			$("#course-search-results").css("display", "table");
         }
         var onFailure = function(){
             window.alert("get request failed @ api/account/student/courseSearch");
@@ -763,8 +768,21 @@ var TALink = (function(){
         });
     }
 	
+	var makeCourseSearchTableEntry = function(course){
+		var courseNameSplit = course.course_name.split(" ");
+		
+		$("#course-search-results-table-body").append($('<tr/>')
+		.append($('<th/>').html("&#x2610"),
+			($('<th/>').attr('scope', 'row').text(courseNameSplit[0])),
+			($('<td/>').text(courseNameSplit[1])),
+			($('<td/>').text(course.semester)),
+			($('<td/>').text(course.days_lecture)),
+			($('<td/>').text(course.time_lecture))
+		)
+	)}
+	
     
-      var attachInstructorCourseApplicantListener = function(e){
+    var attachInstructorCourseApplicantListener = function(e){
         
         //window.alert(document.getElementById("selected-prefix")).innerHTML;
         $(".class-list2").on("click", ".instructor-class-info", function(e){
