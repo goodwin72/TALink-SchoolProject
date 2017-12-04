@@ -111,7 +111,7 @@ var TALink = (function(){
 						
 						//alert("hi")
 						for(i = 0; i < data["instructor"].length; i++){
-							fillCourseData(data, i);
+							fillCourseData(data);
 						}
 					
 					}
@@ -422,14 +422,13 @@ var TALink = (function(){
 	
 	var attachPrefixDropdownTextHandler = function(e){
 		$(".course-prefix-dropdown").on('click', 'li a', function(e){
-			//alert($('.selected-prefix').text())
-			//console.log($(e.target).text());
+			
+			console.log($(e.target).text());
 			var replaceText = $(e.target).text();
-			//alert(replaceText);
+		
 			$(".selected-prefix").each(function(e){
 				console.log($(this).text());
 				$(this).text( replaceText );
-				//alert($('.selected-prefix').text())
 			})
 		
 			// $(".selected-prefix-group").each(function(e){
@@ -569,8 +568,8 @@ var TALink = (function(){
 	var attachInstructorAddCourseListener = function(e){
 		$(".instructor-add-course-button").click(function(){
 			var courseInfo = {};
-			//alert($('.selected-prefix').text())
-			courseInfo.course_name = $('#modal-instructor-add-class .selected-prefix').text() + " " + $('#course-number').val();
+			
+			courseInfo.course_name = $('#selected-prefix').text() + " " + $('#course-number').val();
 			courseInfo.section_name = $('#section-or-lab-number').val();
 			
 			//Get the semester from the user's radio selection.
@@ -596,13 +595,13 @@ var TALink = (function(){
  				//do nothing
  			}
 			
-			alert("DEBUG" + "\n" +
-					"----------------" + "\n" +
-					"Course Name: " + courseInfo.course_name + "\n" +
-					"Section: " + courseInfo.section_name + "\n" +
-					"Semester: " + courseInfo.semester + "\n" +
-					"Days: " + courseInfo.days_lecture + "\n" +
-					"Time: " + courseInfo.time_lecture);
+			// alert("DEBUG" + "\n" +
+					// "----------------" + "\n" +
+					// "Course Name: " + courseInfo.course_name + "\n" +
+					// "Section: " + courseInfo.section_name + "\n" +
+					// "Semester: " + courseInfo.semester + "\n" +
+					// "Days: " + courseInfo.days_lecture + "\n" +
+					// "Time: " + courseInfo.time_lecture);
 					
 			var onSuccess = function(){
 				//alert("Successfully added course!")
@@ -617,8 +616,14 @@ var TALink = (function(){
 		});
 	}
 	
+	var attachInstructorEditCourseListener = function(){
+		$(".instructor-class-info").click(function(){
+			
+		});
+	}
+	
 	//data["instructor"][i].course_id, data["instructor"][i].course_name, data["instructor"][i].section_name, data["instructor"][i].ta_name, data["instructor"][i].app_count
-	var fillCourseData = function(data, i){
+	var fillCourseData = function(data){
 		$('.class-list2').append($('<div/>')
 			.attr("id", data["instructor"][i].course_id.toString())
 			.addClass("row")
@@ -674,28 +679,14 @@ var TALink = (function(){
 		)
 	}
 	
-	var fillApplicantList = function(data, i){
-		$('#table-applicants-list').append($('<tr/>')
-			.attr("id", data["applications"][i].app_id.toString())
-					.append($('<th/>').text(data["applications"][i].student_name),
-						$('<td/>').text(data["applications"][i].username),
-						$('<td/>').text(data["applications"][i].wsu_sid),
-						$('<td/>').text(data["applications"][i].date_taken),
-						$('<td/>').text(data["applications"][i].grade_earned),
-						$('<td/>').text(data["applications"][i].ta_before)
-					)
-			)
-	}
-	
 	var attachDeleteCourseListener = function(e){
  		console.log(this);
  		$(".class-list2").on('click', '.delete-course', function(e){
- 			var courseListingDocumentElement = (e.target).parentNode;
+            var courseListingDocumentElement = (e.target).parentNode;
  			var courseListingId = $((e.target).parentNode).attr('id');
- 			
- 			//console.log($((e.target).parentNode).attr('id'));
- 			
- 			var onSuccess = function(){
+            $("#modal-confirm-removal").modal();
+ 			$("#yes-remove").click(function(){
+                var onSuccess = function(){
  				//alert("Successfully deleted course!");
  				window.location.href = "home.html";	//if we successfully deleted a course, reload home.html
 			}
@@ -715,19 +706,20 @@ var TALink = (function(){
  			else{
  				alert("Error: Could not delete course - user not student or instructor?")
  			}
+            });
+ 			//console.log($((e.target).parentNode).attr('id'));
+ 			
+
  		});
  	}
 	
     var attachStudentCourseSearchListener = function(e){
         var onSuccess = function(data){
-		$("#course-search-results-table-body").html("");
-		
+
 			for (var i = 0; i < data["found_courses"].length; i++){
 				alert(data["found_courses"][i].course_name + "\n" +
 					data["found_courses"][i].days_lecture + "\n" +
 					"\n");
-					
-				makeCourseSearchTableEntry(data["found_courses"][i]);
 
 				//console.log(data["found_courses"][i].course_name);
 			}
@@ -745,33 +737,19 @@ var TALink = (function(){
         });
     }
 	
-	var makeCourseSearchTableEntry = function(course){
-		var courseNameSplit = course.course_name.split(" ");
-		
-		$("#course-search-results-table-body").append($('<tr/>').attr('id', course.course_id)
-		.append($('<th/>').html("&#x2610"),
-			($('<th/>').attr('scope', 'row').text(courseNameSplit[0])),
-			($('<td/>').text(courseNameSplit[1])),
-			($('<td/>').text(course.semester)),
-			($('<td/>').text(course.days_lecture)),
-			($('<td/>').text(course.time_lecture))
-		)
-	)}
-	
     
-    var attachInstructorCourseApplicantListener = function(e){
+      var attachInstructorCourseApplicantListener = function(e){
         
+        //window.alert(document.getElementById("selected-prefix")).innerHTML;
         $(".class-list2").on("click", ".instructor-class-info", function(e){
-           //console.log(e.target.closest(".row").id);
-		    var x = e.target.closest(".row").id;
-					
+           //var x = $(e.target).attr('id');
+		   //alert($(this).text())
+           console.log(e.target.closest(".row").id);
+		   var x = e.target.closest(".row").id;
+           //alert(x); //x
+		   
 		var onSuccess = function(data){
-		    $("#table-applicants-list").html("");
 			console.log(data);
-			for(i = 0; i < data["applications"].length; i++)
-			{
-				fillApplicantList(data, i);
-			}
             
         }
         var onFailure = function(){
@@ -781,30 +759,15 @@ var TALink = (function(){
            makeGetRequest('/api/account/instructor/courses/applications' + '?course_id=' + e.target.closest(".row").id, onSuccess, onFailure);
         });
     }
-	
-	var attachSelectCourseInResultsListener = function(e){
-		$("#course-search-results-table-body").on("click", "tr", function(e){
-			alert($(e.target).closest('tr').attr('id'));
-			if ($(e.target).closest('tr').hasClass('selected-table-option')){
-				$(e.target).closest('tr').removeClass('selected-table-option');
-			
-			}
-			else{
-				$(e.target).closest('tr').addClass('selected-table-option');
-			}
-		})		
-	}
-	
-	var attachStudentAddApplicationsListener = function(e){
-		$("#modal-student-add-class").on('click', '#student-add-applications-button', function(e){
-			$('.selected-table-option').each(function(e){
-				alert($(this).attr('id'));
-			})
-			
-		})
-	}
 
-	
+	var attachConfirmDeleteModalListener = function(e){
+        document.getElementsByClassName("delete-course").on("click", function(e){
+            alert("The click worked");
+            $("#modal-x-removal").modal();
+        });
+        }
+                                  
+                                
 	//	Waits until the page is loaded before running these functions.
 	$(document).ready(function(){
 		resetRadios();
@@ -816,14 +779,13 @@ var TALink = (function(){
 		attachLogoutListener();
 		attachEditAccountListener();
 		attachInstructorAddCourseListener();
+		//attachInstructorEditCourseListener();
         attachStudentCourseSearchListener();
 		attachInstructorCourseApplicantListener();
 		attachDeleteCourseListener();
 		homeLoadUserData();
 		accountLoadUserData();
-		attachSelectCourseInResultsListener();
-		attachStudentAddApplicationsListener();
-		
+		//attachConfirmDeleteModalListener();
 	});
 	
 })();
