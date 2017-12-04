@@ -466,6 +466,52 @@
 									<button type="button" class="btn btn-default">Search for Courses</button>
 								</div>
 							</div>
+							
+							<div class="row">
+								<div class="col-sm-12">
+									<table class="table table-striped">
+										<thead>
+											<tr>
+												<th></th>
+												<th>Prefix</th>
+												<th>Course Name</th>
+												<th>Semester/Year</th>
+												<th>Days</th>
+												<th>Time</th>
+											</tr>
+										</thead>
+										
+										<tbody>
+											<tr>
+												<th>&#x2610</th>
+												<th scope="row">ANTH</th>
+												<td>101-1</td>
+												<td>Fall 2017</td>
+												<td>MWF</td>
+												<td>9:10am - 10:00am</td>
+											</tr>
+											
+											<tr>
+												<th>&#x2610</th>
+												<th scope="row">CPT_S</th>
+												<td>223-1</td>
+												<td>Fall 2017</td>
+												<td>MWF</td>
+												<td>14:10pm - 15:00pm</td>										
+											</tr>
+											
+											<tr class="selected-table-option">
+												<th>&#x2611</th>
+												<th scope="row">DTC</th>
+												<td>335-2</td>
+												<td>Fall 2017</td>												
+												<td>TTh</td>
+												<td>10:10am - 12:25pm</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
 						</div>
 					</div>
 					
@@ -480,63 +526,70 @@
 				
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary">Add course</button>
+					<button type="button" class="btn btn-primary">Add course(s)</button>
 				</div>
 			</div>
 		</div>
 	</div>
 	
 	<div class="modal fade" id="modal-instructor-class-info" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-		<div class="modal-dialog" role="document">
+		<div class="modal-dialog modal-lg" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title" id="myModalLabel">Course Info</h4>
+					<h4 class="modal-title" id="myModalLabel">TA Applicants</h4>
 				</div>
 				
 				<div class="modal-body">
 					<div class="form-group">
 						<div class="form-inline">
 							<div class="row">
-								<div class="col-sm-4">
-									<label class="control-label">temp</label>
-								</div>
-								
-								<div class="col-sm-4">
-									<label class="control-label">temp</label>
-								</div>
-								
-								<div class="col-sm-4">
-									<label class="control-label">temp</label>
-								</div>
-							</div>
-							
-							<div class="row">
-								<div class="col-sm-4">
-									<input type="text" name="course-prefix" id="course-prefix" class="form-control"
-										title="Enter the course prefix" required/>								
-								</div>
-								
-								<div class="col-sm-4">
-									<input type="text" name="course-number" id="course-number" class="form-control"
-										title="Enter the course number" required/>								
-								</div>
-								
-								<div class="col-sm-4">
-									<input type="text" name="section-or-lab-number" id="section-or-lab-number" class="form-control"
-										title="Enter the section or lab number" required/>								
+								<div class="col-sm-12">
+									<table class="table table-striped">
+										<thead>
+											<tr>
+												<th>Name</th>
+												<th>Username</th>
+												<th>ID</th>
+												<th>Date Taken</th>
+												<th>Grade Earned</th>
+												<th>Prior TA</th>
+											</tr>
+										</thead>
+										
+										<tbody>
+											<tr>
+												<th scope="row">Tyler Walker</th>
+												<td>test@wsu.edu</td>
+												<td>1122334</td>
+												<td>Fall 2017</td>
+												<td>A</td>
+												<td>Yes</td>
+											</tr>
+											
+											<tr>
+												<th scope="row">loremipsumdolorsitamet</th>
+												<td>teswefweffwfewfewfewft@wsu.edu</td>
+												<td>1122334</td>
+												<td>Fall 2017</td>
+												<td>A</td>
+												<td>Yes</td>											
+											</tr>
+											
+											<tr>
+												<th scope="row">Tyler Walker</th>
+												<td>tefwefweft@wsu.edu</td>
+												<td>1122334</td>
+												<td>Fall 2017</td>
+												<td>A</td>
+												<td>Yes</td>											
+											</tr>
+										</tbody>
+									</table>
 								</div>
 							</div>
 						</div>
-					</div>
-					
-					<div class="form-group">
-						<label class="control-label radio-label">Is this course a temp?</label>
-						<input type="radio" name="course-is-lab" id="course-is-lab-yes" value="yes">
-						<label>temp</label>
-						<input type="radio" name="course-is-lab" id="course-is-lab-no" value="no" checked>
-						<label>temp</label>
-					</div>						
+					</div>					
 				</div>
 				
 				<div class="modal-footer">
@@ -557,16 +610,33 @@
 				<dd> is the description... description? -->
 			<dl class="dl-horizontal">
 				<dt class="instructor">Professor</dt>
+				
+				<!-- <dt class="instructor">WSU Email</dt> -->
+				<!-- <dd class="instructor" id="instructor-email">Unknown</dd> -->
+				
+				<!-- <dt class="instructor">Other Email</dt> -->
+				<!-- <dd class="instructor" id="instructor-email-secondary">Unknown</dd> -->
+				
+				<!-- <dt class="instructor">Phone Number</dt> -->
+				<!-- <dd class="instructor" id="instructor-phone">Unknown</dd> -->
+			
+				
 				<dd></dd>
 				
 				<dt class="student">Major</dt>
-				<dd class="student" id="student-major">Computer Science</dd>
+				<dd class="student" id="student-major">Unknown</dd>
+				
+				<dt class="student">GPA </dt>
+				<dd class="student" id="student-TA-gpa">Unknown</dd>
 				
 				<dt class="student">Graduation Date</dt>
-				<dd class="student" id="student-graduation-date">Fall 2018</dd>
+				<dd class="student" id="student-graduation-date">Unknown</dd>
 				
 				<dt class="student">Previously Been a TA</dt>
-				<dd class="student" id="student-TA-history">No</dd>
+				<dd class="student" id="student-TA-history">Unknown</dd>
+				
+				<dt class="student">TAShip </dt>
+				<dd class="student" id="student-TA-chosen">Not chosen</dd>
 			</dl>
 			
 			<!-- This class appears by default. If the GET request returns at leat one class, this is
@@ -608,75 +678,8 @@
 					The "xs" specifies that the columns exist even in the smallest mobile views.
 					If you want the columns to collapse into 1 column on mobile, you can use
 					"col-sm-4". -->
-				<!-- <div class="row"> -->
-					<!-- <div class="col-xs-10"> -->
-						<!-- <dl class="dl-horizontal"> -->
-							<!-- <dt class="h3">Cpts 223</dt> -->
-							<!-- <dd></dd> -->
-							
-							<!-- <dt>Taken</dt> -->
-							<!-- <dd>2017</dd> -->
-							
-							<!-- <dt>Grade</dt> -->
-							<!-- <dd>A-</dd> -->
-							
-							<!-- <dt>Previously Been a TA</dt> -->
-							<!-- <dd>No</dd> -->
-						<!-- </dl> -->
-					<!-- </div> -->
 					
-					<!-- <div class="col-xs-2 text-right"> -->
-						<!-- <p class="h3">x</p> -->
-					<!-- </div> -->
-				<!-- </div> -->
-				
-				<!-- <div class="row"> -->
-					<!-- <div class="col-xs-10"> -->
-						<!-- <dl class="dl-horizontal"> -->
-							<!-- <dt class="h3">Cpts 223</dt> -->
-							<!-- <dd></dd> -->
-							
-							<!-- <dt>Taken</dt> -->
-							<!-- <dd>2017</dd> -->
-							
-							<!-- <dt>Grade</dt> -->
-							<!-- <dd>A-</dd> -->
-							
-							<!-- <dt>Previously Been a TA</dt> -->
-							<!-- <dd>No</dd> -->
-						<!-- </dl> -->
-					<!-- </div> -->
-					
-					<!-- <div class="col-xs-2 text-right"> -->
-						<!-- <p class="h3">x</p> -->
-					<!-- </div> -->
-				<!-- </div> -->
-				
-				<!-- <div class="row"> -->
-					<!-- <div class="col-xs-10"> -->
-						<!-- <dl class="dl-horizontal"> -->
-							<!-- <dt class="h3">Cpts 223</dt> -->
-							<!-- <dd></dd> -->
-							
-							<!-- <dt>Taken</dt> -->
-							<!-- <dd>2017</dd> -->
-							
-							<!-- <dt>Grade</dt> -->
-							<!-- <dd>A-</dd> -->
-							
-							<!-- <dt>Previously Been a TA</dt> -->
-							<!-- <dd>No</dd> -->
-							
-							<!-- <!--<dt>Sections</dt> -->
-							<!-- <dd>01, 02, 03, 01-L, 02-L, 03-L</dd>-->
-						<!-- </dl> -->
-					<!-- </div> -->
-					
-					<!-- <div class="col-xs-2 text-right"> -->
-						<!-- <p class="h3">x</p> -->
-					<!-- </div> -->
-				</div>
-			<!-- </div> -->
+			</div>
 			
 			<div class="container instructor class-list">
 				<div class="row">
@@ -690,73 +693,6 @@
 				</div>
 				
 				<div class="border-bottom"></div>
-				
-<!-- 			<div class="row">
-					<div class="col-xs-10 instructor-class-info" data-toggle="modal" data-target="#modal-instructor-class-info">
-						<dl class="dl-horizontal">
-							<dt class="h3">Cpts 223</dt>
-							<dd></dd>
-							
-							<dt>Section number:</dt>
-							<dd>01</dd>
-							
-							<dt>Assigned to:</dt>
-							<dd>Tyler Walker</dd>
-							
-							<dt>Number of applicants:</dt>
-							<dd>4</dd>
-						</dl>
-					</div>
-					
-					<div class="col-xs-2 text-right">
-						<p class="h3">x</p>
-					</div>
-				</div>
-				
-				<div class="row">
-					<div class="col-xs-10 instructor-class-info" data-toggle="modal" data-target="#modal-instructor-class-info">
-						<dl class="dl-horizontal">
-							<dt class="h3">Cpts 223</dt>
-							<dd></dd>
-							
-							<dt>Section number:</dt>
-							<dd>01</dd>
-							
-							<dt>Assigned to:</dt>
-							<dd>Tyler Walker</dd>
-							
-							<dt>Number of applicants:</dt>
-							<dd>4</dd>
-						</dl>
-					</div>
-					
-					<div class="col-xs-2 text-right">
-						<p class="h3">x</p>
-					</div>
-				</div>
-				
-				<div class="row">
-					<div class="col-xs-10 instructor-class-info" data-toggle="modal" data-target="#modal-instructor-class-info">
-						<dl class="dl-horizontal">
-							<dt class="h3">Cpts 223</dt>
-							<dd></dd>
-							
-							<dt>Section number:</dt>
-							<dd>01</dd>
-							
-							<dt>Assigned to:</dt>
-							<dd>Tyler Walker</dd>
-							
-							<dt>Number of applicants:</dt>
-							<dd>4</dd>
-						</dl>
-					</div>
-					
-					<div class="col-xs-2 text-right">
-						<p class="h3">x</p>
-					</div> -->
-				</div>
-			</div>
 			</div>
 		</div>
 	</div>
