@@ -305,16 +305,16 @@ def addApplication():
 def removeApplication():
 	app_id = request.args.get('app_id', None)
 	if app_id is None:
-		return "Must provide app_id", 500
+		return "Must provide app_id", 501
 	username = request.args.get('username', None)
 	password = request.args.get('password', None)
 
 	if (validatePassword(username, password)) is False:
-		return "The username or password is incorrect", 500
+		return "The username or password is incorrect", 502
 
 	application = TAApplication.query.filter_by(app_id=app_id).first()  # obtain the TAApplication we want to delete
 	if application is None:
-		return "No application with that id exists", 500
+		return "No application with that id exists", 503
 		
 	application.course.app_count -= 1 #reduces the number of applications to an account
 

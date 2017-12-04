@@ -661,7 +661,7 @@ var TALink = (function(){
 			, $('<div/>')
 			.addClass("col-xs-2 text-right")
 			.append('<p/>')
-				.addClass('h3')
+				.addClass('h3 delete-course')
 				.text('x')
 			)
 		)
@@ -689,7 +689,7 @@ var TALink = (function(){
  			}
  			
  			else if(localStorage.getItem("user_type") == "Student"){
- 				makeDeleteRequest('/api/account/student/removeApp?space=' + accountSpace + '&username='+ localStorage.getItem("username") + '&password=' + localStorage.getItem("password") + '&course_id=' + courseListingId, onSuccess, onFailure);
+ 				makeDeleteRequest('/api/account/student/removeApp?space=' + accountSpace + '&username='+ localStorage.getItem("username") + '&password=' + localStorage.getItem("password") + '&app_id=' + courseListingId, onSuccess, onFailure);
  			}
  			
  			else{
@@ -720,11 +720,10 @@ var TALink = (function(){
         //window.alert(document.getElementById("selected-prefix")).innerHTML;
         $(".class-list2").on("click", ".instructor-class-info", function(e){
            //var x = $(e.target).attr('id');
-		   alert($(this).text())
+		   //alert($(this).text())
            console.log(e.target.closest(".row").id);
 		   var x = e.target.closest(".row").id;
-           alert(x); //x
-           alert("hi!"); //debugging
+           //alert(x); //x
 		   
 		var onSuccess = function(data){
 			console.log(data);
