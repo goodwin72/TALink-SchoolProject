@@ -466,6 +466,52 @@
 									<button type="button" class="btn btn-default">Search for Courses</button>
 								</div>
 							</div>
+							
+							<div class="row">
+								<div class="col-sm-12">
+									<table class="table table-striped">
+										<thead>
+											<tr>
+												<th></th>
+												<th>Prefix</th>
+												<th>Course Name</th>
+												<th>Semester/Year</th>
+												<th>Days</th>
+												<th>Time</th>
+											</tr>
+										</thead>
+										
+										<tbody>
+											<tr>
+												<th>&#x2610</th>
+												<th scope="row">ANTH</th>
+												<td>101-1</td>
+												<td>Fall 2017</td>
+												<td>MWF</td>
+												<td>9:10am - 10:00am</td>
+											</tr>
+											
+											<tr>
+												<th>&#x2610</th>
+												<th scope="row">CPT_S</th>
+												<td>223-1</td>
+												<td>Fall 2017</td>
+												<td>MWF</td>
+												<td>14:10pm - 15:00pm</td>										
+											</tr>
+											
+											<tr class="selected-table-option">
+												<th>&#x2611</th>
+												<th scope="row">DTC</th>
+												<td>335-2</td>
+												<td>Fall 2017</td>												
+												<td>TTh</td>
+												<td>10:10am - 12:25pm</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
 						</div>
 					</div>
 					
@@ -480,7 +526,7 @@
 				
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary">Add course</button>
+					<button type="button" class="btn btn-primary">Add course(s)</button>
 				</div>
 			</div>
 		</div>
@@ -498,33 +544,48 @@
 					<div class="form-group">
 						<div class="form-inline">
 							<div class="row">
-								<div class="col-sm-4">
-									<label class="control-label">temp</label>
-								</div>
-								
-								<div class="col-sm-4">
-									<label class="control-label">temp</label>
-								</div>
-								
-								<div class="col-sm-4">
-									<label class="control-label">temp</label>
-								</div>
-							</div>
-							
-							<div class="row">
-								<div class="col-sm-4">
-									<input type="text" name="course-prefix" id="course-prefix" class="form-control"
-										title="Enter the course prefix" required/>								
-								</div>
-								
-								<div class="col-sm-4">
-									<input type="text" name="course-number" id="course-number" class="form-control"
-										title="Enter the course number" required/>								
-								</div>
-								
-								<div class="col-sm-4">
-									<input type="text" name="section-or-lab-number" id="section-or-lab-number" class="form-control"
-										title="Enter the section or lab number" required/>								
+								<div class="col-sm-12">
+									<table class="table table-striped">
+										<thead>
+											<tr>
+												<th>Name</th>
+												<th>Username</th>
+												<th>ID</th>
+												<th>Date Taken</th>
+												<th>Grade Earned</th>
+												<th>Prior TA</th>
+											</tr>
+										</thead>
+										
+										<tbody>
+											<tr>
+												<th scope="row">Tyler Walker</th>
+												<td>test@wsu.edu</td>
+												<td>1122334</td>
+												<td>Fall 2017</td>
+												<td>A</td>
+												<td>Yes</td>
+											</tr>
+											
+											<tr>
+												<th scope="row">loremipsumdolorsitamet</th>
+												<td>teswefweffwfewfewfewft@wsu.edu</td>
+												<td>1122334</td>
+												<td>Fall 2017</td>
+												<td>A</td>
+												<td>Yes</td>											
+											</tr>
+											
+											<tr>
+												<th scope="row">Tyler Walker</th>
+												<td>tefwefweft@wsu.edu</td>
+												<td>1122334</td>
+												<td>Fall 2017</td>
+												<td>A</td>
+												<td>Yes</td>											
+											</tr>
+										</tbody>
+									</table>
 								</div>
 							</div>
 						</div>
@@ -754,9 +815,8 @@
 					
 					<div class="col-xs-2 text-right">
 						<p class="h3">x</p>
-					</div> -->
-				</div>
-			</div>
+					</div>
+				</div>-->
 			</div>
 		</div>
 	</div>

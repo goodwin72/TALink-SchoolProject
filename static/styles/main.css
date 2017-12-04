@@ -131,3 +131,10 @@ body .student{
 	
 	cursor: pointer;
 }
+
+.selected-table-option{
+	background-color: #f9e45f !important; 
+	/*Resorting to !important here because the interfering Bootstrap styling
+		for striped tables is very specific (see: CSS specificity rules), and 
+		don't see an issue with it for now.*/
+}
