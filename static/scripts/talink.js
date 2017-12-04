@@ -111,7 +111,7 @@ var TALink = (function(){
 						
 						//alert("hi")
 						for(i = 0; i < data["instructor"].length; i++){
-							fillCourseData(data);
+							fillCourseData(data, i);
 						}
 					
 					}
@@ -422,13 +422,14 @@ var TALink = (function(){
 	
 	var attachPrefixDropdownTextHandler = function(e){
 		$(".course-prefix-dropdown").on('click', 'li a', function(e){
-			
-			console.log($(e.target).text());
+			//alert($('.selected-prefix').text())
+			//console.log($(e.target).text());
 			var replaceText = $(e.target).text();
-		
+			//alert(replaceText);
 			$(".selected-prefix").each(function(e){
 				console.log($(this).text());
 				$(this).text( replaceText );
+				//alert($('.selected-prefix').text())
 			})
 		
 			// $(".selected-prefix-group").each(function(e){
@@ -568,8 +569,8 @@ var TALink = (function(){
 	var attachInstructorAddCourseListener = function(e){
 		$(".instructor-add-course-button").click(function(){
 			var courseInfo = {};
-			
-			courseInfo.course_name = $('#selected-prefix').text() + " " + $('#course-number').val();
+			//alert($('.selected-prefix').text())
+			courseInfo.course_name = $('#modal-instructor-add-class .selected-prefix').text() + " " + $('#course-number').val();
 			courseInfo.section_name = $('#section-or-lab-number').val();
 			
 			//Get the semester from the user's radio selection.
@@ -595,13 +596,13 @@ var TALink = (function(){
  				//do nothing
  			}
 			
-			// alert("DEBUG" + "\n" +
-					// "----------------" + "\n" +
-					// "Course Name: " + courseInfo.course_name + "\n" +
-					// "Section: " + courseInfo.section_name + "\n" +
-					// "Semester: " + courseInfo.semester + "\n" +
-					// "Days: " + courseInfo.days_lecture + "\n" +
-					// "Time: " + courseInfo.time_lecture);
+			alert("DEBUG" + "\n" +
+					"----------------" + "\n" +
+					"Course Name: " + courseInfo.course_name + "\n" +
+					"Section: " + courseInfo.section_name + "\n" +
+					"Semester: " + courseInfo.semester + "\n" +
+					"Days: " + courseInfo.days_lecture + "\n" +
+					"Time: " + courseInfo.time_lecture);
 					
 			var onSuccess = function(){
 				//alert("Successfully added course!")
@@ -678,6 +679,36 @@ var TALink = (function(){
 			)
 		)
 	}
+	
+/* 	var fillApplicantList = function(data){
+		$('.table-applicants').append($('<thead/>')
+			.attr("id", data["applications"][i].app_id.toString())
+			.addClass("row")
+			.append($('<div/>')
+				.addClass("col-xs-10 instructor-class-info")
+				.attr("data-toggle", "modal")
+				.attr("data-target", "#modal-instructor-class-info")
+				.append($('<dl/>')
+					.addClass("dl-horizontal")
+					.append($('<dt/>').addClass("h3").text(data["instructor"][i].course_name + " " + data["instructor"][i].section_name), $('<dd/>'),
+						//$('<dt/>').text("Section number:"), $('<dd/>').text(course_section.toString()),
+						$('<dt/>').text("TA Chosen:"), $('<dd/>').text(data["instructor"][i].ta_name),
+						$('<dt/>').text("Meeting Days:"), $('<dd/>').text(data["instructor"][i].days_lecture),
+						$('<dt/>').text("Meeting Times:"), $('<dd/>').text(data["instructor"][i].time_lecture),
+						$('<dt/>').text("Number of applicants:"), $('<dd/>').text(data["instructor"][i].app_count.toString())
+					)
+				)
+				//
+				//
+				//
+			, $('<div/>')
+			.addClass("col-xs-2 text-right")
+			.append('<p/>')
+				.addClass("h3 delete-course")
+				.text('x')
+			)
+		)
+	} */
 	
 	var attachDeleteCourseListener = function(e){
  		console.log(this);
