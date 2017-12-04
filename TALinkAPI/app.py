@@ -277,22 +277,20 @@ def addApplication():
 		if courseQuery is None:
 			return "No course with that id = " + i + " exists", 500
 		copyQuery = TAApplication.query.filter_by(student_id=query.account_id).filter_by(course_id=int(i)).first()
-		if copyQuery is not None:
-			return "An application for that course" + i + " from this student already exists", 500
-		
-		application = TAApplication(**request.json)
-		
-		query.course_applications.append(application)	#add application to student's applications
-		courseQuery.applications.append(application)	# add application to the InstructorCourse's applications
-		courseQuery.app_count += 1
-		db.session.add(application)		# add application to the TAApplication database
-		db.session.add(query)
-		db.session.add(courseQuery)
-		db.session.commit()
-		db.session.refresh(application)
-		db.session.refresh(query)
-		db.session.refresh(courseQuery)
-		result.append(taApplication_to_obj(application))
+		if copyQuery is None:
+			application = TAApplication(**request.json)
+			
+			query.course_applications.append(application)	#add application to student's applications
+			courseQuery.applications.append(application)	# add application to the InstructorCourse's applications
+			courseQuery.app_count += 1
+			db.session.add(application)		# add application to the TAApplication database
+			db.session.add(query)
+			db.session.add(courseQuery)
+			db.session.commit()
+			db.session.refresh(application)
+			db.session.refresh(query)
+			db.session.refresh(courseQuery)
+			result.append(taApplication_to_obj(application))
 
 	return jsonify({"status": 1, "application": result}), 200
 
