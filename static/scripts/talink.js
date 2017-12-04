@@ -750,8 +750,8 @@ var TALink = (function(){
 		
 		$("#course-search-results-table-body").append($('<tr/>').attr('id', course.course_id)
 		.append($('<th/>').html("&#x2610"),
-			($('<th/>').attr('scope', 'row').text(courseNameSplit[0])),
-			($('<td/>').text(courseNameSplit[1])),
+			($('<th/>').attr('scope', 'row').attr('id', 'course-name-prefix').text(courseNameSplit[0])),
+			($('<td/>').attr('id', 'course-name-number').text(courseNameSplit[1])),
 			($('<td/>').text(course.semester)),
 			($('<td/>').text(course.days_lecture)),
 			($('<td/>').text(course.time_lecture))
@@ -800,10 +800,26 @@ var TALink = (function(){
 			$('.selected-table-option').each(function(e){
 				alert($(this).attr('id'));
 			})
+
+			//Get the course name from the first entry in the table.
+			var courseName = $('#course-search-results-table-body #course-name-prefix').first().text() + " " + $('#course-search-results-table-body #course-name-number').first().text();
 			
+			//Hide the add class modal.
+			$('#modal-student-add-class').modal('hide');
+			
+			//Fill in the class name.
+			$('#application-course-name').text(courseName);
+			
+			//Show the application info modal.
+			$('#modal-student-application-info').modal('show');
 		})
 	}
 	
+	var attachStudentSubmitApplicationsListener = function(e){
+		$("#student-submit-applications-button").click(function(e){
+			alert("submit");
+		})
+	}
 	
 	
 	var attachSelectAppInResultsListener = function(e){
@@ -863,6 +879,7 @@ var TALink = (function(){
 		accountLoadUserData();
 		attachSelectCourseInResultsListener();
 		attachStudentAddApplicationsListener();
+		attachStudentSubmitApplicationsListener();
 		attachSelectAppInResultsListener();
 		attachInstructorAddTAListener();
 		
