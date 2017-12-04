@@ -281,7 +281,6 @@ def addApplication():
 			return "An application for that course" + i + " from this student already exists", 500
 		
 		application = TAApplication(**request.json)
-		result.append(taApplication_to_obj(application))
 		
 		query.course_applications.append(application)	#add application to student's applications
 		courseQuery.applications.append(application)	# add application to the InstructorCourse's applications
@@ -293,6 +292,7 @@ def addApplication():
 		db.session.refresh(application)
 		db.session.refresh(query)
 		db.session.refresh(courseQuery)
+		result.append(taApplication_to_obj(application))
 
 	return jsonify({"status": 1, "application": result}), 200
 
@@ -841,6 +841,7 @@ def taApplication_to_obj(taApp):
 	application = {
 			"app_id": taApp.app_id,
 			"student_name": taApp.student_name,
+			"username": taApp.student.wsu_email,
 			"wsu_sid": taApp.wsu_sid,
 			"grade_earned": taApp.grade_earned,
 			"date_taken": taApp.date_taken,

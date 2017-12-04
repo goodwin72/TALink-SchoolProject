@@ -617,14 +617,8 @@ var TALink = (function(){
 		});
 	}
 	
-	var attachInstructorEditCourseListener = function(){
-		$(".instructor-class-info").click(function(){
-			
-		});
-	}
-	
 	//data["instructor"][i].course_id, data["instructor"][i].course_name, data["instructor"][i].section_name, data["instructor"][i].ta_name, data["instructor"][i].app_count
-	var fillCourseData = function(data){
+	var fillCourseData = function(data, i){
 		$('.class-list2').append($('<div/>')
 			.attr("id", data["instructor"][i].course_id.toString())
 			.addClass("row")
@@ -680,35 +674,18 @@ var TALink = (function(){
 		)
 	}
 	
-/* 	var fillApplicantList = function(data){
-		$('.table-applicants').append($('<thead/>')
+	var fillApplicantList = function(data, i){
+		$('#table-applicants-list').append($('<tr/>')
 			.attr("id", data["applications"][i].app_id.toString())
-			.addClass("row")
-			.append($('<div/>')
-				.addClass("col-xs-10 instructor-class-info")
-				.attr("data-toggle", "modal")
-				.attr("data-target", "#modal-instructor-class-info")
-				.append($('<dl/>')
-					.addClass("dl-horizontal")
-					.append($('<dt/>').addClass("h3").text(data["instructor"][i].course_name + " " + data["instructor"][i].section_name), $('<dd/>'),
-						//$('<dt/>').text("Section number:"), $('<dd/>').text(course_section.toString()),
-						$('<dt/>').text("TA Chosen:"), $('<dd/>').text(data["instructor"][i].ta_name),
-						$('<dt/>').text("Meeting Days:"), $('<dd/>').text(data["instructor"][i].days_lecture),
-						$('<dt/>').text("Meeting Times:"), $('<dd/>').text(data["instructor"][i].time_lecture),
-						$('<dt/>').text("Number of applicants:"), $('<dd/>').text(data["instructor"][i].app_count.toString())
+					.append($('<th/>').text(data["applications"][i].student_name),
+						$('<td/>').text(data["applications"][i].username),
+						$('<td/>').text(data["applications"][i].wsu_sid),
+						$('<td/>').text(data["applications"][i].date_taken),
+						$('<td/>').text(data["applications"][i].grade_earned),
+						$('<td/>').text(data["applications"][i].ta_before)
 					)
-				)
-				//
-				//
-				//
-			, $('<div/>')
-			.addClass("col-xs-2 text-right")
-			.append('<p/>')
-				.addClass("h3 delete-course")
-				.text('x')
 			)
-		)
-	} */
+	}
 	
 	var attachDeleteCourseListener = function(e){
  		console.log(this);
@@ -784,16 +761,17 @@ var TALink = (function(){
     
     var attachInstructorCourseApplicantListener = function(e){
         
-        //window.alert(document.getElementById("selected-prefix")).innerHTML;
         $(".class-list2").on("click", ".instructor-class-info", function(e){
-           //var x = $(e.target).attr('id');
-		   //alert($(this).text())
-           console.log(e.target.closest(".row").id);
-		   var x = e.target.closest(".row").id;
-           //alert(x); //x
-		   
+           //console.log(e.target.closest(".row").id);
+		    var x = e.target.closest(".row").id;
+					
 		var onSuccess = function(data){
+		    $("#table-applicants-list").html("");
 			console.log(data);
+			for(i = 0; i < data["applications"].length; i++)
+			{
+				fillApplicantList(data, i);
+			}
             
         }
         var onFailure = function(){
@@ -816,7 +794,6 @@ var TALink = (function(){
 		attachLogoutListener();
 		attachEditAccountListener();
 		attachInstructorAddCourseListener();
-		//attachInstructorEditCourseListener();
         attachStudentCourseSearchListener();
 		attachInstructorCourseApplicantListener();
 		attachDeleteCourseListener();
