@@ -85,6 +85,11 @@ var TALink = (function(){
 			$("#student-major").text(localStorage.getItem("major"));
 			$("#student-graduation-date").text(localStorage.getItem("expected_grad"));
 			$("#student-TA-history").text(localStorage.getItem("ta_before"));
+			$("#student-TA-gpa").text(localStorage.getItem("gpa"));
+			if (localStorage.getItem("assigned_ta") == true){
+				//$("#student-TA-chosen").text(localStorage.getItem("assigned_ta"));
+				$("#student-TA-chosen").text("You've been chosen as a TA!")
+			}
 			
 			if(localStorage.getItem("user_type") == "Instructor"){
 				var onSuccess = function(data){
@@ -376,15 +381,18 @@ var TALink = (function(){
 				window.localStorage.setItem("user_type", data["person"]["user_type"]);
 				window.localStorage.setItem("password", lPassword);	
 				window.localStorage.setItem("username", data["person"]["wsu_email"]);
-				window.localStorage.setItem("major", data["person"]["major"]);
-				window.localStorage.setItem("expected_grad", data["person"]["expected_grad"]);
-				window.localStorage.setItem("ta_before", data["person"]["ta_before"]);
 				window.localStorage.setItem("first_name", data["person"]["first_name"]);
 				window.localStorage.setItem("last_name", data["person"]["last_name"]);
 				window.localStorage.setItem("wsu_id", data["person"]["wsu_id"]);
 				window.localStorage.setItem("phone_number", data["person"]["phone_number"]);
 				window.localStorage.setItem("secondary_email", data["person"]["secondary_email"]);
-				window.localStorage.setItem("gpa", data["person"]["gpa"]);
+				if (data["person"]["user_type"] == "Student"){
+					window.localStorage.setItem("gpa", data["person"]["gpa"]);
+					window.localStorage.setItem("major", data["person"]["major"]);
+					window.localStorage.setItem("expected_grad", data["person"]["expected_grad"]);
+					window.localStorage.setItem("ta_before", data["person"]["ta_before"]);
+					window.localStorage.setItem("assigned_ta", data["person"]["assigned_ta"])
+				}
 			};
 			var onFailure = function() { 
 				console.error('login failed'); 
