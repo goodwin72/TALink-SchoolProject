@@ -740,7 +740,7 @@ var TALink = (function(){
 	var makeCourseSearchTableEntry = function(course){
 		var courseNameSplit = course.course_name.split(" ");
 		
-		$("#course-search-results-table-body").append($('<tr/>')
+		$("#course-search-results-table-body").append($('<tr/>').attr('id', course.course_id)
 		.append($('<th/>').html("&#x2610"),
 			($('<th/>').attr('scope', 'row').text(courseNameSplit[0])),
 			($('<td/>').text(courseNameSplit[1])),
@@ -772,6 +772,28 @@ var TALink = (function(){
            makeGetRequest('/api/account/instructor/courses/applications' + '?course_id=' + e.target.closest(".row").id, onSuccess, onFailure);
         });
     }
+	
+	var attachSelectCourseInResultsListener = function(e){
+		$("#course-search-results-table-body").on("click", "tr", function(e){
+			alert($(e.target).closest('tr').attr('id'));
+			if ($(e.target).closest('tr').hasClass('selected-table-option')){
+				$(e.target).closest('tr').removeClass('selected-table-option');
+			
+			}
+			else{
+				$(e.target).closest('tr').addClass('selected-table-option');
+			}
+		})		
+	}
+	
+	var attachStudentAddApplicationsListener = function(e){
+		$("#modal-student-add-class").on('click', '#student-add-applications-button', function(e){
+			$('.selected-table-option').each(function(e){
+				alert($(this).attr('id'));
+			})
+			
+		})
+	}
 
 	
 	//	Waits until the page is loaded before running these functions.
@@ -791,6 +813,8 @@ var TALink = (function(){
 		attachDeleteCourseListener();
 		homeLoadUserData();
 		accountLoadUserData();
+		attachSelectCourseInResultsListener();
+		attachStudentAddApplicationsListener();
 		
 	});
 	

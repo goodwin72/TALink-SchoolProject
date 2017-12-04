@@ -530,7 +530,7 @@
 				
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary">Add course(s)</button>
+					<button type="button" class="btn btn-primary" id="student-add-applications-button">Add course(s)</button>
 				</div>
 			</div>
 		</div>
@@ -623,6 +623,65 @@
 			</div>
 		</div>
 	</div>
+	
+	<div class="modal fade" id="modal-student-application-info" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel">Application Info</h4>
+				</div>
+				
+				<div class="modal-body">
+					<div class="form-group">
+						<label class="control-label radio-label">Date Taken</label>
+						<div class="form-inline">
+							<input type="radio" name="course-semester-taken" id="course-semester-taken-fall" 
+								value="fall" checked>
+							<label>Fall</label>
+							<input type="radio" name="course-semester-taken" id="course-semester-taken-spring" 
+								value="spring">
+							<label>Spring</label>
+							<input type="radio" name="course-semester-taken" id="course-semester-taken-spring" 
+								value="summer">
+							<label>Summer</label>
+							<input type="text" name="course-year-taken" id="course-year-taken" placeholder="Year" 
+								class="form-control" title="Please enter the year you took this course" 
+								pattern="[0-9]+" required>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<div class="form-inline">					
+							<div class="row">							
+								<div class="col-sm-3">
+									<label class="control-label">Grade Earned</label>
+									<label class="input-description">(ex: 3.4)</label>
+									<input type="text" name="grade-earned" id="grade-earned" class="form-control"
+										title="Enter the grade you earned in this course" required/>								
+								</div>
+							</div>
+						</div>
+					</div>				
+					
+					<div class="form-group">
+						<label class="control-label radio-label">Have you been a TA for this course before?</label>
+						<div class="form-inline">
+							<input type="radio" name="ta-before-for-this-course" id="ta-before-for-this-course-yes" value="yes">
+							<label>Yes</label>
+							<input type="radio" name="ta-before-for-this-course" id="ta-before-for-this-course-no" value="no" checked>
+							<label>No</label>
+						</div>
+					</div>						
+				</div>
+				
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary instructor-add-course-button">Submit application(s)</button>
+				</div>
+			</div>
+		</div>
+	</div>	
 	
     <div class="container">
     <!-- The Jumbotron is one of several base styling classes in Bootstrap. As a template I referenced 
