@@ -124,7 +124,6 @@ def login():
 	if bcrypt.check_password_hash(query.password, password) is False:
 		return "Password does not match", 500
 		
-		
 	#prepare the information as a json file to be sent back to the requester
 	result = []
 	if query.user_type == "Student":
@@ -197,7 +196,7 @@ def addInstructorCourse():
 	query = Instructor.query.filter_by(wsu_email=username).first()
 	if query is None:
 		return "No account exists with the given username", 500
-	courseQuery = InstructorCourse.query.filter_by(course_id=query.account_id).filter_by(course_name=course.course_name).first()
+	#courseQuery = InstructorCourse.query.filter_by(course_id=query.account_id).filter_by(course_name=course.course_name).first()
 	if (validatePassword(username, password)) is False:
 		return "The username or password is incorrect", 500
 	
@@ -238,6 +237,7 @@ def removeInstructorCourse():
 	# next we need to remove all taApplications from the database that are in this course
 	for d in course.applications:
 		course.applications.remove(d)
+		db.session.delete(d)
 
 	db.session.delete(course) # remove the InstructorCourse from the database
 	db.session.commit()
@@ -430,78 +430,6 @@ def updateInstructorInfo():
 	
 	
 	
-#------------------------------------------------------- Getting Information --------------------------------------------------------
-#	This section contains functions involving retrieving information and lists of class objects from accounts and tables
-#------------------------------------------------------------------------------------------------------------------------------------
-		
-# returns all of a given instructor's Instructor Courses
-@app.route(base_url + 'account/instructor/courses', methods=['GET'])
-def getCoursesTaught():
-	username = request.args.get('username', None)
-	if username is None:
-		return "Must provide username", 500
-	query = Instructor.query.filter_by(wsu_email=username).first()
-	if query is None:
-		return "No account exists with the given username", 500
-	
-	result = []
-	for c in query.courses_taught:
-		result.append(instructorCourse_to_obj(c))
-		
-	return jsonify({"status": 1, "instructor": result})
-
-
-# returns all applications for a given InstructorCourse
-@app.route(base_url + 'account/instructor/courses/applications', methods=['GET'])
-def getCourseApplications():
-	cid = request.args.get('course_id', None)
-	if cid is None:
-		return "Must provide course id", 500
-	query = InstructorCourse.query.filter_by(course_id=cid).first()
-	if query is None:
-		return "No course exists with the given course id", 500
-
-	result = []
-	for c in query.applications:
-		result.append(taApplication_to_obj(c))
-
-	return jsonify({"status": 1, "applications": result})
-
-
-# returns all applications for a given Student
-@app.route(base_url + 'account/student/applications', methods=['GET'])
-def getStudentApplications():
-	username = request.args.get('username', None)
-	if username is None:
-		return "Must provide student username", 500
-	query = Student.query.filter_by(wsu_email=username).first()
-	if query is None:
-		return "No student exists with the given username", 500
-
-	result = []
-	for c in query.course_applications:
-		result.append(taApplication_to_obj_Student_Version(c))
-
-	return jsonify({"status": 1, "applications": result})
-
-
-@app.route(base_url + 'account/student/courseSearch', methods=['GET'])
-def getCoursesByName():
-	search_name = request.args.get('search_name', None)
-	if search_name is None:
-		return "Must provide a course name to search", 500
-
-	courses = InstructorCourse.query.filter_by(course_name=search_name).all()
-	if courses is None:
-		return "No courses with that name exist", 500
-
-	result = []
-	for c in courses:
-		result.append(instructorCourse_to_obj(c))
-
-	return jsonify({"status": 1, "found_courses": result}), 200
-
-
 #------------------------------------------------------- TAship Manipulation --------------------------------------------------------
 #	This section contains functions involving setting and removing TAship for/from a course
 #------------------------------------------------------------------------------------------------------------------------------------
@@ -569,6 +497,84 @@ def removeTA():
 	db.session.refresh(course)
 
 	return jsonify({"status": 1}), 200
+
+	
+	
+#------------------------------------------------------- Getting Information --------------------------------------------------------
+#	This section contains functions involving retrieving information and lists of class objects from accounts and tables
+#------------------------------------------------------------------------------------------------------------------------------------
+		
+# returns all of a given instructor's Instructor Courses
+@app.route(base_url + 'account/instructor/courses', methods=['GET'])
+def getCoursesTaught():
+	username = request.args.get('username', None)
+	if username is None:
+		return "Must provide username", 500
+	query = Instructor.query.filter_by(wsu_email=username).first()
+	if query is None:
+		return "No account exists with the given username", 500
+	
+	result = []
+	for c in query.courses_taught:
+		result.append(instructorCourse_to_obj(c))
+		
+	return jsonify({"status": 1, "instructor": result})
+
+
+# returns all applications for a given InstructorCourse
+@app.route(base_url + 'account/instructor/courses/applications', methods=['GET'])
+def getCourseApplications():
+	cid = request.args.get('course_id', None)
+	if cid is None:
+		return "Must provide course id", 500
+	query = InstructorCourse.query.filter_by(course_id=cid).first()
+	if query is None:
+		return "No course exists with the given course id", 500
+
+	result = []
+	for c in query.applications:
+		result.append(taApplication_to_obj(c))
+
+	return jsonify({"status": 1, "applications": result})
+
+
+# returns all applications for a given Student
+@app.route(base_url + 'account/student/applications', methods=['GET'])
+def getStudentApplications():
+	username = request.args.get('username', None)
+	if username is None:
+		return "Must provide student username", 500
+	query = Student.query.filter_by(wsu_email=username).first()
+	if query is None:
+		return "No student exists with the given username", 500
+
+	result = []
+	for c in query.course_applications:
+		if c is None:
+			return "Error: application was none", 511
+		result.append(taApplication_to_obj_Student_Version(c))
+
+	return jsonify({"status": 1, "applications": result})
+
+
+@app.route(base_url + 'account/student/courseSearch', methods=['GET'])
+def getCoursesByName():
+	search_name = request.args.get('search_name', None)
+	if search_name is None:
+		return "Must provide a course name to search", 500
+
+	courses = InstructorCourse.query.filter_by(course_name=search_name).all()
+	if courses is None:
+		return "No courses with that name exist", 500
+
+	result = []
+	for c in courses:
+		result.append(instructorCourse_to_obj(c))
+
+	return jsonify({"status": 1, "found_courses": result}), 200
+
+
+
 	
 
 	
