@@ -696,24 +696,24 @@ var TALink = (function(){
             $("#confirm-delete").click(function(){
                 var onSuccess = function(){
  				//alert("Successfully deleted course!");
- 				window.location.href = "home.html";	//if we successfully deleted a course, reload home.html
-			}
+					window.location.href = "home.html";	//if we successfully deleted a course, reload home.html
+				}
  			
- 			var onFailure = function(){
- 				alert("Failed to delete course.");
- 			}
- 			
- 			if(localStorage.getItem("user_type") == "Instructor"){
- 				makeDeleteRequest('/api/account/instructor/removeCourse?space=' + accountSpace + '&username='+ localStorage.getItem("username") + '&password=' + localStorage.getItem("password") + '&course_id=' + courseListingId, onSuccess, onFailure);
- 			}
- 			
- 			else if(localStorage.getItem("user_type") == "Student"){
- 				makeDeleteRequest('/api/account/student/removeApp?space=' + accountSpace + '&username='+ localStorage.getItem("username") + '&password=' + localStorage.getItem("password") + '&app_id=' + courseListingId, onSuccess, onFailure);
- 			}
- 			
- 			else{
- 				alert("Error: Could not delete course - user not student or instructor?")
- 			}
+				var onFailure = function(){
+					alert("Failed to delete course.");
+				}
+				
+				if(localStorage.getItem("user_type") == "Instructor"){
+					makeDeleteRequest('/api/account/instructor/removeCourse?space=' + accountSpace + '&username='+ localStorage.getItem("username") + '&password=' + localStorage.getItem("password") + '&course_id=' + courseListingId, onSuccess, onFailure);
+				}
+				
+				else if(localStorage.getItem("user_type") == "Student"){
+					makeDeleteRequest('/api/account/student/removeApp?space=' + accountSpace + '&username='+ localStorage.getItem("username") + '&password=' + localStorage.getItem("password") + '&app_id=' + courseListingId, onSuccess, onFailure);
+				}
+				
+				else{
+					alert("Error: Could not delete course - user not student or instructor?")
+				}
             })
  			//console.log($((e.target).parentNode).attr('id'))	
  			
@@ -820,6 +820,9 @@ var TALink = (function(){
 	var attachStudentSubmitApplicationsListener = function(e){
 		$("#student-submit-applications-button").click(function(e){
 			var appInfo = {};
+			
+			appInfo.student_name = localStorage.getItem("first_name") + ' ' + localStorage.getItem("last_name");
+			appInfo.wsu_sid = localStorage.getItem("wsu_id");
 			
 			if ($("input[name=course-semester-taken]:checked").val() == "fall"){
 				appInfo.date_taken = "Fall";
