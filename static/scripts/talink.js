@@ -106,11 +106,7 @@ var TALink = (function(){
 						$(".instructor.class-list").css("display", "initial");
 						
 						//fill the list of classes with the professor's added courses.
-<<<<<<< HEAD
-					
-=======
-						
->>>>>>> 97848d68452609d20731b99ab722fdfae1a4cf09
+
 						for(i = 0; i < data["instructor"].length; i++){
 							fillCourseData(data, i);
 						}
@@ -414,14 +410,9 @@ var TALink = (function(){
 	
 	var attachPrefixDropdownTextHandler = function(e){
 		$(".course-prefix-dropdown").on('click', 'li a', function(e){
-<<<<<<< HEAD
-			//console.log($(e.target).text());
-			var replaceText = $(e.target).text();
-=======
 
 			var replaceText = $(e.target).text();
-
->>>>>>> 97848d68452609d20731b99ab722fdfae1a4cf09
+			
 			$(".selected-prefix").each(function(e){
 				$(this).text( replaceText );
 			})
@@ -487,10 +478,6 @@ var TALink = (function(){
 						window.localStorage.setItem("phone_number", accountInfo.phone_number);
 						window.localStorage.setItem("secondary_email", accountInfo.secondary_email);
 						window.localStorage.setItem("gpa", accountInfo.gpa);					
-<<<<<<< HEAD
-					
-=======
->>>>>>> 97848d68452609d20731b99ab722fdfae1a4cf09
 						
 						window.location.href = "account.html";	//if we successfully created an account, go back to the login page
 					};
@@ -529,10 +516,6 @@ var TALink = (function(){
 						window.localStorage.setItem("wsu_id", accountInfo.wsu_id);
 						window.localStorage.setItem("phone_number", accountInfo.phone_number);
 						window.localStorage.setItem("secondary_email", accountInfo.secondary_email);
-<<<<<<< HEAD
-					
-=======
->>>>>>> 97848d68452609d20731b99ab722fdfae1a4cf09
 						
 						window.location.href = "account.html";	//if we successfully created an account, go back to the login page
 					};
@@ -546,10 +529,6 @@ var TALink = (function(){
 				
 				else{
 					alert("Error: LocalStorage account type is not student or instructor.");
-<<<<<<< HEAD
-					console.error("LocalStorage account type not student or instructor?")
-=======
->>>>>>> 97848d68452609d20731b99ab722fdfae1a4cf09
 				}
 			}
 			
@@ -562,10 +541,7 @@ var TALink = (function(){
 	var attachInstructorAddCourseListener = function(e){
 		$(".instructor-add-course-button").click(function(){
 			var courseInfo = {};
-<<<<<<< HEAD
-=======
 
->>>>>>> 97848d68452609d20731b99ab722fdfae1a4cf09
 			courseInfo.course_name = $('#modal-instructor-add-class .selected-prefix').text() + " " + $('#course-number').val();
 			courseInfo.section_name = $('#section-or-lab-number').val();
 			
@@ -591,11 +567,7 @@ var TALink = (function(){
  			else if ($("input[name=course-is-lab]:checked").val() == "no"){
  				//do nothing
  			}
-<<<<<<< HEAD
-					
-=======
-			
->>>>>>> 97848d68452609d20731b99ab722fdfae1a4cf09
+
 			var onSuccess = function(){
 				window.location.href = "home.html"; //if we successfully added a course, reload home.html
 			}
@@ -717,10 +689,7 @@ var TALink = (function(){
 		$("#course-search-results-table-body").html("");
 		
 			for (var i = 0; i < data["found_courses"].length; i++){
-<<<<<<< HEAD
-					
-=======
->>>>>>> 97848d68452609d20731b99ab722fdfae1a4cf09
+
 				makeCourseSearchTableEntry(data["found_courses"][i]);
 			}
 			
@@ -753,23 +722,15 @@ var TALink = (function(){
     var attachInstructorCourseApplicantListener = function(e){
         
         $(".class-list2").on("click", ".instructor-class-info", function(e){
-<<<<<<< HEAD
-           //console.log(e.target.closest(".row").id);
 		   var x = e.target.closest(".row").id;
 			var z = $(e.target.closest(".row")).attr("ta");
 				
 		   
 			var onSuccess = function(data){
 				$("#table-applicants-list").html("");
-				console.log(data);
 				$("#modal-instructor-class-info table").attr("course-id", x)
-				//alert($("#modal-instructor-class-info table").attr("course-id"))
-=======
-			var x = e.target.closest(".row").id;		
-			var onSuccess = function(data){
-				$("#table-applicants-list").html("");
 
->>>>>>> 97848d68452609d20731b99ab722fdfae1a4cf09
+				
 				for(i = 0; i < data["applications"].length; i++)
 				{
 					fillApplicantList(data, i, z);
@@ -778,11 +739,8 @@ var TALink = (function(){
 			
 			}
 			var onFailure = function(){
-<<<<<<< HEAD
-				window.alert("Error recieving list of applicants");
-=======
+
 				window.alert("Failed to get list of course applicants.");
->>>>>>> 97848d68452609d20731b99ab722fdfae1a4cf09
 			}
 			makeGetRequest('/api/account/instructor/courses/applications' + '?course_id=' + e.target.closest(".row").id, onSuccess, onFailure);
 			
@@ -873,10 +831,7 @@ var TALink = (function(){
 	
 	var attachSelectAppInResultsListener = function(e){
 		$("#table-applicants-list").on("click", "tr", function(e){
-<<<<<<< HEAD
-			
-=======
->>>>>>> 97848d68452609d20731b99ab722fdfae1a4cf09
+
 			if ($(e.target).closest('tr').hasClass('selected-table-option')){
 				$(e.target).closest('tr').removeClass('selected-table-option');
 			
