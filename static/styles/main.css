@@ -139,3 +139,44 @@ body .student{
 #course-search-results{
 	display: none;
 }
+
+.navbar{
+	background-color: #981e32;
+}
+
+/* The following style code sets the navbar colors.
+	Again, !important is a bad idea, but considering nothing else should be
+	setting these, this should work fine. */
+
+.navbar-default .navbar-brand{
+	color: #dedede;
+}
+
+.navbar-default .navbar-nav > li > a{
+	color: #dedede !important;
+}
+
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover{
+	color: #555 !important;
+}
+
+.navbar-default .navbar-nav > li > a:hover, .navbar-brand:hover{
+	color: #777 !important;
+}
+
+
+
+.button-disabled, .button-disabled:hover{
+	background-color: #f0f0f0 !important;
+	border-color: #f0f0f0 !important;
+	pointer-events: none !important;
+}
+
+#course-search-results-table-body > tr:hover{
+	background-color: #bfbfbf;
+}
+
+#search-results-description{
+	display: none;
+	margin-top: 10px;
+}

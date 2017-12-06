@@ -397,7 +397,7 @@ var TALink = (function(){
 					window.localStorage.setItem("expected_grad", data["person"]["expected_grad"]);
 					window.localStorage.setItem("ta_before", data["person"]["ta_before"]);
 					window.localStorage.setItem("assigned_ta", data["person"]["assigned_ta"])
-					//alert(window.localStorage.getItem("assigned_ta"))
+
 				}
 			};
 			var onFailure = function() { 
@@ -749,6 +749,8 @@ var TALink = (function(){
         }
         
         $("#course-search-button").click(function(){
+			console.log("TESTTESTET");
+			$("#search-results-description").show();
 			//console.log($("#modal-student-add-class .selected-prefix").text());
 			//console.log($("#modal-student-add-class .selected-prefix").text() + ' ' + $("#course-search-number").val());
 			makeGetRequest('/api/account/student/courseSearch' + '?search_name=' + $("#modal-student-add-class .selected-prefix").text() + ' ' + $("#course-search-number").val(), onSuccess, onFailure);
@@ -759,7 +761,7 @@ var TALink = (function(){
 		var courseNameSplit = course.course_name.split(" ");
 		
 		$("#course-search-results-table-body").append($('<tr/>').attr('id', course.course_id)
-		.append($('<th/>').html("&#x2610"),
+		.append(/*$('<th/>').html("&#x2610"),*/
 			($('<th/>').attr('scope', 'row').attr('id', 'course-name-prefix').text(courseNameSplit[0])),
 			($('<td/>').attr('id', 'course-name-number').text(courseNameSplit[1])),
 			($('<td/>').text(course.semester)),
@@ -941,6 +943,29 @@ var TALink = (function(){
 			
 		})
 	}
+	
+	var attachApplicationAddCourseButtonActiveListener = function(e){
+		$("#course-search-results-table-body").on("click", "tr", function(e){
+			var classHasBeenSelected = false;
+			
+			$('.selected-table-option').each(function(e){
+				classHasBeenSelected = true;
+			})
+			
+			console.log("Class has been selected? " + classHasBeenSelected.toString());
+			
+			if(classHasBeenSelected == false){
+				if (!$("#student-add-applications-button").hasClass('button-disabled')){
+					$("#student-add-applications-button").addClass('button-disabled');
+				}
+			}
+			else{
+				if ($("#student-add-applications-button").hasClass('button-disabled')){
+					$("#student-add-applications-button").removeClass('button-disabled');
+				}
+			}
+		})
+	}
 
 	
 	//	Waits until the page is loaded before running these functions.
@@ -964,6 +989,7 @@ var TALink = (function(){
 		attachStudentSubmitApplicationsListener();
 		attachSelectAppInResultsListener();
 		attachInstructorAddTAListener();
+		attachApplicationAddCourseButtonActiveListener();
 		
 	});
 	
