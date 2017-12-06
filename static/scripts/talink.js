@@ -111,8 +111,7 @@ var TALink = (function(){
 						$(".instructor.class-list").css("display", "initial");
 						
 						//fill the list of classes with the professor's added courses.
-						
-						//alert("hi")
+					
 						for(i = 0; i < data["instructor"].length; i++){
 							fillCourseData(data, i);
 						}
@@ -130,12 +129,10 @@ var TALink = (function(){
 			else if(localStorage.getItem("user_type") == "Student"){
 				var onSuccess = function(data){
 					if(data["applications"].length == 0){
-						//alert("No apps!");
 						$(".student.class-list").css("display", "none");
 						$(".student.class-list-empty").css("display", "initial");
 					}
-					else{
-						//alert("Has apps.");						
+					else{					
 						$(".student.class-list-empty").css("display", "none");
 						$(".student.class-list").css("display", "initial");
 						
@@ -426,14 +423,11 @@ var TALink = (function(){
 	
 	var attachPrefixDropdownTextHandler = function(e){
 		$(".course-prefix-dropdown").on('click', 'li a', function(e){
-			//alert($('.selected-prefix').text())
 			//console.log($(e.target).text());
 			var replaceText = $(e.target).text();
-			//alert(replaceText);
 			$(".selected-prefix").each(function(e){
 				console.log($(this).text());
 				$(this).text( replaceText );
-				//alert($('.selected-prefix').text())
 			})
 		
 			// $(".selected-prefix-group").each(function(e){
@@ -504,7 +498,6 @@ var TALink = (function(){
 						window.localStorage.setItem("secondary_email", accountInfo.secondary_email);
 						window.localStorage.setItem("gpa", accountInfo.gpa);					
 					
-						//alert("Account edit successful!");
 						
 						window.location.href = "account.html";	//if we successfully created an account, go back to the login page
 					};
@@ -545,7 +538,6 @@ var TALink = (function(){
 						window.localStorage.setItem("phone_number", accountInfo.phone_number);
 						window.localStorage.setItem("secondary_email", accountInfo.secondary_email);
 					
-						//alert("Account edit successful!");
 						
 						window.location.href = "account.html";	//if we successfully created an account, go back to the login page
 					};
@@ -559,7 +551,7 @@ var TALink = (function(){
 				}
 				
 				else{
-					alert("Error! LocalStorage account type is not student or instructor.");
+					alert("Error: LocalStorage account type is not student or instructor.");
 					console.error("LocalStorage account type not student or instructor?")
 				}
 			}
@@ -573,7 +565,6 @@ var TALink = (function(){
 	var attachInstructorAddCourseListener = function(e){
 		$(".instructor-add-course-button").click(function(){
 			var courseInfo = {};
-			//alert($('.selected-prefix').text())
 			courseInfo.course_name = $('#modal-instructor-add-class .selected-prefix').text() + " " + $('#course-number').val();
 			courseInfo.section_name = $('#section-or-lab-number').val();
 			
@@ -599,17 +590,8 @@ var TALink = (function(){
  			else if ($("input[name=course-is-lab]:checked").val() == "no"){
  				//do nothing
  			}
-			
-			// alert("DEBUG" + "\n" +
-					// "----------------" + "\n" +
-					// "Course Name: " + courseInfo.course_name + "\n" +
-					// "Section: " + courseInfo.section_name + "\n" +
-					// "Semester: " + courseInfo.semester + "\n" +
-					// "Days: " + courseInfo.days_lecture + "\n" +
-					// "Time: " + courseInfo.time_lecture);
 					
 			var onSuccess = function(){
-				//alert("Successfully added course!")
 				window.location.href = "home.html"; //if we successfully added a course, reload home.html
 			}
 			
@@ -733,9 +715,6 @@ var TALink = (function(){
 		$("#course-search-results-table-body").html("");
 		
 			for (var i = 0; i < data["found_courses"].length; i++){
-				alert(data["found_courses"][i].course_name + "\n" +
-					data["found_courses"][i].days_lecture + "\n" +
-					"\n");
 					
 				makeCourseSearchTableEntry(data["found_courses"][i]);
 
@@ -792,7 +771,7 @@ var TALink = (function(){
 				
 			}
 			var onFailure = function(){
-				window.alert("bad");
+				window.alert("Error recieving list of applicants");
 			}
 			makeGetRequest('/api/account/instructor/courses/applications' + '?course_id=' + e.target.closest(".row").id, onSuccess, onFailure);
 			
@@ -801,7 +780,6 @@ var TALink = (function(){
 	
 	var attachSelectCourseInResultsListener = function(e){
 		$("#course-search-results-table-body").on("click", "tr", function(e){
-			alert($(e.target).closest('tr').attr('id'));
 			if ($(e.target).closest('tr').hasClass('selected-table-option')){
 				$(e.target).closest('tr').removeClass('selected-table-option');
 			
@@ -814,9 +792,6 @@ var TALink = (function(){
 	
 	var attachStudentAddApplicationsListener = function(e){
 		$("#modal-student-add-class").on('click', '#student-add-applications-button', function(e){
-			$('.selected-table-option').each(function(e){
-				alert($(this).attr('id'));
-			})
 
 			//Get the course name from the first entry in the table.
 			var courseName = $('#course-search-results-table-body #course-name-prefix').first().text() + " " + $('#course-search-results-table-body #course-name-number').first().text();
@@ -859,11 +834,8 @@ var TALink = (function(){
 				appInfo.ta_before = false;
 			}			
 			
-			//alert("submit");
-			
 			var courseIDs = "";
 			$('#modal-student-add-class .selected-table-option').each(function(e){
-				//alert("Signing up for class number " + $(this).attr('id'));
 				courseIDs += $(this).attr('id').toString() + "-";
 			})
 			
@@ -871,9 +843,7 @@ var TALink = (function(){
 			//	will always have an extra hyphen at the end. This if statement ensures that
 			//	that if any classes were added at all, the extra hyphen that will exist is removed.
 			if (courseIDs.length > 0){
-				//alert("CourseIDs before slice: " + courseIDs);
 				courseIDs = courseIDs.substring(0, courseIDs.length - 1);
-				//alert("CourseIDs after slice: " + courseIDs);
 			}
 			
 			var onSuccess = function(data){
@@ -893,7 +863,6 @@ var TALink = (function(){
 	var attachSelectAppInResultsListener = function(e){
 		$("#table-applicants-list").on("click", "tr", function(e){
 			
-			//alert($(e.target).closest('tr').attr('id'));
 			if ($(e.target).closest('tr').hasClass('selected-table-option')){
 				$(e.target).closest('tr').removeClass('selected-table-option');
 			
