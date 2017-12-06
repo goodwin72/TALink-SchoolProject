@@ -598,7 +598,7 @@
 				
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary" id="instructor-add-TA-button">Set as TA</button>
+					<button type="button" class="btn btn-primary" id="instructor-add-TA-button">Update TA</button>
 				</div>
 			</div>
 		</div>
@@ -614,6 +614,26 @@
 				
 				<div class="modal-body">
 					<p> Are you sure you want to remove this course?</p>
+				</div>
+				
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+					<button type="button" class="btn btn-primary" id="confirm-delete">Remove</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal fade" id="modal-TA-removal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel">Confirm Action</h4>
+				</div>
+				
+				<div class="modal-body">
+					<p> Would you like to remove this TA?</p>
 				</div>
 				
 				<div class="modal-footer">

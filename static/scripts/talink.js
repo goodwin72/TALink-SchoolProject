@@ -679,7 +679,11 @@ var TALink = (function(){
 		)
 	}
 	
-	var fillApplicantList = function(data, i){
+	var fillApplicantList = function(data, i, z){
+		var temp = 'selected-table-option2'
+		if (data["applications"][i].student_name == z){
+			temp = 'selected-table-option';
+		}
 		$('#table-applicants-list').append($('<tr/>')
 			.attr("id", data["applications"][i].app_id.toString())
 					.append($('<th/>').text(data["applications"][i].student_name),
@@ -688,7 +692,8 @@ var TALink = (function(){
 						$('<td/>').text(data["applications"][i].date_taken),
 						$('<td/>').text(data["applications"][i].grade_earned),
 						$('<td/>').text(data["applications"][i].ta_before)
-					)
+					).addClass(temp)
+					
 			)
 	}
 	
@@ -768,13 +773,18 @@ var TALink = (function(){
         
         $(".class-list2").on("click", ".instructor-class-info", function(e){
            //console.log(e.target.closest(".row").id);
-		   var x = e.target.closest(".row").id;		
+		   var x = e.target.closest(".row").id;
+			var z = $(e.target.closest(".row")).attr("ta");
+				
+		   
 			var onSuccess = function(data){
 				$("#table-applicants-list").html("");
 				console.log(data);
+				$("#modal-instructor-class-info table").attr("course-id", x)
+				//alert($("#modal-instructor-class-info table").attr("course-id"))
 				for(i = 0; i < data["applications"].length; i++)
 				{
-					fillApplicantList(data, i);
+					fillApplicantList(data, i, z);
 					
 				}
 				
@@ -880,6 +890,7 @@ var TALink = (function(){
 	
 	var attachSelectAppInResultsListener = function(e){
 		$("#table-applicants-list").on("click", "tr", function(e){
+			
 			//alert($(e.target).closest('tr').attr('id'));
 			if ($(e.target).closest('tr').hasClass('selected-table-option')){
 				$(e.target).closest('tr').removeClass('selected-table-option');
@@ -897,7 +908,9 @@ var TALink = (function(){
 	
 	var attachInstructorAddTAListener = function(e){
 		$("#modal-instructor-class-info").on('click', '#instructor-add-TA-button', function(e){
+			var appHasBeenSelected = false;
 			$('.selected-table-option').each(function(e){
+				appHasBeenSelected = true;
 				aid = $(this).attr('id')
 				
 				var onSuccess = function(){
@@ -908,9 +921,23 @@ var TALink = (function(){
 				var onFailure = function(){
 					alert("Failed to set TA.");
 				}
-				//alert(aid + "HI!")
+				
 				makePostRequest('/api/account/instructor/course/chooseTA?username=' + localStorage.getItem("username") + '&password=' + localStorage.getItem("password") + "&app_id=" + aid, {}, onSuccess, onFailure);
 			})
+			
+			if (appHasBeenSelected == false){
+				
+				var onSuccess = function(){
+					alert("Successfully removed TA!")
+					window.location.href = "home.html"; //if we successfully set a TA, reload home.html
+				}
+				
+				var onFailure = function(){
+					alert("Failed to remove TA.");
+				}
+				makePostRequest('/api/account/instructor/course/removeTA?username=' + localStorage.getItem("username") + '&password=' + localStorage.getItem("password") + "&course_id=" + $("#modal-instructor-class-info table").attr("course-id"), {}, onSuccess, onFailure);
+				
+			}
 			
 		})
 	}
