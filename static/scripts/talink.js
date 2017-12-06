@@ -393,7 +393,7 @@ var TALink = (function(){
 					window.localStorage.setItem("expected_grad", data["person"]["expected_grad"]);
 					window.localStorage.setItem("ta_before", data["person"]["ta_before"]);
 					window.localStorage.setItem("assigned_ta", data["person"]["assigned_ta"])
-					alert(window.localStorage.getItem("assigned_ta"))
+					//alert(window.localStorage.getItem("assigned_ta"))
 				}
 			};
 			var onFailure = function() { 
@@ -596,13 +596,13 @@ var TALink = (function(){
  				//do nothing
  			}
 			
-			alert("DEBUG" + "\n" +
-					"----------------" + "\n" +
-					"Course Name: " + courseInfo.course_name + "\n" +
-					"Section: " + courseInfo.section_name + "\n" +
-					"Semester: " + courseInfo.semester + "\n" +
-					"Days: " + courseInfo.days_lecture + "\n" +
-					"Time: " + courseInfo.time_lecture);
+			// alert("DEBUG" + "\n" +
+					// "----------------" + "\n" +
+					// "Course Name: " + courseInfo.course_name + "\n" +
+					// "Section: " + courseInfo.section_name + "\n" +
+					// "Semester: " + courseInfo.semester + "\n" +
+					// "Days: " + courseInfo.days_lecture + "\n" +
+					// "Time: " + courseInfo.time_lecture);
 					
 			var onSuccess = function(){
 				//alert("Successfully added course!")
@@ -824,7 +824,7 @@ var TALink = (function(){
 	
 	var attachSelectAppInResultsListener = function(e){
 		$("#table-applicants-list").on("click", "tr", function(e){
-			alert($(e.target).closest('tr').attr('id'));
+			//alert($(e.target).closest('tr').attr('id'));
 			if ($(e.target).closest('tr').hasClass('selected-table-option')){
 				$(e.target).closest('tr').removeClass('selected-table-option');
 			
@@ -843,7 +843,7 @@ var TALink = (function(){
 		$("#modal-instructor-class-info").on('click', '#instructor-add-TA-button', function(e){
 			$('.selected-table-option').each(function(e){
 				aid = $(this).attr('id')
-				alert($(this).attr('id'));
+				//alert($(this).attr('id'));
 				
 				var onSuccess = function(){
 					alert("Successfully set TA!")
@@ -853,7 +853,7 @@ var TALink = (function(){
 				var onFailure = function(){
 					alert("Failed to set TA.");
 				}
-				alert(aid + "HI!")
+				//alert(aid + "HI!")
 				makePostRequest('/api/account/instructor/course/chooseTA?username=' + localStorage.getItem("username") + '&password=' + localStorage.getItem("password") + "&app_id=" + aid, {}, onSuccess, onFailure);
 			})
 			
