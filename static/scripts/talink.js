@@ -833,7 +833,7 @@ var TALink = (function(){
 			appInfo.grade_earned = $("#grade-earned").val();
 			
 			if ($("input[name=ta-before-for-this-course]:checked").val() == "yes"){
-				appInfo.date_taken = true;
+				appInfo.ta_before = true;
 			}
 			else if ($("input[name=ta-before-for-this-course]:checked").val() == "no"){
 				appInfo.ta_before = false;
