@@ -819,8 +819,56 @@ var TALink = (function(){
 	
 	var attachStudentSubmitApplicationsListener = function(e){
 		$("#student-submit-applications-button").click(function(e){
-			alert("submit");
-		})
+			var appInfo = {};
+			
+			if ($("input[name=course-semester-taken]:checked").val() == "fall"){
+				appInfo.date_taken = "Fall";
+			}
+			else if ($("input[name=course-semester-taken]:checked").val() == "spring"){
+				appInfo.date_taken = "Spring";
+			}
+			else if ($("input[name=course-semester-taken]:checked").val() == "summer"){
+				appInfo.date_taken = "Summer";
+			}
+			appInfo.date_taken += (" " + $("#course-year-taken").val().toString());
+			
+			appInfo.grade_earned = $("#grade-earned").val();
+			
+			if ($("input[name=ta-before-for-this-course]:checked").val() == "yes"){
+				appInfo.ta_before = true;
+			}
+			else if ($("input[name=ta-before-for-this-course]:checked").val() == "no"){
+				appInfo.ta_before = false;
+			}			
+			
+			//alert("submit");
+			
+			var courseIDs = "";
+			$('#modal-student-add-class .selected-table-option').each(function(e){
+				//alert("Signing up for class number " + $(this).attr('id'));
+				courseIDs += $(this).attr('id').toString() + "-";
+			})
+			
+			//If any classes were selected, the string created by the .each() loop above
+			//	will always have an extra hyphen at the end. This if statement ensures that
+			//	that if any classes were added at all, the extra hyphen that will exist is removed.
+			if (courseIDs.length > 0){
+				//alert("CourseIDs before slice: " + courseIDs);
+				courseIDs = courseIDs.substring(0, courseIDs.length - 1);
+				//alert("CourseIDs after slice: " + courseIDs);
+			}
+			
+			var onSuccess = function(data){
+				alert("Successfully submitted application(s)!");
+				window.location.href = "home.html"; //If the TA application POST request was successful, reload the page.
+			}
+			
+			var onFailure = function(){
+				window.alert("Failed to send student TA application(s).");
+			}
+	   	
+			makePostRequest('/api/account/student/addApp' + '?username=' + localStorage.getItem("username") + '&password=' + localStorage.getItem("password") + "&course_ids=" + courseIDs, appInfo, onSuccess, onFailure);
+		})	
 	}
 	
 	
