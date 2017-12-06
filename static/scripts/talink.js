@@ -86,10 +86,14 @@ var TALink = (function(){
 			$("#student-graduation-date").text(localStorage.getItem("expected_grad"));
 			$("#student-TA-history").text(localStorage.getItem("ta_before"));
 			$("#student-TA-gpa").text(localStorage.getItem("gpa"));
-			$("#student-TA-chosen").css('color','orange');
+			//$("#student-TA-chosen").css('color','orange');
 			if (localStorage.getItem("assigned_ta") == "true"){
 				$("#student-TA-chosen").text("You've been chosen as a TA!");
 				$("#student-TA-chosen").css('color','green');
+			}
+			else{
+				$("#student-TA-chosen").text("Not chosen");
+				$("#student-TA-chosen").css('color','orange');
 			}
 			
 			if(localStorage.getItem("user_type") == "Instructor"){
@@ -393,7 +397,7 @@ var TALink = (function(){
 					window.localStorage.setItem("expected_grad", data["person"]["expected_grad"]);
 					window.localStorage.setItem("ta_before", data["person"]["ta_before"]);
 					window.localStorage.setItem("assigned_ta", data["person"]["assigned_ta"])
-					// alert(window.localStorage.getItem("assigned_ta"))
+
 				}
 			};
 			var onFailure = function() { 
@@ -596,13 +600,13 @@ var TALink = (function(){
  				//do nothing
  			}
 			
-			alert("DEBUG" + "\n" +
-					"----------------" + "\n" +
-					"Course Name: " + courseInfo.course_name + "\n" +
-					"Section: " + courseInfo.section_name + "\n" +
-					"Semester: " + courseInfo.semester + "\n" +
-					"Days: " + courseInfo.days_lecture + "\n" +
-					"Time: " + courseInfo.time_lecture);
+			// alert("DEBUG" + "\n" +
+					// "----------------" + "\n" +
+					// "Course Name: " + courseInfo.course_name + "\n" +
+					// "Section: " + courseInfo.section_name + "\n" +
+					// "Semester: " + courseInfo.semester + "\n" +
+					// "Days: " + courseInfo.days_lecture + "\n" +
+					// "Time: " + courseInfo.time_lecture);
 					
 			var onSuccess = function(){
 				//alert("Successfully added course!")
@@ -621,6 +625,7 @@ var TALink = (function(){
 	var fillCourseData = function(data, i){
 		$('.class-list2').append($('<div/>')
 			.attr("id", data["instructor"][i].course_id.toString())
+			.attr("ta", data["instructor"][i].ta_name)
 			.addClass("row")
 			.append($('<div/>')
 				.addClass("col-xs-10 instructor-class-info")
@@ -696,9 +701,9 @@ var TALink = (function(){
             $("#confirm-delete").click(function(){
                 var onSuccess = function(){
  				//alert("Successfully deleted course!");
-					window.location.href = "home.html";	//if we successfully deleted a course, reload home.html
+ 				window.location.href = "home.html";	//if we successfully deleted a course, reload home.html
 				}
- 			
+
 				var onFailure = function(){
 					alert("Failed to delete course.");
 				}
@@ -706,11 +711,9 @@ var TALink = (function(){
 				if(localStorage.getItem("user_type") == "Instructor"){
 					makeDeleteRequest('/api/account/instructor/removeCourse?space=' + accountSpace + '&username='+ localStorage.getItem("username") + '&password=' + localStorage.getItem("password") + '&course_id=' + courseListingId, onSuccess, onFailure);
 				}
-				
 				else if(localStorage.getItem("user_type") == "Student"){
 					makeDeleteRequest('/api/account/student/removeApp?space=' + accountSpace + '&username='+ localStorage.getItem("username") + '&password=' + localStorage.getItem("password") + '&app_id=' + courseListingId, onSuccess, onFailure);
 				}
-				
 				else{
 					alert("Error: Could not delete course - user not student or instructor?")
 				}
@@ -765,22 +768,22 @@ var TALink = (function(){
         
         $(".class-list2").on("click", ".instructor-class-info", function(e){
            //console.log(e.target.closest(".row").id);
-		    var x = e.target.closest(".row").id;
+		   var x = e.target.closest(".row").id;		
+			var onSuccess = function(data){
+				$("#table-applicants-list").html("");
+				console.log(data);
+				for(i = 0; i < data["applications"].length; i++)
+				{
+					fillApplicantList(data, i);
 					
-		var onSuccess = function(data){
-		    $("#table-applicants-list").html("");
-			console.log(data);
-			for(i = 0; i < data["applications"].length; i++)
-			{
-				fillApplicantList(data, i);
+				}
+				
 			}
-            
-        }
-        var onFailure = function(){
-            window.alert("bad");
-        }
-		   
-           makeGetRequest('/api/account/instructor/courses/applications' + '?course_id=' + e.target.closest(".row").id, onSuccess, onFailure);
+			var onFailure = function(){
+				window.alert("bad");
+			}
+			makeGetRequest('/api/account/instructor/courses/applications' + '?course_id=' + e.target.closest(".row").id, onSuccess, onFailure);
+			
         });
     }
 	
@@ -877,7 +880,7 @@ var TALink = (function(){
 	
 	var attachSelectAppInResultsListener = function(e){
 		$("#table-applicants-list").on("click", "tr", function(e){
-			alert($(e.target).closest('tr').attr('id'));
+			//alert($(e.target).closest('tr').attr('id'));
 			if ($(e.target).closest('tr').hasClass('selected-table-option')){
 				$(e.target).closest('tr').removeClass('selected-table-option');
 			
@@ -896,7 +899,6 @@ var TALink = (function(){
 		$("#modal-instructor-class-info").on('click', '#instructor-add-TA-button', function(e){
 			$('.selected-table-option').each(function(e){
 				aid = $(this).attr('id')
-				alert($(this).attr('id'));
 				
 				var onSuccess = function(){
 					alert("Successfully set TA!")
@@ -906,7 +908,7 @@ var TALink = (function(){
 				var onFailure = function(){
 					alert("Failed to set TA.");
 				}
-				alert(aid + "HI!")
+				//alert(aid + "HI!")
 				makePostRequest('/api/account/instructor/course/chooseTA?username=' + localStorage.getItem("username") + '&password=' + localStorage.getItem("password") + "&app_id=" + aid, {}, onSuccess, onFailure);
 			})
 			

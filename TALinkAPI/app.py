@@ -331,9 +331,11 @@ def removeApplication():
 
 	# next we need to remove the taApp from the course it belongs to
 	for d in application.course.applications:
-		application.course.applications.remove(d)
+		if d.app_id == app_id:
+			application.course.applications.remove(d)
 
-
+	db.session.add(application.student)
+	db.session.add(application.course)
 	db.session.delete(application)  # remove the TAApplication from the database
 	db.session.commit()
 
