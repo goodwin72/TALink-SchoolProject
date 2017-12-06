@@ -338,7 +338,6 @@ def removeApplication():
 	db.session.add(application.course)
 	db.session.delete(application)  # remove the TAApplication from the database
 	db.session.commit()
-	db.refresh()
 
 	return jsonify({"status": 1}), 200
 	
