@@ -692,10 +692,9 @@ var TALink = (function(){
  		$(".class-list2").on('click', '.delete-course', function(e){
  			var courseListingDocumentElement = (e.target).parentNode;
  			var courseListingId = $((e.target).parentNode).attr('id');
- 			
- 			//console.log($((e.target).parentNode).attr('id'));
- 			
- 			var onSuccess = function(){
+ 			$("#modal-confirm-removal").modal();
+            $("#confirm-delete").click(function(){
+                var onSuccess = function(){
  				//alert("Successfully deleted course!");
  				window.location.href = "home.html";	//if we successfully deleted a course, reload home.html
 			}
@@ -715,6 +714,9 @@ var TALink = (function(){
  			else{
  				alert("Error: Could not delete course - user not student or instructor?")
  			}
+            })
+ 			//console.log($((e.target).parentNode).attr('id'))	
+ 			
  		});
  	}
 	
