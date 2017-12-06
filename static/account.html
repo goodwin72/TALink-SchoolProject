@@ -64,11 +64,12 @@
 		<div class="jumbotron" id="account-info"> 
 			<h1>Account Info</h1>
 			<h3>You can view and edit account information here.</h3>
+            (* indicates a required field)</p>
 			<form class="account-edit-form" method="post" action="account.html">
 				<div class="row">
 					<div class="col-sm-6">
 						<div class="form-group">
-							<label class="control-label">Name</label>
+							<label class="control-label">Name*</label>
 							<div class="form-inline">
 								<input type="text" name="first-name" id="first-name" class="form-control"
 									placeholder="First" title="Please enter your first name" required/>
@@ -78,20 +79,20 @@
 						</div>
 						
 						<div class="form-group">
-							<label class="control-label">WSU Email</label>
+							<label class="control-label">WSU Email*</label>
 							<label class="control-label input-description">This will be your username.</label>
 							<input type="email" name="wsu-email" id="wsu-email" class="form-control"
 								title="Please enter your WSU email" required>
 						</div>
 
 						<div class="form-group">
-							<label class="control-label">WSU ID</label>
+							<label class="control-label">WSU ID*</label>
 							<input type="text" name="wsu-id" id="wsu-id" class="form-control"
 								title="Please enter your WSU ID" pattern="[0-9]+" required>
 						</div>	
 
 						<div class="form-group">
-							<label class="control-label">Phone</label>
+							<label class="control-label">Phone*</label>
 							<label class="control-label input-description">(xxx-xxx-xxxx)</label>
 							<input type="text" name="phone" id="phone" class="form-control"
 								title="Please enter your phone number" pattern="[0-9]{3}[ |-][0-9]{3}[ |-][0-9]{4}" required>
@@ -108,19 +109,19 @@
 						
 						<!-- "form-student" fields should be hidden by default, and shown only if the user is a student. -->
 						<div class="form-group form-student">
-							<label class="control-label">Major</label>
+							<label class="control-label">Major*</label>
 							<input type="text" name="major" id="major" class="form-control"
 								title="Please enter a major. (Undecided is valid!)" required>				
 						</div>
 						
 						<div class="form-group form-student">
-							<label class="control-label">Cumulative GPA</label>
+							<label class="control-label">Cumulative GPA*</label>
 							<input type="text" name="gpa" id="gpa" class="form-control"
 								title="Please enter your GPA, in number format" pattern="[0-4][.][0-9]" required>					
 						</div>
 						
 						<div class="form-group form-student">
-							<label class="control-label radio-label">Expected Graduation Date</label>
+							<label class="control-label radio-label">Expected Graduation Date*</label>
 							<div class="form-inline">
 								<input type="radio" name="graduation-semester" id="graduation-semester-fall" 
 									value="fall" checked>
@@ -135,7 +136,7 @@
 						</div>
 						
 						<div class="form-group form-student">
-							<label class="control-label radio-label">Have you served as a TA before?</label>
+							<label class="control-label radio-label">Have you served as a TA before?*</label>
 							<input type="radio" name="ta-prior" id="ta-prior-yes" value="yes">
 							<label>Yes</label>
 							<input type="radio" name="ta-prior" id="ta-prior-no" value="no" checked>
@@ -146,13 +147,13 @@
 					<div class="col-sm-6">			
 						<h2>Change Password</h2>
 						<div class="form-group">
-							<label class="control-label">New Password</label>
+							<label class="control-label">New Password*</label>
 							<input type="password" name="password" id="password" class="form-control"
 								title="Please enter a password" required>
 						</div>
 						
 						<div class="form-group">
-							<label class="control-label">Confirm New Password</label>
+							<label class="control-label">Confirm New Password*</label>
 							<input type="password" name="confirm-password" id="confirm-password" class="form-control"
 								title="Please confirm your password" required>
 						</div>
@@ -165,18 +166,28 @@
 				<div class="row">
 					<div class="col-sm-6">
 						<div class="form-group">
-							<label class="control-label">Confirm Current Password</label>
+							<label class="control-label">Confirm Current Password*</label>
 							<input type="password" name="confirm-current-password" id="confirm-current-password" class="form-control"
 								title="Please confirm your password" required>
+                            
 						</div>
+                        
 					</div>
+                  
 					
+                    
+                
 					<div class="col-sm-12">
+                        
 						<input type="submit" value="Save Changes" class="account-edit-button btn btn-default"/>	
 					</div>
+                
 				</div>
+             
 			</form>
+            
 		</div>
+        
 	</div>
 	
 	<!-- [Bootstrap] Bootstrap core JavaScript

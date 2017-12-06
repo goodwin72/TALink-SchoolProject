@@ -393,7 +393,7 @@ var TALink = (function(){
 					window.localStorage.setItem("expected_grad", data["person"]["expected_grad"]);
 					window.localStorage.setItem("ta_before", data["person"]["ta_before"]);
 					window.localStorage.setItem("assigned_ta", data["person"]["assigned_ta"])
-					alert(window.localStorage.getItem("assigned_ta"))
+					// alert(window.localStorage.getItem("assigned_ta"))
 				}
 			};
 			var onFailure = function() { 
