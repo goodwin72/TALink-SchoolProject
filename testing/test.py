@@ -455,6 +455,7 @@ class TestTALink(testLib.AccountTestCase):
 			   respCreateI['user']['password']
 		respCourse= self.makeRequest(tUrl, method="POST",
 									data={'course_name': 'CptS_322',
+										  'section_name': 'Lab-01',
 										  'semester': 'Fall',
 										  'days_lecture': 'N/A',
 										  'time_lecture': 'N/A'
@@ -472,8 +473,8 @@ class TestTALink(testLib.AccountTestCase):
 										  'date_taken': 'Fall 2017',
 										  'ta_before': False
 										  })
-		self.assertEqual('Bob Pop', respApp['application']['student_name'])
-		self.assertEqual('A', respApp['application']['grade_earned'])
+		self.assertEqual('Bob Pop', respApp['application'][0]['student_name'])
+		self.assertEqual('A', respApp['application'][0]['grade_earned'])
 
 		# Next, we make sure both the student account and instructorCourse have this application
 		tUrl = "/api/account/instructor/courses/applications?course_id=1"
@@ -481,7 +482,7 @@ class TestTALink(testLib.AccountTestCase):
 		tUrl = "/api/account/student/applications?username=" + respCreateS['user']['wsu_email']
 		respStudent= self.makeRequest(tUrl, method="GET")
 		self.assertEqual('Bob Pop', respInstCourse['applications'][0]['student_name'])
-		self.assertEqual('Bob Pop', respStudent['applications'][0]['student_name'])
+		self.assertEqual('Johnny Doey', respStudent['applications'][0]['instructor_name'])
 
 		# Next, we have the Instructor accept TAship, and then test if the course and the student were updated
 		tUrl = "/api/account/instructor/course/chooseTA?username=" + respCreateS['user']['wsu_email'] + "&password=" + \
