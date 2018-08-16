@@ -1,5 +1,5 @@
-#TALink
-##Web app for managing teacher's assistant applications for students and professors (School project) 
+# TALink
+## Web app for managing teacher's assistant applications for students and professors (School project) 
 
 (Class name and university not included at professor's request to reduce the likelihood of future students plagarizing.)
 
